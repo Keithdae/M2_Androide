@@ -2,6 +2,7 @@ breed [waypoints waypoint]
 breed [envconstructors envconstructor]
 breed [convois convoi]
 breed [HQs HQ]
+breed [ennemis ennemi]
 directed-link-breed [path-links path-link]
 undirected-link-breed [dummy-links dummy-link]
 directed-link-breed [convoi-links convoi-link]
@@ -29,6 +30,10 @@ convois-own[incoming-queue
   last-send-time ; communication historical time-stamp
   ]
 
+ennemis-own[
+  dead?
+  targets ; convois a portee de vue
+]
 
 ;***********************
 ;         SETUP
@@ -57,7 +62,7 @@ to setup
   ]
   if not debug and not debug-verbose [no-display]
   ;setup-drones
-  ;setup-enemies
+  setup-ennemis
   ;setup-citizens
 ;  setup-hq
 
@@ -562,15 +567,95 @@ to move-convoi [goal slowdown? cortege?]
   set pitch 0 ; make sure there's no pitch ever, else the car will disappear in the ground
   fd tmp-speed ; Avance
 end
+
+
+
+;***********************
+;         Projet
+;***********************
+
+to go
+  convois-think
+  ennemis-think
+  tick
+end
+
+
+
+;**********************
+;        Ennemis
+;**********************
+; Generation des ennemis
+to setup-ennemis
+  create-ennemis nb-ennemis
+  ask ennemis [
+    set shape "person"
+    set color red
+    let x random-xcor
+    let y random-ycor
+    let done false
+    while [not done] [
+      ask patch-at x y mapAlt [
+        ifelse (pcolor < (green + 2)) and (pcolor > (green - 2))
+        [set done true]
+        [set x random-xcor
+         set y random-ycor]
+      ]
+    ]
+    setxy x y
+  ]
+end
+
+; Comportement des ennemis
+to ennemis-think
+  ask ennemis [
+   ennemi-random-move
+  ]
+end
+
+to-report detect-obstacle-ennemi ; ennemi procedure
+  let answer false
+  let nextpx 0
+  let nextpy 0
+  ask patch-at dx dy mapAlt [
+   set nextpx pxcor
+   set nextpy pycor
+   if obstacle?
+   [set answer true]
+  ]
+
+  ;ifelse
+  ;abs(pxcor - nextpx) > 1
+  ;or
+  ;abs(pycor - nextpy) > 1
+  ;[set answer false]
+  ;[set answer true]
+
+  report answer
+end
+
+; Deplacement aleatoire
+to ennemi-random-move ; ennemi procedure
+  let done false
+  while [not done] [
+    rt random 50
+    lt random 50
+    ifelse detect-obstacle-ennemi
+      [rt random 50
+        lt random 50]
+      [set done true
+        fd ennemi-speed]
+  ]
+end
 @#$#@#$#@
 GRAPHICS-WINDOW
 0
 0
-439
-460
-16
-16
-13.0
+720
+741
+-1
+-1
+10.0
 1
 10
 1
@@ -580,14 +665,14 @@ GRAPHICS-WINDOW
 1
 1
 1
--16
-16
--16
-16
+0
+70
+0
+70
 0
 0
 1
-0
+1
 1
 ticks
 30.0
@@ -686,10 +771,10 @@ nb-rivers
 Number
 
 INPUTBOX
-663
-185
-824
-245
+516
+47
+677
+107
 astar-faster
 20
 1
@@ -697,32 +782,32 @@ astar-faster
 Number
 
 INPUTBOX
-663
-259
-824
-319
+516
+121
+677
+181
 astar-max-depth
-1000
+5000
 1
 0
 Number
 
 SWITCH
-471
-183
-635
-216
+324
+45
+488
+78
 astar-longpath
 astar-longpath
-0
+1
 1
 -1000
 
 SWITCH
-471
-227
-634
-260
+324
+89
+487
+122
 astar-randpath
 astar-randpath
 1
@@ -730,10 +815,10 @@ astar-randpath
 -1000
 
 SWITCH
-468
-320
-630
-353
+321
+182
+483
+215
 astar-visu-more
 astar-visu-more
 1
@@ -741,10 +826,10 @@ astar-visu-more
 -1000
 
 SWITCH
-469
-272
-632
-305
+322
+134
+485
+167
 astar-visu
 astar-visu
 0
@@ -760,7 +845,7 @@ simu-speed
 simu-speed
 0
 10
-1
+3
 1
 1
 NIL
@@ -787,14 +872,86 @@ Simulation
 1
 
 TEXTBOX
-461
-154
-611
-172
+314
+16
+464
+34
 A*
 12
 0.0
 1
+
+BUTTON
+124
+387
+187
+420
+NIL
+go
+T
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+TEXTBOX
+767
+21
+917
+39
+Ennemis
+12
+0.0
+1
+
+SLIDER
+781
+42
+953
+75
+nb-ennemis
+nb-ennemis
+1
+100
+20
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+780
+82
+952
+115
+ennemi-vision
+ennemi-vision
+0
+10
+1.5
+0.1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+782
+124
+954
+157
+ennemi-speed
+ennemi-speed
+0
+1
+0.05
+0.01
+1
+NIL
+HORIZONTAL
 
 @#$#@#$#@
 ## WHAT IS IT?
