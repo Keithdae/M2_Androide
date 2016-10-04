@@ -1,8 +1,12 @@
+;__includes ["bdi.nls" "communication.nls"]
+
+
 breed [waypoints waypoint]
 breed [envconstructors envconstructor]
 breed [convois convoi]
 breed [HQs HQ]
 breed [ennemis ennemi]
+breed [shoots shoot]
 directed-link-breed [path-links path-link]
 undirected-link-breed [dummy-links dummy-link]
 directed-link-breed [convoi-links convoi-link]
@@ -15,6 +19,7 @@ globals [mapAlt solAlt basseAlt hauteAlt ; variables topologiques Z discretise: 
   mission-completed? mission-failed?
   send-interval ; communication period
   is-movie-recording?
+  nb-cars
   ]
 
 patches-own [obstacle? base? hangar? objectif? bridge? ; variables topologiques au niveau mapAlt, permet de definir les patchs praticables et ceux qui sont des obstacles
@@ -33,6 +38,11 @@ convois-own[incoming-queue
 ennemis-own[
   dead?
   targets ; convois a portee de vue
+  currentReload ; Compteur
+]
+
+shoots-own[
+ target ; convoi cible
 ]
 
 ;***********************
@@ -44,6 +54,7 @@ to setup
   let path-is-possible? false
   while [not path-is-possible?] [
     clear-all
+    set nb-cars number-cars
     if not debug and not debug-verbose [no-display] ; disable gui display to speedup processing, the time slider won't influence the setup procedure
     setup-globals
     setup-env
@@ -577,6 +588,7 @@ end
 to go
   convois-think
   ennemis-think
+  update-shoots
   tick
 end
 
@@ -591,6 +603,7 @@ to setup-ennemis
   ask ennemis [
     set shape "person"
     set color red
+    set currentReload ennemi-reloadRate
     let x random-xcor
     let y random-ycor
     let done false
@@ -610,6 +623,7 @@ end
 to ennemis-think
   ask ennemis [
    ennemi-random-move
+   ennemi-shoot
   ]
 end
 
@@ -645,6 +659,49 @@ to ennemi-random-move ; ennemi procedure
         lt random 50]
       [set done true
         fd ennemi-speed]
+  ]
+end
+
+to ennemi-shoot ; ennemi procedure
+
+  ifelse ( currentReload < ennemi-reloadRate )
+  [
+    set currentReload ( currentReload + 1 )
+  ]
+  ; else
+  [
+    set targets convois in-radius ennemi-vision
+    if any? targets
+    [
+      build-shot targets
+      set currentReload 0
+    ]
+  ] ; ifelse
+end
+
+to build-shot [targetsForShoots]
+  hatch-shoots 1 [ set color red
+        set shape "line half"
+        set target one-of targetsForShoots]
+end
+
+to update-shoots
+  ask shoots [
+    if target != nobody
+    [
+      face target
+      fd 0.5
+      let prey one-of convois-here
+      if prey != nobody
+      [
+        set nb-cars ( nb-cars - 1 )
+        ask prey
+        [
+           die
+        ]
+        die
+      ]
+    ]
   ]
 end
 @#$#@#$#@
@@ -714,7 +771,7 @@ INPUTBOX
 55
 70
 115
-nb-cars
+number-cars
 3
 1
 0
@@ -932,7 +989,7 @@ ennemi-vision
 ennemi-vision
 0
 10
-1.5
+3
 0.1
 1
 NIL
@@ -949,6 +1006,21 @@ ennemi-speed
 1
 0.05
 0.01
+1
+NIL
+HORIZONTAL
+
+SLIDER
+781
+168
+956
+201
+ennemi-reloadRate
+ennemi-reloadRate
+1
+50
+30
+1
 1
 NIL
 HORIZONTAL
@@ -1296,7 +1368,7 @@ Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
 
 @#$#@#$#@
-NetLogo 3D 5.3.1
+NetLogo 3D 5.3
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@
