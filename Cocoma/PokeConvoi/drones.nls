@@ -1,0 +1,204 @@
+;**********************
+;        Drones
+;**********************
+to setup-drones
+  
+  ; piste de decollage
+  let base-min-pxcor min [pxcor] of (patches with [base? and pzcor = mapAlt])
+  let base-max-pxcor ( base-min-pxcor + 1 )
+  let base-min-pycor min [pycor] of (patches with [base? and pzcor = mapAlt])
+  let base-max-pycor max [pycor] of (patches with [base? and pzcor = mapAlt]) 
+  
+  create-drones nb-drones
+  ask drones [
+    set color violet
+    
+    let x ((random-float (base-max-pxcor - base-min-pxcor)) + base-min-pxcor)
+    let y ((random-float (base-max-pycor - base-min-pycor)) + base-min-pycor)
+    setxyz x y solAlt
+    
+    set pitch 0
+    set heading 0
+    set roll 0
+    
+    set munitions drone-nb-munitions
+    set fuel drone-fuel
+    set dead? false
+    set incoming-queue []
+    set beliefs []
+    set intentions []
+    set currentReload drone-reloadRate
+    
+    set objective nobody
+    
+    add-intention "drone-takeOff" "drone-hasTakenOff"
+  ]
+  
+end
+
+
+to drones-think 
+  ask drones [
+    execute-intentions
+    ifelse fuel > (drone-fuel * 0.32) [
+      ifelse drone-hasTakenOff   [
+        add-intention "drone-moveToObjective" "true"    
+        execute-intentions
+        add-intention "drone-shoot" "true" 
+        execute-intentions
+        add-intention "drone-spacing" "true"
+      ]
+      ; else
+      [
+        add-intention "drone-takeOff" "drone-hasTakenOff"
+      ]
+    ]
+    ; else
+    [
+      add-intention "drone-back" "true"  
+    ]
+  ]
+end
+
+
+to drone-shoot ; drone procedure
+
+  ifelse ( currentReload < drone-reloadRate )
+  [
+    set currentReload ( currentReload + 1 )
+  ]
+  ; else
+  [
+    set shootingTargets ennemis in-radius-nowrap drone-vision
+    if any? shootingTargets
+    [
+      build-shot shootingTargets
+      set currentReload 0
+    ]
+  ] ; ifelse
+  
+end
+
+to drone-takeOff
+  ;; orientation en z
+  ifelse zcor < 4.5 [
+    if pitch < 45 [
+      set pitch ( pitch + 12 )
+    ]
+  ]
+  ; else
+  [
+    if pitch > 5 [
+      set pitch ( pitch - 5 )
+    ]
+  ]
+  
+  if (objective != nobody ) [
+    let headingFlag (towards objective)
+    let dirCorrection subtract-headings headingFlag heading
+    
+    if dirCorrection > 15 [
+     set dirCorrection 15 
+    ]
+    if dirCorrection < -15 [
+     set dirCorrection -15 
+    ]
+    
+    set heading ( heading + dirCorrection )
+    
+  ]
+  
+  drone-step
+end
+
+to-report drone-hasTakenOff
+  ifelse zcor >= 5 [
+    set pitch 0
+    report true
+  ]
+  ; else
+  [
+    report false 
+  ]
+end
+
+to drone-setObjective [obj]
+  ask drones [
+   set objective obj 
+  ]
+end
+
+to drone-moveToObjective
+  
+  if (objective != nobody ) [
+    let headingFlag (towards objective)
+    let dirCorrection subtract-headings headingFlag heading
+    
+    if dirCorrection > 15 [
+     set dirCorrection 15 
+    ]
+    if dirCorrection < -15 [
+     set dirCorrection -15 
+    ]
+    
+    set heading ( heading + dirCorrection )
+    
+    let x xcor
+    let y ycor
+    let diff 0
+    
+    ask objective [
+     set diff  ( abs(xcor - x) + abs(ycor - y) )
+    ]
+    if diff > 0 [
+      drone-step
+    ]
+  ]
+  
+end
+
+to drone-spacing 
+ let tooClose drones in-cone-nowrap 1 30
+ if any? tooClose and ((count tooClose) > 1 or not member? self tooClose)[
+   rt random-float 180
+ ]
+end
+
+; MUST FIX
+to drone-back
+  let base one-of patches with [base?]
+  if base != nobody [
+   let x xcor
+   let y ycor 
+   let dist -1
+   ask base [
+     set dist ( sqrt( ((pxcor - x) ^ 2) + ((pycor - y) ^ 2) ) ) 
+   ]
+   if dist != -1 [
+     let headingFlag (towards base)
+     let dirCorrection subtract-headings headingFlag heading
+     
+     if dirCorrection > 15 [
+       set dirCorrection 15 
+     ]
+     if dirCorrection < -15 [
+       set dirCorrection -15 
+     ]
+     
+     set heading ( heading + dirCorrection )
+     if dist < 50
+     [
+       if zcor > 1 [
+         set pitch (pitch - 5)
+       ]
+     ]
+     drone-step
+   ]
+  ]  
+end
+
+
+to drone-step
+  fd drone-speed
+  set fuel fuel - abs((dx + dy + (dz * 5)))
+end

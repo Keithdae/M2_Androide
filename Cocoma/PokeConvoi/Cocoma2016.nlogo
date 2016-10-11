@@ -1,5 +1,4 @@
-;__includes ["bdi.nls" "communication.nls"]
-
+__includes ["ennemis.nls" "drones.nls" "bdi.nls" "communication.nls" "shoot.nls"]
 
 breed [waypoints waypoint]
 breed [envconstructors envconstructor]
@@ -7,6 +6,7 @@ breed [convois convoi]
 breed [HQs HQ]
 breed [ennemis ennemi]
 breed [shoots shoot]
+breed [drones drone]
 directed-link-breed [path-links path-link]
 undirected-link-breed [dummy-links dummy-link]
 directed-link-breed [convoi-links convoi-link]
@@ -25,6 +25,7 @@ globals [mapAlt solAlt basseAlt hauteAlt ; variables topologiques Z discretise: 
 patches-own [obstacle? base? hangar? objectif? bridge? ; variables topologiques au niveau mapAlt, permet de definir les patchs praticables et ceux qui sont des obstacles
   as-closed as-heuristic as-prev-pos ; variables temporaires pour calculer les chemins AStar (effaces a chaque calcul de plan)
   ]
+
 convois-own[incoming-queue
   finished? ; Is the goal reached ?
   leader?   ; car leading the convoi convoi
@@ -43,6 +44,18 @@ ennemis-own[
 
 shoots-own[
  target ; convoi cible
+]
+
+drones-own[
+ fuel     ; Carburant (quantite)
+ dead?
+ munitions ; quantite de tirs possibles
+ incoming-queue ; file de messages
+ beliefs
+ intentions
+ currentReload ; Compteur
+ shootingTargets ; Ennemis a portee de tir
+ objective ; Cible a suivre / proteger
 ]
 
 ;***********************
@@ -72,7 +85,7 @@ to setup
     ]
   ]
   if not debug and not debug-verbose [no-display]
-  ;setup-drones
+  setup-drones
   setup-ennemis
   ;setup-citizens
 ;  setup-hq
@@ -119,7 +132,31 @@ to setup-env
   ask patches with [pzcor = mapAlt][set pcolor green + (random-float 2) - 1]
 
   ; Montagnes
+  if nb-mountains > 0 [
+    repeat nb-mountains [
+      create-envconstructors 1 [
+        let x random-xcor
+        let y random-ycor
+        let done false
+        while [not done] [
+          ask patch-at x y mapAlt [
+            ifelse (x > 15) or (y > 15)
+            [set done true]
+            [set x random-xcor
+             set y random-ycor]
+          ]
+        ]
+        setxyz x y mapAlt
 
+        ask patches in-radius-nowrap 6.348 [
+          set pcolor brown
+          set obstacle? true
+        ]
+
+        die
+      ]
+    ]
+  ]
 
   ; Rivieres
   if nb-rivers > 0 [
@@ -588,122 +625,16 @@ end
 to go
   convois-think
   ennemis-think
+  drones-think
   update-shoots
+
+  ask convois with [leader?] [
+      drone-setObjective self
+  ]
+
   tick
 end
 
-
-
-;**********************
-;        Ennemis
-;**********************
-; Generation des ennemis
-to setup-ennemis
-  create-ennemis nb-ennemis
-  ask ennemis [
-    set shape "person"
-    set color red
-    set currentReload ennemi-reloadRate
-    let x random-xcor
-    let y random-ycor
-    let done false
-    while [not done] [
-      ask patch-at x y mapAlt [
-        ifelse (pcolor < (green + 2)) and (pcolor > (green - 2))
-        [set done true]
-        [set x random-xcor
-         set y random-ycor]
-      ]
-    ]
-    setxy x y
-  ]
-end
-
-; Comportement des ennemis
-to ennemis-think
-  ask ennemis [
-   ennemi-random-move
-   ennemi-shoot
-  ]
-end
-
-to-report detect-obstacle-ennemi ; ennemi procedure
-  let answer false
-  let nextpx 0
-  let nextpy 0
-  ask patch-at dx dy mapAlt [
-   set nextpx pxcor
-   set nextpy pycor
-   if obstacle?
-   [set answer true]
-  ]
-
-  ;ifelse
-  ;abs(pxcor - nextpx) > 1
-  ;or
-  ;abs(pycor - nextpy) > 1
-  ;[set answer false]
-  ;[set answer true]
-
-  report answer
-end
-
-; Deplacement aleatoire
-to ennemi-random-move ; ennemi procedure
-  let done false
-  while [not done] [
-    rt random 50
-    lt random 50
-    ifelse detect-obstacle-ennemi
-      [rt random 50
-        lt random 50]
-      [set done true
-        fd ennemi-speed]
-  ]
-end
-
-to ennemi-shoot ; ennemi procedure
-
-  ifelse ( currentReload < ennemi-reloadRate )
-  [
-    set currentReload ( currentReload + 1 )
-  ]
-  ; else
-  [
-    set targets convois in-radius ennemi-vision
-    if any? targets
-    [
-      build-shot targets
-      set currentReload 0
-    ]
-  ] ; ifelse
-end
-
-to build-shot [targetsForShoots]
-  hatch-shoots 1 [ set color red
-        set shape "line half"
-        set target one-of targetsForShoots]
-end
-
-to update-shoots
-  ask shoots [
-    if target != nobody
-    [
-      face target
-      fd 0.5
-      let prey one-of convois-here
-      if prey != nobody
-      [
-        set nb-cars ( nb-cars - 1 )
-        ask prey
-        [
-           die
-        ]
-        die
-      ]
-    ]
-  ]
-end
 @#$#@#$#@
 GRAPHICS-WINDOW
 0
@@ -727,7 +658,7 @@ GRAPHICS-WINDOW
 0
 70
 0
-0
+10
 1
 1
 1
@@ -956,20 +887,20 @@ NIL
 1
 
 TEXTBOX
-767
-21
-917
-39
+734
+22
+884
+40
 Ennemis
 12
 0.0
 1
 
 SLIDER
-781
-42
-953
-75
+730
+43
+902
+76
 nb-ennemis
 nb-ennemis
 1
@@ -981,10 +912,10 @@ NIL
 HORIZONTAL
 
 SLIDER
-780
-82
-952
-115
+729
+83
+901
+116
 ennemi-vision
 ennemi-vision
 0
@@ -996,10 +927,10 @@ NIL
 HORIZONTAL
 
 SLIDER
-782
-124
-954
-157
+731
+125
+903
+158
 ennemi-speed
 ennemi-speed
 0
@@ -1011,16 +942,163 @@ NIL
 HORIZONTAL
 
 SLIDER
-781
-168
-956
-201
+730
+169
+905
+202
 ennemi-reloadRate
 ennemi-reloadRate
 1
 50
 30
 1
+1
+NIL
+HORIZONTAL
+
+SWITCH
+250
+298
+421
+331
+show-intentions
+show-intentions
+1
+1
+-1000
+
+SWITCH
+248
+340
+422
+373
+show_messages
+show_messages
+1
+1
+-1000
+
+TEXTBOX
+253
+272
+403
+290
+BDI / Communication
+12
+0.0
+1
+
+TEXTBOX
+546
+254
+696
+272
+Drones
+12
+0.0
+1
+
+SLIDER
+499
+276
+671
+309
+nb-drones
+nb-drones
+1
+30
+10
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+499
+314
+673
+347
+drone-vision
+drone-vision
+0.5
+25
+25
+0.5
+1
+NIL
+HORIZONTAL
+
+SLIDER
+498
+351
+715
+384
+drone-communication-radius
+drone-communication-radius
+1
+20
+15
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+499
+388
+671
+421
+drone-speed
+drone-speed
+0.01
+1
+0.2
+0.01
+1
+NIL
+HORIZONTAL
+
+SLIDER
+499
+424
+673
+457
+drone-reloadRate
+drone-reloadRate
+1
+50
+30
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+498
+461
+686
+494
+drone-nb-munitions
+drone-nb-munitions
+1
+50
+12
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+739
+276
+911
+309
+drone-fuel
+drone-fuel
+10
+2000
+500
+10
 1
 NIL
 HORIZONTAL

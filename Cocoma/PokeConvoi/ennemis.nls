@@ -1,0 +1,91 @@
+;**********************
+;        Ennemis
+;**********************
+; Generation des ennemis
+to setup-ennemis
+  create-ennemis nb-ennemis
+  ask ennemis [
+    set shape "person"
+    set color red
+    
+    set currentReload ennemi-reloadRate
+    
+    let x random-xcor
+    let y random-ycor
+    
+    let done false
+    while [not done] [
+      ask patch-at x y mapAlt [
+        ifelse (pcolor < (green + 2)) and (pcolor > (green - 2)) and ((x > 15) or (y > 15))
+        [set done true]
+        [set x random-xcor
+         set y random-ycor]
+      ]
+    ]
+    setxyz x y solAlt
+    
+    set dead? false
+  ]
+end
+
+; Comportement des ennemis
+to ennemis-think
+  ask ennemis [
+   ennemi-random-move
+   ennemi-shoot
+   
+   if dead? [
+    die 
+   ]
+  ]
+end
+
+to-report detect-obstacle-ennemi ; ennemi procedure
+  let answer false
+  let nextpx 0
+  let nextpy 0
+
+  ask patch-at dx dy mapAlt [
+   set nextpx pxcor
+   set nextpy pycor
+  ]
+
+  if any? other patches in-cone 1.5 90 with [obstacle?] [set answer true]
+
+  if abs(pxcor - nextpx) > 1 or abs(pycor - nextpy) > 1
+  [set answer true]
+
+  report answer
+end
+
+; Deplacement aleatoire
+to ennemi-random-move ; ennemi procedure
+  let done false
+  while [not done] [
+    rt random 50
+    lt random 50
+    ifelse detect-obstacle-ennemi
+      [rt random 50
+        lt random 50]
+      [set done true
+        fd ennemi-speed]
+  ]
+end
+
+to ennemi-shoot ; ennemi procedure
+
+  ifelse ( currentReload < ennemi-reloadRate )
+  [
+    set currentReload ( currentReload + 1 )
+  ]
+  ; else
+  [
+    set targets convois in-radius-nowrap ennemi-vision
+    if any? targets
+    [
+      build-shot targets
+      set currentReload 0
+    ]
+  ] ; ifelse
+end
+

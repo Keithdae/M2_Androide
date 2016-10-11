@@ -31,7 +31,7 @@ to-report belief-type [bel]
   report first bel
 end
 
-;; reports the coontent of belief belief 
+;; reports the content of belief belief 
 to-report belief-content [bel]
   report item 1 bel
 end
@@ -41,6 +41,7 @@ to add-belief [bel]
   if member? bel beliefs [stop]
   set beliefs fput bel beliefs 
 end 
+
 ;; Removing a belief from the list of beliefs. 
 to remove-belief [bel]
  set beliefs remove bel beliefs 

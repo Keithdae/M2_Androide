@@ -1,0 +1,60 @@
+to build-shot [targetsForShoots]
+  hatch-shoots 1 [ set color red
+        set shape "line half"
+        set target one-of targetsForShoots]
+end
+
+to update-shoots
+  ask shoots [
+    ifelse target != nobody
+    [
+      face target
+      fd 0.5
+      ifelse ([ breed ] of target) = convois
+      [
+        let prey one-of convois-here
+        if prey != nobody
+        [
+          set nb-cars ( nb-cars - 1 )
+          ask prey
+          [
+            die
+          ]
+          die
+        ]
+      ]
+      ; else
+      [
+        ifelse ([ breed ] of target) = ennemis
+        [
+          let prey one-of ennemis-here
+          if prey != nobody
+          [
+            ask prey
+            [
+              set dead? true
+            ]
+            die
+          ]
+        ]
+        ; else
+        [
+          let prey one-of drones-here
+          if prey != nobody
+          [
+            ask prey
+            [
+              set dead? true
+            ]
+            die
+          ]
+        ]
+      ]
+    ]
+    ;else
+    [
+      die 
+    ]
+  ]
+end
+
