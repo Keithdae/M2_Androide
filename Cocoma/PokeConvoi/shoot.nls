@@ -6,6 +6,10 @@ end
 
 to update-shoots
   ask shoots [
+    if [obstacle?] of patch-here [
+     die 
+    ]
+    
     ifelse target != nobody
     [
       face target

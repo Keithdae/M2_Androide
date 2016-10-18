@@ -1,4 +1,4 @@
-__includes ["ennemis.nls" "drones.nls" "bdi.nls" "communication.nls" "shoot.nls"]
+__includes ["ennemis.nls" "drones.nls" "bdi.nls" "communication.nls" "shoot.nls" "convoi.nls"]
 
 breed [waypoints waypoint]
 breed [envconstructors envconstructor]
@@ -56,6 +56,7 @@ drones-own[
  currentReload ; Compteur
  shootingTargets ; Ennemis a portee de tir
  objective ; Cible a suivre / proteger
+ backObjective ; Patch base
 ]
 
 ;***********************
@@ -463,160 +464,6 @@ report neighbors6 with
 end
 
 
-;-----------
-;  CONVOIS
-;-----------
-
-; Procedure principale de gestion des convois
-to convois-think
-
-  if nb-cars > 0 [
-
-    let first-car min [who] of convois
-
-    ; Calcul du plan AStar pour chaque leader si necessaire
-    foreach sort-on [who] turtle-set convois with [leader? and not finished? and not dead?] [
-      let id ([who] of ?) - first-car
-      ; Recalcule le chemin si nécessaire (par exemple au début de la simulation ou quand le convoi se sépare)
-      ; Note: on est oblige de le faire en dehors du ask sinon on ne peut pas acceder a tous les patchs
-      if empty? as-path or length as-path < (id + 1) or empty? (item id as-path) [ ; s'il n'y a pas encore de chemin du tout, ou pas de chemin pour cette voiture, on cree un plan AStar
-        ; Cree le plan AStar (attention a ca que le patch start soit au niveau ou il y a les obstacles, ici pzcor = mapAlt pour les obstacles)
-        let start-patch min-one-of (patches with [pzcor = mapAlt and not obstacle?]) [distance ?] ; on s'assure de choisir comme patch de depart un patch libre sans obstacle, sinon quand on split un convoi il se peut qu'il soit sur un obstacle et qu'il ne puisse jamais generer de chemin
-        let new-path plan-astar ([patch-at 0 0 (pzcor * -1)] of start-patch) (one-of patches with [objectif?]) ([genlongpath?] of ?)
-        ; S'il n'y a pas de plan et qu'on a essayé de trouver un long chemin, on attend la prochaine iteration et on reessaie mais avec un plan court
-        if empty? new-path and [genlongpath?] of ? [ ask ? [ set genlongpath? false ] ]
-        ; S'il n'y a pas deja une entree pour cette voiture on la cree
-        ifelse length as-path < (id + 1) [
-          set as-path lput new-path as-path
-        ]
-        ; Sinon on remplace l'entree pour cette voiture par le nouveau plan
-        [
-          set as-path replace-item id as-path new-path
-        ]
-      ]
-    ]
-
-    ; Deplacement des leaders sur le chemin AStar
-    ask convois with [leader? and not finished? and not dead?] [ ; Tant qu'on n'a pas atteint le but
-      ;move-convoi-naive ; deplacement naif sans AStar
-
-      ; Recupere le plan AStar
-      let my-as-path item (who - first-car) as-path
-      if not empty? my-as-path [
-        ; Deplacement par waypoints: on se deplace jusqu'au prochain patch du chemin jusqu'à l'atteindre
-        let next-patch first my-as-path
-        let zz pzcor
-        set next-patch [patch-at 0 0 (zz - pzcor)] of next-patch ; mise a niveau de pzcor au cas ou le chemin a ete calculé sur un autre plan
-        ; Deplacement vers le prochain waypoint
-        if next-patch != patch-here [move-convoi next-patch false false]
-        ; Si on a atteint ce patch, on le supprime de la liste, et on va donc continuer vers le prochain patch du chemin
-        if patch-here = next-patch [
-          set my-as-path remove-item 0 my-as-path
-          set as-path replace-item (who - first-car) as-path my-as-path
-          if debug [ show (word "Waypoint atteint: " patch-here ", prochain: " next-patch ) ]
-        ]
-      ]
-
-      ; Critere d'arret: on est a cote de l'objectif
-      check-convoi-finished
-
-    ]
-
-    ; Deplacement des voitures-cortege: elles ne font que suivre la voiture devant eux (avec laquelle elles sont liées)
-    ask convois with [not leader? and not finished? and not dead?] [
-      ifelse any? my-out-convoi-links [
-        move-convoi ([patch-here] of one-of out-convoi-link-neighbors) true true
-      ]
-      ; S'il n'y a pas de lien devant, c'est probablement que la voiture est morte, donc on devient leader
-      [
-        set leader? true
-        set genlongpath? true
-        if not to-protect? [ set color orange ]
-      ]
-    ]
-  ]
-end
-
-to-report detect-obstacle
- if any? other patches in-cone 10 60 with [obstacle?] [report true]
-; if any? other patches in-cone 10 90 [report true]
-; if any? other patches in-cone 3 270 [report true]
- report false
-end
-
-to turn-away
-   ;let free-patches neighbors with [not any? patches ]
-   ;if any? free-patches [face one-of free-patches]
-   rt random 10 - 5
-end
-
-to check-convoi-finished
-  ; Critere d'arret: on est a cote de l'objectif
-  ; Note: on veut etre a cote de l'objectif et pas directement dessus car on est une voiture, donc il se peut qu'on tourne indefiniment autour sans arriver directement a arriver dessus a cause de la limite d'angle de rotation.
-  if any? [neighbors6-nowrap with [objectif?]] of patch-here [ ; On ne bouge pas si on est arrive au but!
-                                                               ; Fini pour le leader
-    set finished? true
-    ; Fini aussi pour toutes les voitures-cortege qui suivent ce leader
-    let linked-cars (list in-convoi-link-neighbors)
-    while [not empty? linked-cars] [ ; on fait une boucle pour recursivement mettre a finished? = true toutes les voitures liees entre elles dans ce cortege
-      let next-linked-cars []
-      foreach linked-cars [
-        ask ? [
-          set finished? true
-          if any? in-convoi-link-neighbors [ ; on recupere les voitures-cortege liees a la voiture-cortege en cours
-            set next-linked-cars lput in-convoi-link-neighbors next-linked-cars
-          ]
-        ]
-      ]
-      set linked-cars next-linked-cars
-    ]
-  ]
-end
-
-; Avancer une voiture
-; Permet de faire avancer les voitures d'un convoi (cortege et leader)
-; Maintien egalement une petite distance afin de ne pas "rentrer" dans la voiture de devant
-to move-convoi [goal slowdown? cortege?]
-  ;show (word "ici:" patch-here " goal:" goal)
-
-  ; Calcule de l'angle avec la cible
-  let headingFlag heading
-  ifelse cortege?
-  [ set headingFlag (towards goal) ] ; Si c'est un cortege, on veut qu'il suive toujours le leader par le chemin le plus court (surtout en play-mode ou le joueur n'est pas limite par le nowrap)
-  [ set headingFlag (towards-nowrap goal) ]
-  let dirCorrection subtract-headings headingFlag heading
-  ; Arrondissement de l'angle (on ne veut pas faire de micro tournant)
-  set dirCorrection precision dirCorrection 2
-  ; Limite de l'angle, pour que ce soit plus realiste (la voiture ne peut pas faire un demi-tour sur place!)
-  ifelse dirCorrection > maxdir [ ; limite a droite
-    set dirCorrection maxdir
-  ]
-  [
-    if dirCorrection < maxdir * -1 [ ; limite a gauche
-      set dirCorrection maxdir * -1
-    ]
-  ]
-
-  ; On tourne
-  rt dirCorrection
-
-  ; Limite de vitesse pour les voitures-cortege (pour pas qu'elles ne rentrent dans la voiture leader)
-  let tmp-speed speed
-  if slowdown? [
-    if distance-nowrap goal < 1.1 [
-      set tmp-speed tmp-speed / 20
-    ]
-    if distance-nowrap goal < 0.9 [
-      set tmp-speed 0
-    ]
-  ]
-
-  ; Deplacement!
-  set pitch 0 ; make sure there's no pitch ever, else the car will disappear in the ground
-  fd tmp-speed ; Avance
-end
-
-
 
 ;***********************
 ;         Projet
@@ -634,7 +481,6 @@ to go
 
   tick
 end
-
 @#$#@#$#@
 GRAPHICS-WINDOW
 0
@@ -905,7 +751,7 @@ nb-ennemis
 nb-ennemis
 1
 100
-20
+1
 1
 1
 NIL
@@ -1007,7 +853,7 @@ nb-drones
 nb-drones
 1
 30
-10
+6
 1
 1
 NIL
@@ -1097,7 +943,7 @@ drone-fuel
 drone-fuel
 10
 2000
-500
+150
 10
 1
 NIL
