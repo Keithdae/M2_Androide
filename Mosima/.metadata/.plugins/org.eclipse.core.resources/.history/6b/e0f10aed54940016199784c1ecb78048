@@ -1,0 +1,71 @@
+package Model_Calibration;
+
+import Model_Calibration.CMAES.TeacherCMAES;
+import Model_Calibration.GDE.*;
+
+public class Calibration {
+
+	public static void main(String[] args) {
+		int NbCalib=10; // Nombre de calibrations par run 
+		
+		TeacherCMAES teacherCMAES = new TeacherCMAES();
+		TeacherGDE teacherGDE = new TeacherGDE();
+		
+		/*
+		 * Nb de simu lancées pour le calcul de la fitness moyenne
+		 */
+		int NbSimus = 20;
+ 	
+		
+		double nbIterMoy1=0;
+		double nbIterMoy2=0;
+		
+		int nbEchecs1 = 0;
+		int nbEchecs2 = 0;
+		
+		double cpt1 = 0;
+		double cpt2 = 0;
+		
+		
+		for(int i = 0; i < NbCalib ; i++){
+			 
+			 /*
+			  * Lancement d'une calibration avec le CMA-ES et récupération du nombre d'itération - 1 itération = 1 jeu de paramètres testés
+			  */
+			 double nbrIter1 = teacherCMAES.teachCMAES(100, NbSimus, 30, 0.5 , 0.01, 1000);
+			 double nbrIter2 = teacherGDE.teachGDE(    100, NbSimus, 30, 0.5, 0.5, 10, 0.01, 1000);
+			 
+			 System.out.println("nbrIter " + nbrIter);  
+			 
+			 if(nbrIter == -1){
+				 nbEchecs++;
+			 } else {
+				 nbIterMoy += nbrIter;
+				 cpt++;
+			 }
+			 System.out.println("[Calibration #" + (i+1) +"] - nbrIter =" + nbrIter1 +"\n-------------------------------------------\n");  
+			 
+			 if(nbrIter1 == -1){
+				 nbEchecs1++;
+			 } else {
+				 nbIterMoy1 += nbrIter1;
+				 cpt1++;
+			 }
+			 
+			 
+		}
+		
+	// Moyenne du nombre d'itérations
+		if(cpt1 !=0){
+			nbIterMoy1=nbIterMoy1/cpt1;
+		}
+		
+		double tauxEchecs1 = nbEchecs1/(double)NbCalib;
+		  
+		System.out.println("\n nbIterMoy : " + nbIterMoy1);
+		System.out.println("tauxEchecs : " + tauxEchecs1);
+		
+	}
+	
+
+}

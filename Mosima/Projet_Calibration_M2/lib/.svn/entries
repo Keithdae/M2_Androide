@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wc-entries
+   xmlns="svn:">
+<entry
+   repos="https://alm.lip6.fr:2004/svn/WorkSim"
+   name=""
+   revision="5"
+   last-author="legrand"
+   url="https://alm.lip6.fr:2004/svn/WorkSim/trunk/lib"
+   uuid="a8b25cb9-3e6f-4240-9f37-9695e82012ef"
+   committed-rev="2"
+   kind="dir"
+   committed-date="2011-05-10T16:41:02.348405Z"/>
+<entry
+   name="Repast-3.1"
+   kind="dir"/>
+<entry
+   name="grappa1_2.jar"
+   checksum="180f7b0f9a58555e9b76d014b6c4342d"
+   last-author="legrand"
+   text-time="2011-05-10T16:41:02.000000Z"
+   committed-rev="2"
+   kind="file"
+   committed-date="2011-05-10T16:41:02.348405Z"
+   prop-time="2011-08-05T19:38:32.000000Z"/>
+<entry
+   name="groovy-all-1.6.3.jar"
+   checksum="9d856627782a429061cbe286237d9a3c"
+   last-author="legrand"
+   text-time="2011-05-10T16:41:02.000000Z"
+   committed-rev="2"
+   kind="file"
+   committed-date="2011-05-10T16:41:02.348405Z"
+   prop-time="2011-08-05T19:38:44.000000Z"/>
+<entry
+   name="jcommon-1.0.15.jar"
+   checksum="2e808e32dd48f014a9c0c84a8d9979d4"
+   last-author="legrand"
+   text-time="2011-05-10T16:41:02.000000Z"
+   committed-rev="2"
+   kind="file"
+   committed-date="2011-05-10T16:41:02.348405Z"
+   prop-time="2011-08-05T19:45:28.000000Z"/>
+<entry
+   name="jfreechart-1.0.12.jar"
+   checksum="7e2f2803f493174c7a4352e6f130733d"
+   last-author="legrand"
+   text-time="2011-05-10T16:41:02.000000Z"
+   committed-rev="2"
+   kind="file"
+   committed-date="2011-05-10T16:41:02.348405Z"
+   prop-time="2011-08-05T19:38:32.000000Z"/>
+<entry
+   name="log4j-1.2-15.jar"
+   checksum="4d4609998fbc124ce6f0d1d48fca2614"
+   last-author="legrand"
+   text-time="2011-05-10T16:41:02.000000Z"
+   committed-rev="2"
+   kind="file"
+   committed-date="2011-05-10T16:41:02.348405Z"
+   prop-time="2011-08-05T19:38:45.000000Z"/>
+<entry
+   name="poi-3.1-FINAL-20080629.jar"
+   checksum="8704f2466d226e6dc51013ef24eabce5"
+   last-author="legrand"
+   text-time="2011-05-10T16:41:02.000000Z"
+   committed-rev="2"
+   kind="file"
+   committed-date="2011-05-10T16:41:02.348405Z"
+   prop-time="2011-08-05T19:38:28.000000Z"/>
+</wc-entries>
