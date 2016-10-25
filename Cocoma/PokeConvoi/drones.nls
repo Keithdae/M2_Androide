@@ -273,9 +273,9 @@ to drone-step
       set nextpy pycor
     ]
     
-    ;if any? other patches in-cone 1.5 90 with [obstacle?]
+    ;if 
     
-    ifelse abs(pxcor - nextpx) > 1 or abs(pycor - nextpy) > 1[
+    ifelse abs(pxcor - nextpx) > 1 or abs(pycor - nextpy) > 1 or any? other patches in-cone 1.5 90 with [obstacle?][
       rt random-float 90
     ]
     ;else 

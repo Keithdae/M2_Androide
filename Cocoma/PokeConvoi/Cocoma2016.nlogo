@@ -20,10 +20,12 @@ globals [mapAlt solAlt basseAlt hauteAlt ; variables topologiques Z discretise: 
   send-interval ; communication period
   is-movie-recording?
   nb-cars
+  astar-gen-curr ; cooldown for using astar to plan again
   ]
 
 patches-own [obstacle? base? hangar? objectif? bridge? ; variables topologiques au niveau mapAlt, permet de definir les patchs praticables et ceux qui sont des obstacles
   as-closed as-heuristic as-prev-pos ; variables temporaires pour calculer les chemins AStar (effaces a chaque calcul de plan)
+  ennemi?
   ]
 
 convois-own[incoming-queue
@@ -34,6 +36,7 @@ convois-own[incoming-queue
   dead?
   speed maxdir ; maximal speed of a car, and max angle
   last-send-time ; communication historical time-stamp
+  ennemis-seen
   ]
 
 ennemis-own[
@@ -57,6 +60,7 @@ drones-own[
  shootingTargets ; Ennemis a portee de tir
  objective ; Cible a suivre / proteger
  backObjective ; Patch base
+ leader?
 ]
 
 ;***********************
@@ -114,6 +118,8 @@ to setup-globals
  ; set dist-R-set []
 
   set is-movie-recording? false
+
+  set astar-gen-curr astar-gen-cd
 end
 
 
@@ -127,7 +133,7 @@ end
 
 ;environment definition
 to setup-env
-  ask patches [set obstacle? false set base? false set hangar? false set objectif? false set bridge? false]
+  ask patches [set obstacle? false set base? false set hangar? false set objectif? false set bridge? false set ennemi? false]
 
   ; Herbe
   ask patches with [pzcor = mapAlt][set pcolor green + (random-float 2) - 1]
@@ -374,7 +380,7 @@ to-report plan-astar [start goal longpath?] ; start et goal sont des patchs
       ; Sinon on va explorer les voisins du patch en cours
       [
         ; Expansion du meilleur candidat (expansion = on ajoute les voisins dans la liste open, des noeuds a visiter)
-        ask [neighbors6-nowrap with [pzcor = start-pzcor and as-closed = 0 and not obstacle? and not base?]] of pos [ ; On ne visite que les voisins au meme niveau (astar en 2D, mais on peut etendre ici au 3D facilement!) ET on ne l'a pas deja visite (as-closed = 0) ET il n'y a pas d'obstacle sur ce patch
+        ask [neighbors6-nowrap with [pzcor = start-pzcor and as-closed = 0 and not obstacle? and not base? and not ennemi?]] of pos [ ; On ne visite que les voisins au meme niveau (astar en 2D, mais on peut etendre ici au 3D facilement!) ET on ne l'a pas deja visite (as-closed = 0) ET il n'y a pas d'obstacle sur ce patch
           ; Calcul du score f de ce voisin
           let g2 g + as-cost
           let h2 as-heuristic
@@ -751,7 +757,7 @@ nb-ennemis
 nb-ennemis
 1
 100
-1
+19
 1
 1
 NIL
@@ -851,9 +857,9 @@ SLIDER
 309
 nb-drones
 nb-drones
-1
+0
 30
-6
+4
 1
 1
 NIL
@@ -868,7 +874,7 @@ drone-vision
 drone-vision
 0.5
 25
-25
+8
 0.5
 1
 NIL
@@ -943,8 +949,48 @@ drone-fuel
 drone-fuel
 10
 2000
-150
+300
 10
+1
+NIL
+HORIZONTAL
+
+TEXTBOX
+521
+530
+671
+548
+Convois
+12
+0.0
+1
+
+SLIDER
+493
+554
+665
+587
+convoi-vision
+convoi-vision
+0
+10
+6
+0.1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+493
+596
+665
+629
+astar-gen-cd
+astar-gen-cd
+1
+20
+6
+1
 1
 NIL
 HORIZONTAL
