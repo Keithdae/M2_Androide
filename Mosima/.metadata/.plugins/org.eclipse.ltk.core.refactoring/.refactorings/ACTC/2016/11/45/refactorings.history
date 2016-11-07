@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Move element &apos;FollowBehaviour.java&apos; to &apos;ACTC/src/sma.actionsBehaviours&apos;&#x0A;- Original project: &apos;ACTC&apos;&#x0A;- Destination element: &apos;ACTC/src/sma.actionsBehaviours&apos;&#x0A;- Original element: &apos;sma.agents.FollowBehaviour.java&apos;&#x0A;- Update references to refactored element" description="Move compilation unit" destination="/src&lt;sma.actionsBehaviours" element1="/src&lt;sma.agents{FollowBehaviour.java" files="0" flags="589830" folders="0" id="org.eclipse.jdt.ui.move" patterns="*" policy="org.eclipse.jdt.ui.moveResources" qualified="false" references="true" stamp="1478519032148" units="1" version="1.0"/>
+</session>

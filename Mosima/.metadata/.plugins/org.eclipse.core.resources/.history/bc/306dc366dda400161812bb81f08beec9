@@ -1,0 +1,11 @@
+package sma.agents;
+
+import sma.AbstractAgent;
+
+public class NotBasicAgent extends AbstractAgent {
+
+	public NotBasicAgent() {
+		// TODO Auto-generated constructor stub
+	}
+
+}

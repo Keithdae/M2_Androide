@@ -1,9 +1,0 @@
-package Model_Calibration;
-
-public class FitnessTargets {
-
-	
-	
-	public static double ratePreysOverPredatorsTarget = 1;
-	public static double ratePreyEatenTarget = 0.002;
-}

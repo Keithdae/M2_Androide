@@ -1,2 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<typeInfoHistroy/>
+<typeInfoHistroy>
+<typeInfo handle="=ACTC/ressources\/lib\/prolog\/jiprolog-4.1.5.1.jar&lt;com.ugos.jiprolog.engine(aG.class[aG" modifiers="48" timestamp="1478349484000"/>
+<typeInfo handle="=ACTC/src&lt;sma{AbstractAgent.java[AbstractAgent" modifiers="1" timestamp="1476803222000"/>
+<typeInfo handle="=ACTC/ressources\/lib\/jade\/jade.jar&lt;jade.core.behaviours(Behaviour.class[Behaviour" modifiers="1057" timestamp="1478347642000"/>
+</typeInfoHistroy>
