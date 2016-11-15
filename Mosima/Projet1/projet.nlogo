@@ -73,6 +73,7 @@ to setupAgents
       set heading direction
 
       set typeAgent typeBlack ; On assigne le type demandé
+      initAgent
     ]
   ]
 
@@ -98,6 +99,7 @@ to setupAgents
       set heading dir
 
       set typeAgent typeRed
+      initAgent
     ]
   ]
 
@@ -123,6 +125,7 @@ to setupAgents
       set heading dir
 
       set typeAgent typeGreen
+      initAgent
     ]
   ]
 
@@ -148,6 +151,7 @@ to setupAgents
       set heading dir
 
       set typeAgent typeViolet
+      initAgent
     ]
   ]
 
@@ -173,6 +177,7 @@ to setupAgents
       set heading dir
 
       set typeAgent typeYellow
+      initAgent
     ]
   ]
 
@@ -198,6 +203,7 @@ to setupAgents
       set heading dir
 
       set typeAgent typeCyan
+      initAgent
     ]
   ]
 
@@ -442,7 +448,7 @@ nbAgentsBlack
 nbAgentsBlack
 0
 X * Y
-245
+500
 1
 1
 NIL
@@ -457,7 +463,7 @@ nbAgentsRed
 nbAgentsRed
 0
 X * Y
-89
+250
 1
 1
 NIL
@@ -472,7 +478,7 @@ nbAgentsGreen
 nbAgentsGreen
 0
 X * Y
-165
+0
 1
 1
 NIL
@@ -487,7 +493,7 @@ nbAgentsViolet
 nbAgentsViolet
 0
 X * Y
-217
+0
 1
 1
 NIL
@@ -502,7 +508,7 @@ nbAgentsYellow
 nbAgentsYellow
 0
 X * Y
-95
+0
 1
 1
 NIL
@@ -517,7 +523,7 @@ nbAgentsCyan
 nbAgentsCyan
 0
 X * Y
-87
+0
 1
 1
 NIL
@@ -551,7 +557,7 @@ CHOOSER
 typeGreen
 typeGreen
 0 1 2 3 4 5 6 7 8 9
-1
+9
 
 CHOOSER
 1597
@@ -561,7 +567,7 @@ CHOOSER
 typeViolet
 typeViolet
 0 1 2 3 4 5 6 7 8 9
-0
+9
 
 CHOOSER
 1598
@@ -571,7 +577,7 @@ CHOOSER
 typeYellow
 typeYellow
 0 1 2 3 4 5 6 7 8 9
-0
+9
 
 CHOOSER
 1598
@@ -581,7 +587,7 @@ CHOOSER
 typeCyan
 typeCyan
 0 1 2 3 4 5 6 7 8 9
-0
+9
 
 SWITCH
 1176
@@ -630,7 +636,7 @@ NIL
 0.0
 10.0
 0.0
-3.0
+2.1
 true
 true
 "" ""
