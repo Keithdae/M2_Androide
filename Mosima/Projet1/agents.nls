@@ -1,0 +1,113 @@
+;-------------;
+;   AGENTS    ;
+;-------------;
+
+to calculateProfits
+  ask agents [
+    set lastProfit profit
+    set profit (5 * sqrt(effort + otherEffort) - (effort * effort))
+  ]
+end
+
+to randomMove
+  ask agents [
+    set direction one-of [0 90 180 270]  ; on tourne aléatoirement
+    set heading direction
+
+    let occ false
+    if patch-ahead 1 != nobody [
+      if [occupied?] of patch-ahead 1 = TRUE [  ; on vérifie si le patch devant nous est libre
+        set occ TRUE
+      ]
+    ]
+    if not occ [
+      set occupied? false  ; patch d'où on part
+      fd 1
+      set occupied? true   ; patch où l'on arrive
+    ]
+  ]
+end
+
+to workAgent
+  ask agents[
+     let deltax 0
+     let deltay 0
+     let dir direction
+     if patch-ahead 1 != nobody [
+       ifelse direction = 0[
+         set deltay 1
+       ]
+       [
+         ifelse direction = 90[
+           set deltax 1 
+         ] 
+         [
+           ifelse direction = 180[
+             set deltay -1 
+           ] 
+           [
+             if direction = 270[
+               set deltax -1 
+             ] 
+           ]
+         ]
+       ] ;definition du x et y 
+       if any? agents-at deltax deltay [ ;agent dans la case en face
+         ask agents-at deltax deltay [
+           if direction = (dir + 180) mod 360 [ ;si l'agent en face nous regarde, on travaille ensemble
+             if typeAgent = 0 [ ;null effort agent
+               set effort 0.001 
+             ]
+             if typeAgent = 1 [ ;shrinking effort agent
+               set effort lastPartnerEffort / 2
+             ]
+             if typeAgent = 2 [ ;replicator agent
+               set effort lastPartnerEffort
+             ]
+             if typeAgent = 3 [ ;rational agent
+               
+             ]
+             if typeAgent = 4 [ ;profit comparator agent
+               ifelse lastPartnerProfit < lastProfit[
+                 set effort effort * 1.1 
+               ]
+               [
+                 set effort effort * 0.9
+               ]
+             ]
+             if typeAgent = 5 [ ;high effort agent
+               set effort 2.0
+             ]
+             if typeAgent = 6 [ ;average rational agent
+               
+             ]
+             if typeAgent = 7 [ ;winner imitator agent
+               ifelse timer = 0 [ ;au premier travail il est high-effort
+                 set effort 2.0
+               ]
+               [
+                 if lastProfit < lastPartnerProfit [
+                   set effort lastPartnerEffort 
+                 ]
+               ]
+             ]
+             if typeAgent = 8 [ ;effort comparator agent
+               ifelse timer = 0 [ ;au premier travail il est high-effort
+                 set effort 2.0
+               ]
+               [
+                 if lastEffort < lastPartnerEffort [
+                   set effort lastPartnerEffort 
+                 ]
+               ]
+             ]
+             if typeAgent = 9 [ ;averager agent
+               
+             ]
+             print(word "effort: " effort)              
+           ]
+         ]
+       ] 
+     ]
+  ]
+end

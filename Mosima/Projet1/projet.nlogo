@@ -1,3 +1,4 @@
+__includes ["agents.nls"]
 breed [agents agent]
 
 patches-own [
@@ -7,10 +8,15 @@ patches-own [
 
 agents-own [
  typeAgent
+ direction
  effort
  profit
  otherEffort
  otherProfit
+ lastEffort
+ lastProfit
+ lastPartnerEffort
+ lastPartnerProfit
 ]
 
 to setup
@@ -63,8 +69,8 @@ to setupAgents
       let targetPatch one-of patches with [not occupied? and not effort?]
       move-to targetPatch
       set occupied? true
-      let dir one-of [0 90 180 270]  ; on tourne aléatoirement
-      set heading dir
+      set direction one-of [0 90 180 270]  ; on tourne aléatoirement
+      set heading direction
 
       set typeAgent typeBlack ; On assigne le type demandé
     ]
@@ -199,38 +205,17 @@ end
 
 to go
 
-
+  randomMove
+  workAgent
   calculateProfits
   tick
 end
 
-to calculateProfits
-  ask agents [
-    set profit (5 * sqrt(effort + otherEffort) - (effort * effort))
-  ]
-end
-
-to randomMove
-  ask agents [
-    let dir one-of [0 90 180 270]  ; on tourne aléatoirement
-    set heading dir
-
-    let occ false
-    ask patch-ahead 1 [  ; on vérifie si le patch devant nous est libre
-      set occ occupied?
-    ]
-    if not occ [
-      set occupied? false  ; patch d'où on part
-      fd 1
-      set occupied? true   ; patch où l'on arrive
-    ]
-  ]
-end
 @#$#@#$#@
 GRAPHICS-WINDOW
 18
 34
-516
+836
 305
 -1
 -1
@@ -245,7 +230,7 @@ GRAPHICS-WINDOW
 0
 1
 0
-60
+100
 0
 29
 1
@@ -307,7 +292,7 @@ X
 X
 5
 50
-30
+50
 1
 1
 NIL
@@ -377,7 +362,7 @@ CHOOSER
 nbAgentTypes
 nbAgentTypes
 1 2 3 4 5 6
-5
+1
 
 TEXTBOX
 538
@@ -458,7 +443,7 @@ nbAgentsBlack
 nbAgentsBlack
 0
 X * Y
-95
+250
 1
 1
 NIL
@@ -488,7 +473,7 @@ nbAgentsGreen
 nbAgentsGreen
 0
 X * Y
-69
+165
 1
 1
 NIL
@@ -503,7 +488,7 @@ nbAgentsViolet
 nbAgentsViolet
 0
 X * Y
-102
+217
 1
 1
 NIL
@@ -547,7 +532,7 @@ CHOOSER
 typeBlack
 typeBlack
 0 1 2 3 4 5 6 7 8 9
-0
+5
 
 CHOOSER
 765
@@ -567,7 +552,7 @@ CHOOSER
 typeGreen
 typeGreen
 0 1 2 3 4 5 6 7 8 9
-0
+1
 
 CHOOSER
 765
@@ -978,7 +963,7 @@ Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
 
 @#$#@#$#@
-NetLogo 5.3
+NetLogo 5.3.1
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@
