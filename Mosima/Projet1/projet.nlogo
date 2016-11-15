@@ -210,7 +210,6 @@ to go
   calculateProfits
   tick
 end
-
 @#$#@#$#@
 GRAPHICS-WINDOW
 18
@@ -240,10 +239,10 @@ ticks
 30.0
 
 BUTTON
-47
-508
-110
-541
+879
+49
+942
+82
 NIL
 go
 T
@@ -257,10 +256,10 @@ NIL
 1
 
 BUTTON
-46
-549
-119
-582
+878
+90
+951
+123
 NIL
 setup
 NIL
@@ -274,20 +273,20 @@ NIL
 1
 
 TEXTBOX
-191
-488
-341
-506
+1023
+29
+1173
+47
 World parameters :
 12
 0.0
 1
 
 SLIDER
-188
-507
-280
-540
+1020
+48
+1112
+81
 X
 X
 5
@@ -299,10 +298,10 @@ NIL
 HORIZONTAL
 
 SLIDER
-188
-545
-280
-578
+1020
+86
+1112
+119
 Y
 Y
 5
@@ -334,20 +333,20 @@ Efforts
 1
 
 TEXTBOX
-350
-488
-500
-506
+1182
+29
+1332
+47
 View parameters :
 12
 0.0
 1
 
 SWITCH
-346
-506
-477
-539
+1178
+47
+1309
+80
 effortWindow
 effortWindow
 0
@@ -355,105 +354,105 @@ effortWindow
 -1000
 
 CHOOSER
-535
-507
-673
-552
+1367
+48
+1505
+93
 nbAgentTypes
 nbAgentTypes
 1 2 3 4 5 6
-1
+3
 
 TEXTBOX
-538
-489
-688
-507
+1370
+30
+1520
+48
 Agent parameters :
 12
 0.0
 1
 
 TEXTBOX
-529
-615
-595
-633
+1361
+156
+1427
+174
 # agents
 12
 15.0
 0
 
 TEXTBOX
-530
-568
-597
-586
+1362
+109
+1429
+127
 # agents
 12
 0.0
 1
 
 TEXTBOX
-527
-667
-607
-685
+1359
+208
+1439
+226
 # agents
 12
 55.0
 1
 
 TEXTBOX
-527
-718
-609
-736
+1359
+259
+1441
+277
 # agents
 12
 115.0
 1
 
 TEXTBOX
-527
-771
-608
-789
+1359
+312
+1440
+330
 # agents
 12
 44.0
 1
 
 TEXTBOX
-528
-823
-604
-841
+1360
+364
+1436
+382
 # agents
 12
 85.0
 1
 
 SLIDER
-611
-567
-758
-600
+1443
+108
+1590
+141
 nbAgentsBlack
 nbAgentsBlack
 0
 X * Y
-250
+245
 1
 1
 NIL
 HORIZONTAL
 
 SLIDER
-609
-616
-756
-649
+1441
+157
+1588
+190
 nbAgentsRed
 nbAgentsRed
 0
@@ -465,10 +464,10 @@ NIL
 HORIZONTAL
 
 SLIDER
-608
-668
-754
-701
+1440
+209
+1586
+242
 nbAgentsGreen
 nbAgentsGreen
 0
@@ -480,10 +479,10 @@ NIL
 HORIZONTAL
 
 SLIDER
-608
-715
-756
-748
+1440
+256
+1588
+289
 nbAgentsViolet
 nbAgentsViolet
 0
@@ -495,10 +494,10 @@ NIL
 HORIZONTAL
 
 SLIDER
-607
-770
-754
-803
+1439
+311
+1586
+344
 nbAgentsYellow
 nbAgentsYellow
 0
@@ -510,10 +509,10 @@ NIL
 HORIZONTAL
 
 SLIDER
-606
-825
-755
-858
+1438
+366
+1587
+399
 nbAgentsCyan
 nbAgentsCyan
 0
@@ -525,70 +524,70 @@ NIL
 HORIZONTAL
 
 CHOOSER
-765
-561
-857
-606
+1597
+102
+1689
+147
 typeBlack
 typeBlack
 0 1 2 3 4 5 6 7 8 9
 5
 
 CHOOSER
-765
-612
-857
-657
+1597
+153
+1689
+198
 typeRed
 typeRed
 0 1 2 3 4 5 6 7 8 9
 0
 
 CHOOSER
-765
-663
-857
-708
+1597
+204
+1689
+249
 typeGreen
 typeGreen
 0 1 2 3 4 5 6 7 8 9
 1
 
 CHOOSER
-765
-716
-857
-761
+1597
+257
+1689
+302
 typeViolet
 typeViolet
 0 1 2 3 4 5 6 7 8 9
 0
 
 CHOOSER
-766
-767
-858
-812
+1598
+308
+1690
+353
 typeYellow
 typeYellow
 0 1 2 3 4 5 6 7 8 9
 0
 
 CHOOSER
-766
-823
-858
-868
+1598
+364
+1690
+409
 typeCyan
 typeCyan
 0 1 2 3 4 5 6 7 8 9
 0
 
 SWITCH
-344
-703
-467
-736
+1176
+244
+1299
+277
 noiseSwitch
 noiseSwitch
 1
@@ -596,20 +595,20 @@ noiseSwitch
 -1000
 
 TEXTBOX
-344
-676
-388
-694
+1176
+217
+1220
+235
 Noise :
 12
 0.0
 1
 
 SLIDER
-343
-747
-468
-780
+1175
+288
+1300
+321
 noiseValue
 noiseValue
 0
@@ -619,6 +618,53 @@ noiseValue
 1
 NIL
 HORIZONTAL
+
+PLOT
+21
+429
+464
+617
+Effort
+NIL
+NIL
+0.0
+10.0
+0.0
+3.0
+true
+true
+"" ""
+PENS
+"Mean" 1.0 0 -16777216 true "" "plot mean [effort] of agents"
+"Std" 1.0 0 -7500403 true "" "plot standard-deviation [effort] of agents"
+
+PLOT
+492
+429
+892
+617
+Profit
+NIL
+NIL
+0.0
+10.0
+0.0
+10.0
+true
+true
+"" ""
+PENS
+"Average" 1.0 0 -16777216 true "" "plot mean [profit] of turtles"
+
+TEXTBOX
+1715
+117
+1865
+271
+Agent types :\n0 - null effort\n1 - shrinking effort\n2 - replicator\n3 - rational\n4 - profit comparator\n5 - high effort\n6 - average rational\n7 - winner imitator\n8 - effort comparator\n9 - averager
+11
+0.0
+1
 
 @#$#@#$#@
 ## WHAT IS IT?
