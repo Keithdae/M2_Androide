@@ -209,6 +209,14 @@ to setupAgents
 
 end
 
+to drawEfforts
+  ask agents[
+    ask patch-at (xcor + X + 1) ycor [
+      set pcolor green
+    ]
+  ]
+end
+
 to go
 
   randomMove
@@ -220,7 +228,7 @@ end
 GRAPHICS-WINDOW
 18
 34
-836
+516
 305
 -1
 -1
@@ -235,7 +243,7 @@ GRAPHICS-WINDOW
 0
 1
 0
-100
+60
 0
 29
 1
@@ -297,7 +305,7 @@ X
 X
 5
 50
-50
+30
 1
 1
 NIL
@@ -537,7 +545,7 @@ CHOOSER
 typeBlack
 typeBlack
 0 1 2 3 4 5 6 7 8 9
-5
+9
 
 CHOOSER
 1597
@@ -547,7 +555,7 @@ CHOOSER
 typeRed
 typeRed
 0 1 2 3 4 5 6 7 8 9
-0
+1
 
 CHOOSER
 1597
