@@ -210,9 +210,59 @@ to setupAgents
 end
 
 to drawEfforts
+  ask patches with [pxcor > X ] [
+    set pcolor white
+  ]
   ask agents[
-    ask patch-at (xcor + X + 1) ycor [
-      set pcolor green
+    let couleur 25
+    ifelse effort < 0.2 and 0.0 <= effort [
+      set couleur couleur - 5
+    ]
+    [
+      ifelse effort < 0.4 and 0.2 <= effort [
+        set couleur couleur - 4
+      ]
+      [
+        ifelse effort < 0.6 and 0.4 <= effort [
+          set couleur couleur - 3
+        ]
+        [
+          ifelse effort < 0.8 and 0.6 <= effort [
+            set couleur couleur - 2
+          ]
+          [
+             ifelse effort < 1.0 and 0.8 <= effort [
+              set couleur couleur - 1
+            ]
+            [
+              ifelse effort < 1.2 and 1.0 <= effort [
+                set couleur couleur
+              ]
+              [
+                ifelse effort < 1.4 and 1.2 <= effort [
+                  set couleur couleur + 1
+                ]
+                [
+                  ifelse effort < 1.6 and 1.4 <= effort [
+                    set couleur couleur + 2
+                  ]
+                  [
+                    ifelse effort < 1.8 and 1.6 <= effort [
+                      set couleur couleur + 3
+                    ]
+                    [
+                      set couleur couleur + 4
+                    ]
+                  ]
+                ]
+              ]
+            ]
+          ]
+        ]
+      ]
+    ]
+    ask patch-at (X + 1) 0 [
+       set pcolor couleur
     ]
   ]
 end
@@ -222,6 +272,7 @@ to go
   randomMove
   workAgent
   calculateProfits
+  drawEfforts
   tick
 end
 @#$#@#$#@
@@ -456,7 +507,7 @@ nbAgentsBlack
 nbAgentsBlack
 0
 X * Y
-500
+205
 1
 1
 NIL
@@ -555,7 +606,7 @@ CHOOSER
 typeRed
 typeRed
 0 1 2 3 4 5 6 7 8 9
-1
+5
 
 CHOOSER
 1597
