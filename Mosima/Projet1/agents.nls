@@ -4,8 +4,20 @@
 
 to calculateProfits
   ask agents [
-    set lastProfit profit
-    set profit (5 * sqrt(effort + otherEffort) - (effort * effort))
+    if partner != -1[
+      let auxPartnerEffort 0
+      ask partner [
+        set auxPartnerEffort effort
+      ]
+      set otherEffort auxPartnerEffort
+    
+      set profit (5 * sqrt(effort + otherEffort) - (effort * effort))
+      set otherProfit (5 * sqrt(effort + otherEffort) - (otherEffort * otherEffort))
+    
+      set lastProfit profit
+      set lastEffort effort
+      set lastPartnerEffort otherEffort
+    ]
   ]
 end
 
@@ -35,6 +47,7 @@ to initAgent ; agent procedure
   set lastProfit -1  
   set lastPartnerEffort -1  
   set lastPartnerProfit -1  
+  set partner -1
   set effort random-float 2.001
   if typeAgent = 0 [ ;null effort agent
     set effort 0.001 
@@ -48,6 +61,7 @@ end
 
 to workAgent
   ask agents[
+     set partner -1
      let deltax 0
      let deltay 0
      let dir direction
@@ -72,8 +86,11 @@ to workAgent
        ] ;definition du x et y 
        if any? agents-at deltax deltay [ ;agent dans la case en face
          let currPartnerEffort -1
+         let currPartner -1
          ask agents-at deltax deltay [
            if direction = (dir + 180) mod 360 [ ;si l'agent en face nous regarde, on travaille ensemble
+             set currPartner self
+             set numInt (numInt + 1)
              if typeAgent = 0 [ ;null effort agent
                set effort 0.001 
              ]
@@ -101,8 +118,13 @@ to workAgent
                
              ]
              if typeAgent = 7 [ ;winner imitator agent
-               if lastProfit < lastPartnerProfit [
-                 set effort lastPartnerEffort 
+               ifelse lastProfit = -1[
+                 set effort 2.0 
+               ]
+               [
+                 if lastProfit < lastPartnerProfit [
+                   set effort lastPartnerEffort 
+                 ]
                ]
              ]
              if typeAgent = 8 [ ;effort comparator agent
@@ -122,8 +144,8 @@ to workAgent
              ; print(word "effort: " effort)
            ]
          ]
-         if currPartnerEffort > -1 [
-           set lastPartnerEffort currPartnerEffort
+         if currPartner != -1 [
+           set partner currPartner
          ]
        ] 
      ]
