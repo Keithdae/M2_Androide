@@ -7,17 +7,20 @@ patches-own [
 ]
 
 agents-own [
- typeAgent
- direction
- effort
- profit
- otherEffort
- otherProfit
- lastEffort
- lastProfit
- lastPartnerEffort
- lastPartnerProfit
+ typeAgent               ; type de l'agent
+ direction               ; direction (gauche, droite, haut, bas)
+ effort                  ; effort [0;2]
+ profit                  ; profit, calculé avec la fonction deprofit
+ otherEffort             ; effort du binôme
+ otherProfit             ; profit du binôme
+ numInt                  ; nombre d'interactions
+ lastEffort              ; effort à l'interaction précédente
+ lastProfit              ; profit à l'interaction précédente
+ lastPartnerEffort       ; effort du binôme à l'interaction précédente
+ lastPartnerProfit       ; profit du binôme à l'interaction précédente
 ]
+
+;------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 to setup
   clear-all
@@ -47,6 +50,8 @@ to setup
 
   reset-ticks
 end
+
+;------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 to setupAgents
   let currAgents X * Y ; Compteur du nombre d'agents (initialement égal au nombre de cases du monde)
@@ -209,6 +214,8 @@ to setupAgents
 
 end
 
+;------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 to drawEfforts
   ask patches with [pxcor > X ] [
     set pcolor white
@@ -266,6 +273,8 @@ to drawEfforts
     ]
   ]
 end
+
+;------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 to go
 

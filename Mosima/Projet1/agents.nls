@@ -29,6 +29,12 @@ to randomMove
 end
 
 to initAgent ; agent procedure
+  set otherEffort -1  
+  set otherProfit -1  
+  set lastEffort -1  
+  set lastProfit -1  
+  set lastPartnerEffort -1  
+  set lastPartnerProfit -1  
   set effort random-float 2.001
   if typeAgent = 0 [ ;null effort agent
     set effort 0.001 
