@@ -7,6 +7,7 @@ to setup-ennemis
   ask ennemis [
     set shape "person"
     set color red
+    set destination nobody
     
     set currentReload ennemi-reloadRate
     
@@ -60,16 +61,35 @@ end
 
 ; Deplacement aleatoire
 to ennemi-random-move ; ennemi procedure
-  let done false
-  while [not done] [
-    rt random 50
-    lt random 50
-    ifelse detect-obstacle-ennemi
-      [rt random 50
-        lt random 50]
-      [set done true
-        fd ennemi-speed]
+  if destination = nobody
+  [
+    let done false
+    while [not done]
+    [
+      rt random 360
+      let dist ((random 6) + 3)
+      set destination patch-ahead dist
+      if destination != nobody
+      [
+        set done true
+      ]
+    ]
   ]
+  
+  ifelse detect-obstacle-ennemi
+  [
+    set destination nobody
+  ]
+  [
+    set pitch 0
+    fd ennemi-speed
+  ]
+  
+  if destination = patch-here 
+  [
+    set destination nobody 
+  ]
+
 end
 
 to ennemi-shoot ; ennemi procedure
@@ -83,7 +103,8 @@ to ennemi-shoot ; ennemi procedure
     set targets convois in-radius-nowrap ennemi-vision
     if any? targets
     [
-      build-shot targets
+      let miss? (random 100) > ennemi-accuracy
+      build-shot targets miss?
       set currentReload 0
     ]
   ] ; ifelse

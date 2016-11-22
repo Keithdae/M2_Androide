@@ -48,6 +48,25 @@ to drones-think
 end
 
 
+to drone-checkSight
+  let toRemove nobody
+  ask shootingTargets 
+  [
+    let oldHeading heading
+    face myself
+    let p patches in-cone (distance myself) 9
+    if any? p with [obstacle?]
+    [
+       set toRemove (turtle-set toRemove self)
+    ]
+    set heading oldHeading
+  ]
+  if toRemove != nobody
+  [
+    set shootingTargets shootingTargets with [not member? self toRemove]
+  ]
+end
+
 to drone-shoot ; drone procedure
 
   ifelse ( currentReload < drone-reloadRate )
@@ -57,9 +76,11 @@ to drone-shoot ; drone procedure
   ; else
   [
     set shootingTargets ennemis in-radius-nowrap drone-vision
+    drone-checkSight
     if any? shootingTargets
     [
-      build-shot shootingTargets
+      let miss? (random 100) > drone-accuracy
+      build-shot shootingTargets miss?
       set currentReload 0
     ]
   ] ; ifelse
@@ -154,6 +175,7 @@ to drone-spacing
 end
 
 to drone-escort 
+  set pitch 0
   drone-moveToObjective
   drone-shoot
   drone-spacing
@@ -272,8 +294,6 @@ to drone-step
       set nextpx pxcor
       set nextpy pycor
     ]
-    
-    ;if 
     
     ifelse abs(pxcor - nextpx) > 1 or abs(pycor - nextpy) > 1 or any? other patches in-cone 1.5 90 with [obstacle?][
       rt random-float 90

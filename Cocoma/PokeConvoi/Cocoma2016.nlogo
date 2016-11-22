@@ -28,7 +28,7 @@ patches-own [obstacle? base? hangar? objectif? bridge? ; variables topologiques 
   ennemi?
   ]
 
-convois-own[incoming-queue
+convois-own[
   finished? ; Is the goal reached ?
   leader?   ; car leading the convoi convoi
   to-protect? ; Should this car be protected at all cost ?
@@ -37,16 +37,20 @@ convois-own[incoming-queue
   speed maxdir ; maximal speed of a car, and max angle
   last-send-time ; communication historical time-stamp
   ennemis-seen
-  ]
+  incoming-queue ; file de messages
+]
 
 ennemis-own[
   dead?
   targets ; convois a portee de vue
   currentReload ; Compteur
+  destination ; destination random pour le mouvement
 ]
 
 shoots-own[
- target ; convoi cible
+ target ; turtle cible
+ target-breed ; breed de la cible
+ missed? ; indique si le tir est raté
 ]
 
 drones-own[
@@ -787,7 +791,7 @@ ennemi-speed
 ennemi-speed
 0
 1
-0.05
+0.08
 0.01
 1
 NIL
@@ -841,20 +845,20 @@ BDI / Communication
 1
 
 TEXTBOX
-546
-254
-696
-272
+771
+275
+921
+293
 Drones
 12
 0.0
 1
 
 SLIDER
-499
-276
-671
-309
+724
+297
+896
+330
 nb-drones
 nb-drones
 0
@@ -866,25 +870,25 @@ NIL
 HORIZONTAL
 
 SLIDER
-499
-314
-673
-347
+724
+335
+898
+368
 drone-vision
 drone-vision
 0.5
 25
-8
+14
 0.5
 1
 NIL
 HORIZONTAL
 
 SLIDER
-498
-351
-715
-384
+723
+372
+940
+405
 drone-communication-radius
 drone-communication-radius
 1
@@ -896,10 +900,10 @@ NIL
 HORIZONTAL
 
 SLIDER
-499
-388
-671
-421
+724
+409
+896
+442
 drone-speed
 drone-speed
 0.01
@@ -911,10 +915,10 @@ NIL
 HORIZONTAL
 
 SLIDER
-499
-424
-673
-457
+724
+445
+898
+478
 drone-reloadRate
 drone-reloadRate
 1
@@ -926,10 +930,10 @@ NIL
 HORIZONTAL
 
 SLIDER
-498
-461
-686
-494
+723
+482
+911
+515
 drone-nb-munitions
 drone-nb-munitions
 1
@@ -941,10 +945,10 @@ NIL
 HORIZONTAL
 
 SLIDER
-739
-276
-911
-309
+961
+296
+1133
+329
 drone-fuel
 drone-fuel
 10
@@ -956,40 +960,70 @@ NIL
 HORIZONTAL
 
 TEXTBOX
-521
-530
-671
-548
+529
+272
+679
+290
 Convois
 12
 0.0
 1
 
 SLIDER
-493
-554
-665
-587
+501
+296
+673
+329
 convoi-vision
 convoi-vision
 0
 10
-6
+2
 0.1
 1
 NIL
 HORIZONTAL
 
 SLIDER
-493
-596
-665
-629
+501
+338
+673
+371
 astar-gen-cd
 astar-gen-cd
 1
 20
 6
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+729
+211
+908
+244
+ennemi-accuracy
+ennemi-accuracy
+1
+100
+50
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+978
+356
+1150
+389
+drone-accuracy
+drone-accuracy
+1
+100
+100
 1
 1
 NIL

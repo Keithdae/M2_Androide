@@ -1,64 +1,81 @@
-to build-shot [targetsForShoots]
+to build-shot [targetsForShoots miss?]
   hatch-shoots 1 [ set color red
-        set shape "line half"
-        set target one-of targetsForShoots]
+    set shape "line half"
+    set target one-of targetsForShoots
+    set missed? miss?
+    if target != nobody 
+    [
+      face target
+      set target-breed [ breed ] of target
+    ]
+  ]
 end
 
 to update-shoots
   ask shoots [
+    let nextpx 0
+    let nextpy 0
+    ask patch-at dx dy mapAlt [
+      set nextpx pxcor
+      set nextpy pycor
+    ]
+    if abs(pxcor - nextpx) > 1 or abs(pycor - nextpy) > 1
+    [
+      die
+    ]
     if [obstacle?] of patch-here [
-     die 
+      die 
+    ]
+    if target = nobody
+    [
+      die 
     ]
     
-    ifelse target != nobody
+    
+    if not missed? and target != nobody [ face target ]
+    fd 0.42
+    ifelse target-breed = convois
     [
-      face target
-      fd 0.5
-      ifelse ([ breed ] of target) = convois
+      let prey one-of convois-here
+      if prey != nobody
       [
-        let prey one-of convois-here
+        set nb-cars ( nb-cars - 1 )
+        ask prey
+        [
+          die
+        ]
+        die
+      ]
+    ]
+    ; else
+    [
+      ifelse target-breed = ennemis
+      [
+        let prey one-of ennemis-here
         if prey != nobody
         [
-          set nb-cars ( nb-cars - 1 )
           ask prey
           [
-            die
+            set dead? true
           ]
           die
         ]
       ]
-      ; else
+      ; else target-breed = drones
       [
-        ifelse ([ breed ] of target) = ennemis
+        let prey one-of drones-here
+        if prey != nobody
         [
-          let prey one-of ennemis-here
-          if prey != nobody
+          ask prey
           [
-            ask prey
-            [
-              set dead? true
-            ]
-            die
+            set dead? true
           ]
-        ]
-        ; else
-        [
-          let prey one-of drones-here
-          if prey != nobody
-          [
-            ask prey
-            [
-              set dead? true
-            ]
-            die
-          ]
+          die
         ]
       ]
     ]
-    ;else
-    [
-      die 
-    ]
   ]
+  
+  
 end
 
