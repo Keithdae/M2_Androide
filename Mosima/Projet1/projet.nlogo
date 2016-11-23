@@ -1,5 +1,6 @@
 __includes ["agents.nls"]
 breed [agents agent]
+globals [high-effort low-effort]
 
 patches-own [
   occupied?
@@ -19,6 +20,8 @@ agents-own [
  lastPartnerEffort       ; effort du binôme à l'interaction précédente
  lastPartnerProfit       ; profit du binôme à l'interaction précédente
  partner                 ; partner pour cette interaction
+ minEff                  ; effort min
+ maxEff                  ; effort max
 ]
 
 ;------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -46,6 +49,9 @@ to setup
   ask patches with [pxcor > X] [
     set effort? true
   ]
+
+  set high-effort 2.001
+  set low-effort 0.0001
 
   setupAgents
 
@@ -278,11 +284,11 @@ end
 ;------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 to go
-
   randomMove
   workAgent
   calculateProfits
   drawEfforts
+  adaptEffort
   tick
 end
 @#$#@#$#@
@@ -1084,7 +1090,7 @@ Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
 
 @#$#@#$#@
-NetLogo 5.3
+NetLogo 5.3.1
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@
