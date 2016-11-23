@@ -283,7 +283,6 @@ end
 ; La penList est une liste contenant des listes de la forme "penName" (list x1 y1) (list x2 y2) ...
 to fill-plot [ plotName penList ]
   set-current-plot plotName
-  clear-plot
   let colorPen 15
   foreach penList
   [
