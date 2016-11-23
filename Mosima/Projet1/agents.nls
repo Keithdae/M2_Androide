@@ -142,7 +142,7 @@ to adaptEffort
     if typeAgent = 9 [ ;averager agent
       set effort ( ( effort + lastPartnerEffort ) / 2 )
     ]
-    if effort < low-effort [ set effort low-effort]
-    if effort > high-effort [set effort high-effort]
+    if effort < low-effort [ set effort low-effort ]
+    if effort > high-effort [ set effort high-effort ]
   ]
 end

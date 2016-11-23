@@ -15,13 +15,12 @@ agents-own [
  otherEffort             ; effort du binôme
  otherProfit             ; profit du binôme
  numInt                  ; nombre d'interactions
+ sumEffort               ; somme des efforts des partenaire rencontrés
  lastEffort              ; effort à l'interaction précédente
  lastProfit              ; profit à l'interaction précédente
  lastPartnerEffort       ; effort du binôme à l'interaction précédente
  lastPartnerProfit       ; profit du binôme à l'interaction précédente
  partner                 ; partner pour cette interaction
- minEff                  ; effort min
- maxEff                  ; effort max
 ]
 
 ;------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
