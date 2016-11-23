@@ -221,50 +221,49 @@ to setupAgents
 end
 
 ;------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
 to drawEfforts
   ask patches with [pxcor > X ] [
     set pcolor white
   ]
   ask agents[
-    let couleur 25
+    let couleur white
     ifelse effort < 0.2 and 0.0 <= effort [
-      set couleur couleur - 5
+      set couleur 105
     ]
     [
       ifelse effort < 0.4 and 0.2 <= effort [
-        set couleur couleur - 4
+        set couleur 95
       ]
       [
         ifelse effort < 0.6 and 0.4 <= effort [
-          set couleur couleur - 3
+          set couleur 85
         ]
         [
           ifelse effort < 0.8 and 0.6 <= effort [
-            set couleur couleur - 2
+            set couleur 75
           ]
           [
              ifelse effort < 1.0 and 0.8 <= effort [
-              set couleur couleur - 1
+              set couleur 65
             ]
             [
               ifelse effort < 1.2 and 1.0 <= effort [
-                set couleur couleur
+                set couleur 55
               ]
               [
                 ifelse effort < 1.4 and 1.2 <= effort [
-                  set couleur couleur + 1
+                  set couleur 45
                 ]
                 [
                   ifelse effort < 1.6 and 1.4 <= effort [
-                    set couleur couleur + 2
+                    set couleur 25
                   ]
                   [
                     ifelse effort < 1.8 and 1.6 <= effort [
-                      set couleur couleur + 3
+                      set couleur 16
                     ]
                     [
-                      set couleur couleur + 4
+                      set couleur 15
                     ]
                   ]
                 ]
@@ -691,9 +690,9 @@ SLIDER
 321
 noiseValue
 noiseValue
-0
+1
 50
-0
+1
 1
 1
 NIL
