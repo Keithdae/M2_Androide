@@ -521,7 +521,7 @@ nbAgentsBlack
 nbAgentsBlack
 0
 X * Y
-100
+0
 1
 1
 NIL
@@ -692,10 +692,10 @@ noiseValue
 noiseValue
 1
 50
+50
 1
 1
-1
-NIL
+%
 HORIZONTAL
 
 PLOT

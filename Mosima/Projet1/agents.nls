@@ -96,8 +96,21 @@ to workAgent
             ; print(word "effort: " effort)
           ]
         ]
-        set otherEffort currPartnerEffort
-        set sumEffort (sumEffort + otherEffort)
+        if currPartnerEffort != -1 
+        [
+          ifelse noiseSwitch 
+          [
+            let noiseEffort currPartnerEffort * (1 - (noiseValue / 100) + random-float (noiseValue * 2 / 100))
+            if noiseEffort < low-effort [set noiseEffort low-effort]
+            if noiseEffort > high-effort [set noiseEffort high-effort] 
+            set otherEffort noiseEffort
+            print noiseEffort
+          ]
+          [
+            set otherEffort currPartnerEffort
+          ]
+          set sumEffort (sumEffort + otherEffort)
+        ]
       ]
     ]
   ]
