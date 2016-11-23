@@ -53,6 +53,7 @@ to setup
   set low-effort 0.0001
 
   setupAgents
+  simulateFigure6
 
   reset-ticks
 end
@@ -277,6 +278,29 @@ to drawEfforts
        set pcolor couleur
     ]
   ]
+end
+
+; La penList est une liste contenant des listes de la forme "penName" (list x1 y1) (list x2 y2) ...
+to fill-plot [ plotName penList ]
+  set-current-plot plotName
+  clear-plot
+  let colorPen 15
+  foreach penList
+  [
+    ; On récupère le nom qui est le premier élément de la liste
+    create-temporary-plot-pen first ?
+    set-plot-pen-color colorPen
+    ; Le deuxième élément est une liste de paires de points à dessiner que l'on parcourt
+    foreach last ? [ plotxy first ? last ? ]
+    ; On passe à la couleur suivante
+    set colorPen colorPen + 10
+  ]
+end
+
+; to-do
+to simulateFigure6
+  fill-plot "Figure 6" (list (list "test" (list (list 1 12) (list 2 24) (list 3 36)))
+                            (list "toast" (list (list 1 36) (list 2 24) (list 3 42))) )
 end
 
 ;------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -728,7 +752,7 @@ NIL
 0.0
 10.0
 0.0
-10.0
+8.0
 true
 true
 "" ""
@@ -742,6 +766,34 @@ TEXTBOX
 271
 Agent types :\n0 - null effort\n1 - shrinking effort\n2 - replicator\n3 - rational\n4 - profit comparator\n5 - high effort\n6 - average rational\n7 - winner imitator\n8 - effort comparator\n9 - averager
 11
+0.0
+1
+
+PLOT
+17
+682
+630
+1018
+Figure 6
+NIL
+NIL
+0.0
+10.0
+0.0
+10.0
+true
+false
+"" ""
+PENS
+"default" 1.0 0 -16777216 true "" "plot count turtles"
+
+TEXTBOX
+50
+651
+200
+671
+Simulation
+16
 0.0
 1
 
