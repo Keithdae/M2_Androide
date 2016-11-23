@@ -523,7 +523,7 @@ nbAgentsBlack
 nbAgentsBlack
 0
 X * Y
-205
+100
 1
 1
 NIL
@@ -538,7 +538,7 @@ nbAgentsRed
 nbAgentsRed
 0
 X * Y
-250
+50
 1
 1
 NIL
@@ -612,7 +612,7 @@ CHOOSER
 typeBlack
 typeBlack
 0 1 2 3 4 5 6 7 8 9
-9
+4
 
 CHOOSER
 1597

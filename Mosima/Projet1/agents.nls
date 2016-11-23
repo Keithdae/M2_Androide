@@ -4,19 +4,14 @@
 
 to calculateProfits
   ask agents [
-    if partner != -1[
-      let auxPartnerEffort 0
-      ask partner [
-        set auxPartnerEffort effort
-      ]
-      set otherEffort auxPartnerEffort
-      
+    if partner != -1[      
       set profit (5 * sqrt(effort + otherEffort) - (effort * effort))
       set otherProfit (5 * sqrt(effort + otherEffort) - (otherEffort * otherEffort))
       
       set lastProfit profit
       set lastEffort effort
       set lastPartnerEffort otherEffort
+      set lastPartnerProfit otherProfit
     ]
   ]
 end
@@ -39,6 +34,7 @@ to randomMove
       fd 1
       set occupied? true   ; patch où l'on arrive
     ]
+    set partner -1
   ]
 end
 
@@ -67,7 +63,6 @@ end
 
 to workAgent
   ask agents[
-    set partner -1
     let deltax 0
     let deltay 0
     let dir direction
@@ -111,13 +106,14 @@ end
 to adaptEffort
   ask agents[
     if typeAgent = 1 [ ;shrinking effort agent
-      set effort lastPartnerEffort / 2
+      set effort (lastPartnerEffort / 2)
     ]
     if typeAgent = 2 [ ;replicator agent
       set effort lastPartnerEffort
     ]
     if typeAgent = 3 [ ;rational agent
-      
+      let aux (( (- 32) * lastPartnerEffort ^ 3  + 15 * 3 ^ (1 / 2) * (675 - 64 * lastPartnerEffort ^ 3) ^ (1 / 2)  + 675) ^ (1 / 3))
+      set effort ((1 / 6) * ( aux / (2 ^ (2 / 3)) + (4 * 2 ^ (2 / 3) * lastPartnerEffort ^ 2) / aux - 2 * lastPartnerEffort))
     ]
     if typeAgent = 4 [ ;profit comparator agent
       if lastPartnerProfit < lastProfit[
@@ -147,5 +143,6 @@ to adaptEffort
       set effort ( ( effort + lastPartnerEffort ) / 2 )
     ]
     if effort < low-effort [ set effort low-effort]
+    if effort > high-effort [set effort high-effort]
   ]
 end
