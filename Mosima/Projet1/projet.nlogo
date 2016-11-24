@@ -282,7 +282,7 @@ end
 ;------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 to run-simulations
-  simulateFigure6
+  ;simulateFigure6
   simulateFigure7
   simulateFigure9
 end
@@ -434,6 +434,41 @@ end
 
 to simulateFigure7
 
+  let HighEffortProportions [ 0 0.6 5.6 33.3 66.7 100 ]
+  let agentTypeList [ 3 6 ]
+  let paramList []
+  let penList []
+
+  foreach agentTypeList
+  [
+    let currType ?
+
+    ; On créé la liste de résultats pour ce type
+    let typeName typeNbToName currType
+    let currPen (list typeName [])
+
+    foreach HighEffortProportions
+    [
+      let currProportion ?
+      let params (list (list currType ((100 - currProportion) / 100) )  ; Le type d'agent que l'on teste
+                       (list 5 (currProportion / 100) ) )               ; Les HighEffort
+
+      ; On lance la simulation
+      let meanEffort simulate params stdToleranceSimulation nbTestsSimulation
+
+      ; On ajoute les résultats avec la proportion donnée de HighEffort agents
+      let newValList lput (list currProportion meanEffort) (item 1 currPen)
+      set currPen replace-item 1 currPen newValList
+    ]
+
+    show currPen
+
+    set penList lput currPen penList
+  ]
+
+  show penList
+
+  fill-plot "Figure 6" penList
 end
 
 to simulateFigure9
@@ -785,7 +820,7 @@ CHOOSER
 typeBlack
 typeBlack
 0 1 2 3 4 5 6 7 8 9
-9
+6
 
 CHOOSER
 1597
