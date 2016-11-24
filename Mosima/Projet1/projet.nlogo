@@ -317,32 +317,32 @@ to-report simulate [ paramList stdTolerance nbTests ]
     if i = 0
     [
       set typeBlack currType
-      set nbAgentsBlack round nbAgentsSimulation * currProportion
+      set nbAgentsBlack round (nbAgentsSimulation * currProportion)
     ]
     if i = 1
     [
       set typeRed currType
-      set nbAgentsRed round nbAgentsSimulation * currProportion
+      set nbAgentsRed round (nbAgentsSimulation * currProportion)
     ]
     if i = 2
     [
       set typeGreen currType
-      set nbAgentsGreen round nbAgentsSimulation * currProportion
+      set nbAgentsGreen round (nbAgentsSimulation * currProportion)
     ]
     if i = 3
     [
       set typeViolet currType
-      set nbAgentsViolet round nbAgentsSimulation * currProportion
+      set nbAgentsViolet round (nbAgentsSimulation * currProportion)
     ]
     if i = 4
     [
       set typeYellow currType
-      set nbAgentsYellow round nbAgentsSimulation * currProportion
+      set nbAgentsYellow round (nbAgentsSimulation * currProportion)
     ]
     if i = 5
     [
       set typeCyan currType
-      set nbAgentsCyan round nbAgentsSimulation * currProportion
+      set nbAgentsCyan round (nbAgentsSimulation * currProportion)
     ]
     set i i + 1
   ]
@@ -411,8 +411,8 @@ to simulateFigure6
     foreach HighEffortProportions
     [
       let currProportion ?
-      let params (list (list currType ((100 - currProportion) / 100))  ; Le type d'agent que l'on teste
-                       (list 5 (currProportion / 100)) )               ; Les HighEffort
+      let params (list (list currType ((100 - currProportion) / 100) )  ; Le type d'agent que l'on teste
+                       (list 5 (currProportion / 100) ) )               ; Les HighEffort
 
       ; On lance la simulation
       let meanEffort simulate params stdToleranceSimulation nbTestsSimulation
@@ -711,7 +711,7 @@ nbAgentsRed
 nbAgentsRed
 0
 X * Y
-504
+500
 1
 1
 NIL
@@ -973,7 +973,7 @@ nbAgentsSimulation
 nbAgentsSimulation
 168
 X * Y
-504
+500
 1
 1
 NIL
@@ -1352,7 +1352,7 @@ Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
 
 @#$#@#$#@
-NetLogo 5.3.1
+NetLogo 5.3
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@
