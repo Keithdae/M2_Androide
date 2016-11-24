@@ -53,7 +53,6 @@ to setup
   set low-effort 0.0001
 
   setupAgents
-  simulateFigure6
 
   reset-ticks
 end
@@ -280,7 +279,15 @@ to drawEfforts
   ]
 end
 
-; La penList est une liste contenant des listes de la forme "penName" (list x1 y1) (list x2 y2) ...
+;------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+to run-simulations
+  simulateFigure6
+  simulateFigure7
+  simulateFigure9
+end
+
+; La penList est une liste contenant des listes de la forme [ "penName" [x1 y1] [x2 y2] ... ]
 to fill-plot [ plotName penList ]
   set-current-plot plotName
   let colorPen 15
@@ -296,10 +303,155 @@ to fill-plot [ plotName penList ]
   ]
 end
 
-; to-do
+; Lance le programme jusqu'à atteindre une situation stable et retourne la moyenne d'effort des agents
+; Prends une liste de paramètres sur les agents à utiliser sur la forme : [ [typeBlack proportionOfAgentsBlack] [typeRed proportionOfAgentsRed] ... ]
+; stdTolerance est la tolerance sur le changement d'écart-type d'un tick à l'autre
+; nbTests est le nombre de fois où les ticks doivent réussir le test de tolérance successivement pour finir la simulation
+to-report simulate [ paramList stdTolerance nbTests ]
+  let result -1
+  let i 0
+  foreach paramList
+  [
+    let currType first ?
+    let currProportion last ?
+    if i = 0
+    [
+      set typeBlack currType
+      set nbAgentsBlack round nbAgentsSimulation * currProportion
+    ]
+    if i = 1
+    [
+      set typeRed currType
+      set nbAgentsRed round nbAgentsSimulation * currProportion
+    ]
+    if i = 2
+    [
+      set typeGreen currType
+      set nbAgentsGreen round nbAgentsSimulation * currProportion
+    ]
+    if i = 3
+    [
+      set typeViolet currType
+      set nbAgentsViolet round nbAgentsSimulation * currProportion
+    ]
+    if i = 4
+    [
+      set typeYellow currType
+      set nbAgentsYellow round nbAgentsSimulation * currProportion
+    ]
+    if i = 5
+    [
+      set typeCyan currType
+      set nbAgentsCyan round nbAgentsSimulation * currProportion
+    ]
+    set i i + 1
+  ]
+
+  setup
+
+  let done false
+  go
+  let lastSTD standard-deviation [effort] of turtles
+  let currSTD lastSTD
+  let n 0
+  let meanList []
+  let meanEffort mean [effort] of turtles
+  let loopCount 0
+  let loopStdTolerance stdTolerance
+  while [not done]
+  [
+    go
+    set currSTD standard-deviation [effort] of turtles
+    set meanEffort mean [effort] of turtles
+    ifelse abs(currSTD - lastSTD) < loopStdTolerance
+    [
+      set n n + 1
+      set meanList lput meanEffort meanList
+    ]
+    ; else, chaine cassee
+    [
+      set meanList []
+      set n 0
+    ]
+
+    if n >= nbTests
+    [
+       set result mean meanList
+       set done true
+    ]
+
+    set lastSTD currSTD
+
+    set loopCount loopCount + 1
+    if loopCount > 2000
+    [
+      set loopCount 0
+      set loopStdTolerance loopStdTolerance + stdTolerance
+    ]
+  ]
+
+  report result
+end
+
+
 to simulateFigure6
-  fill-plot "Figure 6" (list (list "test" (list (list 1 12) (list 2 24) (list 3 36)))
-                            (list "toast" (list (list 1 36) (list 2 24) (list 3 42))) )
+  let HighEffortProportions [ 0 0.6 5.6 33.3 66.7 100 ]
+  let agentTypeList [ 0 1 2 4 7 8 9 ]
+  let paramList []
+  let penList []
+
+  foreach agentTypeList
+  [
+    let currType ?
+
+    ; On créé la liste de résultats pour ce type
+    let typeName typeNbToName currType
+    let currPen (list typeName [])
+
+    foreach HighEffortProportions
+    [
+      let currProportion ?
+      let params (list (list currType ((100 - currProportion) / 100))  ; Le type d'agent que l'on teste
+                       (list 5 (currProportion / 100)) )               ; Les HighEffort
+
+      ; On lance la simulation
+      let meanEffort simulate params stdToleranceSimulation nbTestsSimulation
+
+      ; On ajoute les résultats avec la proportion donnée de HighEffort agents
+      let newValList lput (list currProportion meanEffort) (item 1 currPen)
+      set currPen replace-item 1 currPen newValList
+    ]
+
+    show currPen
+
+    set penList lput currPen penList
+  ]
+
+  show penList
+
+  fill-plot "Figure 6" penList
+end
+
+to simulateFigure7
+
+end
+
+to simulateFigure9
+
+end
+
+; Converts a type number to the corresponding name for plots
+to-report typeNbToName [nbTypeConvert]
+  if nbTypeConvert = 0 [report "Null Effort"]
+  if nbTypeConvert = 1 [report "Shrinking Effort"]
+  if nbTypeConvert = 2 [report "Replicator"]
+  if nbTypeConvert = 3 [report "Rational"]
+  if nbTypeConvert = 4 [report "Profit Comparator"]
+  if nbTypeConvert = 5 [report "High Effort"]
+  if nbTypeConvert = 6 [report "Average Rational"]
+  if nbTypeConvert = 7 [report "Winner Imitator"]
+  if nbTypeConvert = 8 [report "Effort Comparator"]
+  if nbTypeConvert = 9 [report "Averager"]
 end
 
 ;------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -463,7 +615,7 @@ CHOOSER
 nbAgentTypes
 nbAgentTypes
 1 2 3 4 5 6
-3
+5
 
 TEXTBOX
 1370
@@ -559,7 +711,7 @@ nbAgentsRed
 nbAgentsRed
 0
 X * Y
-50
+504
 1
 1
 NIL
@@ -633,7 +785,7 @@ CHOOSER
 typeBlack
 typeBlack
 0 1 2 3 4 5 6 7 8 9
-4
+9
 
 CHOOSER
 1597
@@ -715,7 +867,7 @@ noiseValue
 noiseValue
 1
 50
-50
+1
 1
 1
 %
@@ -769,32 +921,93 @@ Agent types :\n0 - null effort\n1 - shrinking effort\n2 - replicator\n3 - ration
 1
 
 PLOT
-17
-682
-630
-1018
+51
+760
+664
+1096
 Figure 6
 NIL
 NIL
 0.0
-10.0
+100.0
 0.0
-10.0
-true
+2.1
 false
+true
 "" ""
 PENS
-"default" 1.0 0 -16777216 true "" "plot count turtles"
 
 TEXTBOX
-50
-651
-200
-671
+74
+692
+224
+712
 Simulation
 16
 0.0
 1
+
+BUTTON
+192
+685
+306
+718
+NIL
+run-simulations
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+SLIDER
+344
+684
+516
+717
+nbAgentsSimulation
+nbAgentsSimulation
+168
+X * Y
+504
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+545
+683
+740
+716
+stdToleranceSimulation
+stdToleranceSimulation
+0
+1
+5.0E-4
+0.0001
+1
+NIL
+HORIZONTAL
+
+SLIDER
+765
+690
+937
+723
+nbTestsSimulation
+nbTestsSimulation
+2
+500
+500
+1
+1
+NIL
+HORIZONTAL
 
 @#$#@#$#@
 ## WHAT IS IT?
