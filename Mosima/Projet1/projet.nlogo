@@ -287,7 +287,7 @@ to run-simulations
   simulateFigure9
 end
 
-; La penList est une liste contenant des listes de la forme [ "penName" [x1 y1] [x2 y2] ... ]
+; La penList est une liste contenant des listes de la forme [ "penName" [ [x1 y1] [x2 y2] ... ] ]
 to fill-plot [ plotName penList ]
   set-current-plot plotName
   let colorPen 15
