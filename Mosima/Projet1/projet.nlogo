@@ -282,9 +282,13 @@ end
 ;------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 to run-simulations
-  ;simulateFigure6
-  simulateFigure7
+  let fig6 simulateFigure6
+  let fig7 simulateFigure7
   simulateFigure9
+  fill-plot "Figure 6" fig6
+  fill-plot "Figure 7" fig7
+  export-plot "Figure 6" "simulation_figure6.txt"
+  export-plot "Figure 7" "simulation_figure7.txt"
 end
 
 ; La penList est une liste contenant des listes de la forme [ "penName" [ [x1 y1] [x2 y2] ... ] ]
@@ -394,7 +398,7 @@ to-report simulate [ paramList stdTolerance nbTests ]
 end
 
 
-to simulateFigure6
+to-report simulateFigure6
   let HighEffortProportions [ 0 0.6 5.6 33.3 66.7 100 ]
   let agentTypeList [ 0 1 2 4 7 8 9 ]
   let paramList []
@@ -429,10 +433,10 @@ to simulateFigure6
 
   show penList
 
-  fill-plot "Figure 6" penList
+  report penList
 end
 
-to simulateFigure7
+to-report simulateFigure7
 
   let HighEffortProportions [ 0 0.6 5.6 33.3 66.7 100 ]
   let agentTypeList [ 3 6 ]
@@ -468,7 +472,7 @@ to simulateFigure7
 
   show penList
 
-  fill-plot "Figure 6" penList
+  report penList
 end
 
 to simulateFigure9
@@ -731,7 +735,7 @@ nbAgentsBlack
 nbAgentsBlack
 0
 X * Y
-0
+497
 1
 1
 NIL
@@ -746,7 +750,7 @@ nbAgentsRed
 nbAgentsRed
 0
 X * Y
-500
+3
 1
 1
 NIL
@@ -820,7 +824,7 @@ CHOOSER
 typeBlack
 typeBlack
 0 1 2 3 4 5 6 7 8 9
-6
+1
 
 CHOOSER
 1597
@@ -1043,6 +1047,23 @@ nbTestsSimulation
 1
 NIL
 HORIZONTAL
+
+PLOT
+777
+761
+1370
+1096
+Figure 7
+NIL
+NIL
+0.0
+100.0
+0.0
+2.1
+false
+true
+"" ""
+PENS
 
 @#$#@#$#@
 ## WHAT IS IT?

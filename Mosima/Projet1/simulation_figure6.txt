@@ -1,0 +1,16 @@
+"export-plot data (NetLogo 5.3)"
+"projet.nlogo"
+"11/24/2016 15:28:34:817 +0100"
+
+"MODEL SETTINGS"
+"typered","nbagentsblack","typegreen","nbagentsyellow","nbagentsgreen","nbagenttypes","x","nbtestssimulation","stdtolerancesimulation","nbagentscyan","noisevalue","nbagentsred","nbagentssimulation","y","typeyellow","effortwindow","typeblack","typeviolet","typecyan","nbagentsviolet","noiseswitch"
+"5","0","9","0","0","6","30","500","5.0E-4","0","1","500","500","30","9","true","6","9","9","0","false"
+
+"""Figure 6"""
+"x min","x max","y min","y max","autoplot?","current pen","legend open?","number of pens"
+"0","100","0","2.1","false","""""","false","0"
+
+"pen name","pen down?","mode","interval","color","x"
+
+
+
