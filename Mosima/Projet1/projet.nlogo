@@ -301,7 +301,21 @@ to fill-plot [ plotName penList ]
     create-temporary-plot-pen first ?
     set-plot-pen-color colorPen
     ; Le deuxième élément est une liste de paires de points à dessiner que l'on parcourt
-    foreach last ? [ plotxy first ? last ? ]
+    foreach last ? [
+      let px first ?
+      let py last ?
+      ; On trace le point
+      plotxy px py
+      ; Permet de tracer une croix autour du point
+      plotxy px + (plot-x-max / 50) py
+      plotxy px - (plot-x-max / 50) py
+      plot-pen-up
+      plotxy px py + (plot-y-max / 50)
+      plot-pen-down
+      plotxy px py - (plot-y-max / 50)
+      ; on se replace sur le point pour bien tracer la lgine vers le point suivant
+      plotxy px py
+    ]
     ; On passe à la couleur suivante
     set colorPen colorPen + 10
   ]
@@ -314,6 +328,7 @@ end
 to-report simulate [ paramList stdTolerance nbTests ]
   let result -1
   let i 0
+  ; Initialisation des quantités et types d'agents
   foreach paramList
   [
     let currType first ?
@@ -350,15 +365,20 @@ to-report simulate [ paramList stdTolerance nbTests ]
     ]
     set i i + 1
   ]
+  ; On active le nombre d'agents nécessaires à la simulation
+  set nbAgentTypes i
 
+  ; Setup pour créer et initialiser les agents
   setup
 
+
   let done false
+  ; On fait un premier tick pour obtenir les premières valeurs
   go
   let lastSTD standard-deviation [effort] of turtles
   let currSTD lastSTD
-  let n 0
-  let meanList []
+  let n 0         ; Compteur de succès à la suite servant pour l'arrêt
+  let meanList [] ;
   let meanEffort mean [effort] of turtles
   let loopCount 0
   let loopStdTolerance stdTolerance
@@ -367,25 +387,29 @@ to-report simulate [ paramList stdTolerance nbTests ]
     go
     set currSTD standard-deviation [effort] of turtles
     set meanEffort mean [effort] of turtles
+    ; On compare l'écart-type actuel avec celui du tick précédent
     ifelse abs(currSTD - lastSTD) < loopStdTolerance
     [
+      ; Succès, on augmente notre compteur et on ajoute la moyenne courante à notre liste
       set n n + 1
       set meanList lput meanEffort meanList
     ]
-    ; else, chaine cassee
+    ; else, échec la suite est brisée, on oublie nos valeurs et on remet le comteur à 0
     [
       set meanList []
       set n 0
     ]
 
+    ; Dans le cas où notre compteur atteind le nombre demandé, on renvoie la moyenne des moyennes d'effort stockées dans notre liste
     if n >= nbTests
     [
-       set result mean meanList
+       set result precision mean meanList 6
        set done true
     ]
 
     set lastSTD currSTD
 
+    ; Après 2001 ticks sans succès on augmente la valeur de la tolérance
     set loopCount loopCount + 1
     if loopCount > 2000
     [
@@ -499,7 +523,7 @@ to go
   randomMove
   workAgent
   calculateProfits
-  drawEfforts
+  if effortWindow [drawEfforts]
   adaptEffort
   tick
 end
@@ -518,8 +542,8 @@ GRAPHICS-WINDOW
 1
 1
 0
-0
-0
+1
+1
 1
 0
 60
@@ -654,7 +678,7 @@ CHOOSER
 nbAgentTypes
 nbAgentTypes
 1 2 3 4 5 6
-5
+1
 
 TEXTBOX
 1370
@@ -906,7 +930,7 @@ noiseValue
 noiseValue
 1
 50
-1
+5
 1
 1
 %
@@ -965,8 +989,8 @@ PLOT
 664
 1096
 Figure 6
-NIL
-NIL
+High effort agents proportion (%)
+Average effort
 0.0
 100.0
 0.0
@@ -1054,8 +1078,8 @@ PLOT
 1370
 1096
 Figure 7
-NIL
-NIL
+High effort agents proportion (%)
+Average effort
 0.0
 100.0
 0.0
@@ -1064,6 +1088,39 @@ false
 true
 "" ""
 PENS
+
+MONITOR
+912
+430
+1008
+475
+Average effort
+mean [effort] of agents
+6
+1
+11
+
+MONITOR
+912
+480
+1009
+525
+STD effort
+standard-deviation [effort] of agents
+6
+1
+11
+
+MONITOR
+912
+531
+1009
+576
+Average profit
+mean [profit] of agents
+6
+1
+11
 
 @#$#@#$#@
 ## WHAT IS IT?
@@ -1408,7 +1465,7 @@ Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
 
 @#$#@#$#@
-NetLogo 5.3
+NetLogo 5.3.1
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@

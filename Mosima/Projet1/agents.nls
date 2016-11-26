@@ -4,7 +4,8 @@
 
 to calculateProfits
   ask agents [
-    if partner != -1[      
+    if partner != -1[    
+      ;print (word "oeff : " otherEffort " partner : " partner " self : " self)
       set profit (5 * sqrt(effort + otherEffort) - (effort * effort))
       set otherProfit (5 * sqrt(effort + otherEffort) - (otherEffort * otherEffort))
       
@@ -24,14 +25,30 @@ to randomMove
     set heading direction
     
     let occ false
-    if patch-ahead 1 != nobody [
-      if [occupied?] of patch-ahead 1 = TRUE [  ; on vérifie si le patch devant nous est libre
-        set occ TRUE
+    let dist 1
+    let tp false
+    
+    ; Gère le wrapping en x avec effortWindow
+    if effortWindow = true and ( (xcor = 0 and direction = 270) or (xcor = (X - 1) and direction = 90) ) [
+         set dist (dist + 1 + X)
+         set tp true
+    ]
+    
+    if patch-ahead dist != nobody [
+      if [occupied?] of patch-ahead dist = true [  ; on vérifie si le patch devant nous est libre
+        set occ true
       ]
     ]
+    
     if not occ [
       set occupied? false  ; patch d'où on part
-      fd 1
+      ifelse tp[
+        if xcor = 0 [setxy (X - 1) ycor]
+        if xcor = (X - 1) [setxy 0 ycor]
+      ]
+      [
+        fd 1
+      ]
       set occupied? true   ; patch où l'on arrive
     ]
     set partner -1
@@ -54,8 +71,11 @@ to initAgent ; agent procedure
   if typeAgent = 0 [ ;null effort agent
     set effort low-effort
   ]
-  if typeAgent = 5 or typeAgent = 7 [ ;high effort agent
+  if typeAgent = 5 or typeAgent = 7 [ ;high effort agent / winner imitator
     set effort high-effort
+  ]
+  if typeAgent = 4 or typeAgent = 8 [ ; Comparators
+    set effort (effort + 0.1) 
   ]
   if effort > high-effort [set effort high-effort]
   if effort < low-effort [set effort low-effort]
@@ -68,50 +88,55 @@ to workAgent
     let deltax 0
     let deltay 0
     let dir direction
-    if patch-ahead 1 != nobody [
-      ifelse direction = 0[
-        set deltay 1
-      ]
+    ifelse direction = 0[
+      set deltay 1
+    ]
+    [
+      ifelse direction = 90[
+        set deltax 1 
+      ] 
       [
-        ifelse direction = 90[
-          set deltax 1 
+        ifelse direction = 180[
+          set deltay -1 
         ] 
         [
-          ifelse direction = 180[
-            set deltay -1 
+          if direction = 270[
+            set deltax -1 
           ] 
-          [
-            if direction = 270[
-              set deltax -1 
-            ] 
-          ]
         ]
-      ] ;definition du x et y 
-      if any? agents-at deltax deltay [ ;agent dans la case en face
-        let currPartnerEffort -1
-        ask agents-at deltax deltay [
-          if direction = (dir + 180) mod 360 [ ;si l'agent en face nous regarde, on travaille ensemble
-            set partner myself
-            set numInt (numInt + 1)
-            set currPartnerEffort effort
-            ; print(word "effort: " effort)
-          ]
+      ]
+    ] ;definition du x et y 
+    
+      ; Si la fenetre effort est activé, on doit modifier le wrapping pour les agents sur les bords en x
+    if effortWindow = true and ( (xcor = 0 and direction = 270) or (xcor = (X - 1) and direction = 90) ) [
+      if xcor = 0 [set deltax (deltax - 1 - X)]
+      if xcor = (X - 1) [set deltax (deltax + 1 + X)] 
+    ]
+    
+    if any? agents-at deltax deltay [ ;agent dans la case en face
+      let currPartnerEffort -1
+      ask agents-at deltax deltay [
+        if direction = (dir + 180) mod 360 [ ;si l'agent en face nous regarde, on travaille ensemble
+          set partner myself
+          set numInt (numInt + 1)
+          set currPartnerEffort effort
+          ; print(word "effort: " effort)
         ]
-        if currPartnerEffort != -1 
+      ]
+      if currPartnerEffort != -1 
+      [
+        ifelse noiseSwitch 
         [
-          ifelse noiseSwitch 
-          [
-            let noiseEffort currPartnerEffort * (1 - (noiseValue / 100) + random-float (noiseValue * 2 / 100))
-            if noiseEffort < low-effort [set noiseEffort low-effort]
-            if noiseEffort > high-effort [set noiseEffort high-effort] 
-            set otherEffort noiseEffort
-            print noiseEffort
-          ]
-          [
-            set otherEffort currPartnerEffort
-          ]
-          set sumEffort (sumEffort + otherEffort)
+          let noiseEffort currPartnerEffort * (1 - (noiseValue / 100) + random-float (noiseValue * 2 / 100))
+          if noiseEffort < low-effort [set noiseEffort low-effort]
+          if noiseEffort > high-effort [set noiseEffort high-effort] 
+          set otherEffort noiseEffort
+          ; print noiseEffort
         ]
+        [
+          set otherEffort currPartnerEffort
+        ]
+        set sumEffort (sumEffort + otherEffort)
       ]
     ]
   ]
