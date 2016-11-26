@@ -1122,6 +1122,23 @@ mean [profit] of agents
 1
 11
 
+BUTTON
+879
+10
+965
+43
+step once
+go
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
 @#$#@#$#@
 ## WHAT IS IT?
 

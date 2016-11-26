@@ -41,11 +41,13 @@ to randomMove
     ]
     
     if not occ [
+      let t false
       set occupied? false  ; patch d'où on part
       ifelse tp[
-        if xcor = 0 [setxy (X - 1) ycor
-          show xcor]
-        if xcor = (X - 1) [setxy 0 ycor]
+        if xcor = 0 [
+          set xcor (X - 1) 
+          set t true]
+        if xcor = (X - 1) and not t [set xcor 0]
       ]
       [
         fd 1
