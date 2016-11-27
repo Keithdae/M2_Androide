@@ -1,6 +1,11 @@
 __includes ["agents.nls"]
 breed [agents agent]
-globals [high-effort low-effort]
+globals [
+  high-effort
+  low-effort
+  noiseSum
+  noiseCount
+]
 
 patches-own [
   occupied?
@@ -282,17 +287,20 @@ end
 ;------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 to run-simulations
-  ;let fig6 simulateFigure6
+  let fig6 simulateFigure6
   let fig7 simulateFigure7
-  simulateFigure9
-  ;fill-plot "Figure 6" fig6
-  fill-plot "Figure 7" fig7
-  ;export-plot "Figure 6" "simulation_figure6.txt"
+  let fig9 simulateFigure9
+  fill-plot "Figure 6" fig6 true
+  fill-plot "Figure 7" fig7 true
+  fill-plot "Figure 9" fig9 false
+  export-plot "Figure 6" "simulation_figure6.txt"
   export-plot "Figure 7" "simulation_figure7.txt"
+  export-plot "Figure 9" "simulation_figure9.txt"
+  export-world "simulation.csv"
 end
 
 ; La penList est une liste contenant des listes de la forme [ "penName" [ [x1 y1] [x2 y2] ... ] ]
-to fill-plot [ plotName penList ]
+to fill-plot [ plotName penList drawCross? ]
   set-current-plot plotName
   let colorPen 15
   foreach penList
@@ -306,15 +314,17 @@ to fill-plot [ plotName penList ]
       let py last ?
       ; On trace le point
       plotxy px py
-      ; Permet de tracer une croix autour du point
-      plotxy px + (plot-x-max / 50) py
-      plotxy px - (plot-x-max / 50) py
-      plot-pen-up
-      plotxy px py + (plot-y-max / 50)
-      plot-pen-down
-      plotxy px py - (plot-y-max / 50)
-      ; on se replace sur le point pour bien tracer la lgine vers le point suivant
-      plotxy px py
+      if drawCross? [
+        ; Permet de tracer une croix autour du point
+        plotxy px + (plot-x-max / 50) py
+        plotxy px - (plot-x-max / 50) py
+        plot-pen-up
+        plotxy px py + (plot-y-max / 50)
+        plot-pen-down
+        plotxy px py - (plot-y-max / 50)
+        ; on se replace sur le point pour bien tracer la lgine vers le point suivant
+        plotxy px py
+      ]
     ]
     ; On passe à la couleur suivante
     set colorPen colorPen + 10
@@ -518,8 +528,47 @@ to-report simulateFigure7
   report penList
 end
 
-to simulateFigure9
+to-report simulateFigure9
+  let noiseLevels [ 0 15 30 45 ]
+  let penList []
 
+  set typeBlack 7
+  set nbAgentsBlack nbAgentsSimulation
+
+  foreach noiseLevels
+  [
+    setup
+
+    let i 0
+    let noise ?
+    let currPen nobody
+    ifelse noise = 0 [
+      set noiseSwitch false
+      set currPen (list "Perfect Observability" [])
+    ]
+    [
+      set noiseValue noise
+      set noiseSwitch true
+      if noise = 15 [set currPen (list "Noise : low level" [])]
+      if noise = 30 [set currPen (list "Noise : medium level" [])]
+      if noise = 45 [set currPen (list "Noise : high level" [])]
+    ]
+    go
+    let meanEffort mean [effort] of turtles
+    while [i < 100]
+    [
+      go
+      set meanEffort mean [effort] of turtles
+      set meanEffort precision meanEffort 6
+      let newValList lput (list ticks meanEffort) (item 1 currPen)
+      set currPen replace-item 1 currPen newValList
+      set i i + 1
+    ]
+
+    set penList lput currPen penList
+  ]
+
+  report penList
 end
 
 ; Converts a type number to the corresponding name for plots
@@ -793,7 +842,7 @@ nbAgentsRed
 nbAgentsRed
 0
 X * Y
-500
+900
 1
 1
 NIL
@@ -877,7 +926,7 @@ CHOOSER
 typeRed
 typeRed
 0 1 2 3 4 5 6 7 8 9
-5
+2
 
 CHOOSER
 1597
@@ -949,7 +998,7 @@ noiseValue
 noiseValue
 1
 50
-5
+50
 1
 1
 %
@@ -1092,10 +1141,10 @@ NIL
 HORIZONTAL
 
 PLOT
-777
-761
-1370
-1096
+685
+760
+1278
+1095
 Figure 7
 High effort agents proportion (%)
 Average effort
@@ -1109,130 +1158,130 @@ true
 PENS
 
 TEXTBOX
-891
-337
-906
-356
+885
+266
+900
+285
 ■
 16
 105.0
 1
 
 TEXTBOX
-916
-337
-931
-356
+910
+266
+925
+285
 ■
 16
 95.0
 1
 
 TEXTBOX
-942
-337
-957
-356
+936
+266
+951
+285
 ■
 16
 85.0
 1
 
 TEXTBOX
-968
-337
-983
-356
+962
+266
+977
+285
 ■
 16
 75.0
 1
 
 TEXTBOX
-1024
-337
-1039
-356
+1018
+266
+1033
+285
 ■
 16
 55.0
 1
 
 TEXTBOX
-1055
-337
-1070
-356
+1049
+266
+1064
+285
 ■
 16
 45.0
 1
 
 TEXTBOX
-995
-337
-1010
-356
+989
+266
+1004
+285
 ■
 16
 65.0
 1
 
 TEXTBOX
-1086
-337
-1101
-356
+1080
+266
+1095
+285
 ■
 16
 25.0
 1
 
 TEXTBOX
-1113
-337
-1128
-356
+1107
+266
+1122
+285
 ■
 16
 15.0
 1
 
 TEXTBOX
-1141
-337
-1156
-356
+1135
+266
+1150
+285
 ■
 16
 14.0
 1
 
 TEXTBOX
-882
-320
-1180
-350
+876
+249
+1174
+279
 0  0.2  0.4  0.6  0.8  1.0  1.2  1.4  1.6  1.8  2.0
 12
 0.0
 1
 
 TEXTBOX
-885
-292
-1035
-310
+879
+221
+1029
+239
 Effort chromatic scale:\n
 12
 0.0
 0
 
 MONITOR
-912
-430
-1008
-475
+909
+471
+1005
+516
 Average effort
 mean [effort] of agents
 6
@@ -1240,10 +1289,10 @@ mean [effort] of agents
 11
 
 MONITOR
-912
-480
-1009
-525
+909
+521
+1006
+566
 STD effort
 standard-deviation [effort] of agents
 6
@@ -1251,10 +1300,10 @@ standard-deviation [effort] of agents
 11
 
 MONITOR
-912
-531
-1009
-576
+909
+572
+1006
+617
 Average profit
 mean [profit] of agents
 6
@@ -1277,6 +1326,34 @@ NIL
 NIL
 NIL
 1
+
+PLOT
+1299
+761
+1869
+1094
+Figure 9
+Time
+Average Effort
+0.0
+10.0
+0.0
+2.1
+true
+false
+"" ""
+PENS
+
+MONITOR
+1115
+487
+1204
+532
+averageNoise
+noiseSum / noiseCount
+17
+1
+11
 
 @#$#@#$#@
 ## WHAT IS IT?
