@@ -654,7 +654,7 @@ CHOOSER
 nbAgentTypes
 nbAgentTypes
 1 2 3 4 5 6
-5
+1
 
 TEXTBOX
 1370
@@ -735,7 +735,7 @@ nbAgentsBlack
 nbAgentsBlack
 0
 X * Y
-497
+899
 1
 1
 NIL
@@ -750,7 +750,7 @@ nbAgentsRed
 nbAgentsRed
 0
 X * Y
-3
+500
 1
 1
 NIL
@@ -824,7 +824,7 @@ CHOOSER
 typeBlack
 typeBlack
 0 1 2 3 4 5 6 7 8 9
-1
+2
 
 CHOOSER
 1597
@@ -834,7 +834,7 @@ CHOOSER
 typeRed
 typeRed
 0 1 2 3 4 5 6 7 8 9
-5
+3
 
 CHOOSER
 1597
@@ -877,9 +877,9 @@ typeCyan
 9
 
 SWITCH
-1176
+1197
 244
-1299
+1320
 277
 noiseSwitch
 noiseSwitch
@@ -888,9 +888,9 @@ noiseSwitch
 -1000
 
 TEXTBOX
-1176
+1197
 217
-1220
+1241
 235
 Noise :
 12
@@ -898,25 +898,25 @@ Noise :
 1
 
 SLIDER
-1175
+1196
 288
-1300
+1321
 321
 noiseValue
 noiseValue
 1
 50
-1
+6
 1
 1
 %
 HORIZONTAL
 
 PLOT
-21
-429
-464
-617
+16
+471
+459
+659
 Effort
 NIL
 NIL
@@ -932,10 +932,10 @@ PENS
 "Std" 1.0 0 -7500403 true "" "plot standard-deviation [effort] of agents"
 
 PLOT
-492
-429
-892
-617
+487
+471
+887
+659
 Profit
 NIL
 NIL
@@ -1064,6 +1064,126 @@ false
 true
 "" ""
 PENS
+
+TEXTBOX
+891
+337
+906
+356
+■
+16
+105.0
+1
+
+TEXTBOX
+916
+337
+931
+356
+■
+16
+95.0
+1
+
+TEXTBOX
+942
+337
+957
+356
+■
+16
+85.0
+1
+
+TEXTBOX
+968
+337
+983
+356
+■
+16
+75.0
+1
+
+TEXTBOX
+1024
+337
+1039
+356
+■
+16
+55.0
+1
+
+TEXTBOX
+1055
+337
+1070
+356
+■
+16
+45.0
+1
+
+TEXTBOX
+995
+337
+1010
+356
+■
+16
+65.0
+1
+
+TEXTBOX
+1086
+337
+1101
+356
+■
+16
+25.0
+1
+
+TEXTBOX
+1113
+337
+1128
+356
+■
+16
+15.0
+1
+
+TEXTBOX
+1141
+337
+1156
+356
+■
+16
+14.0
+1
+
+TEXTBOX
+882
+320
+1180
+350
+0  0.2  0.4  0.6  0.8  1.0  1.2  1.4  1.6  1.8  2.0
+12
+0.0
+1
+
+TEXTBOX
+885
+292
+1035
+310
+Effort chromatic scale:\n
+12
+0.0
+1
 
 @#$#@#$#@
 ## WHAT IS IT?
@@ -1408,7 +1528,7 @@ Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
 
 @#$#@#$#@
-NetLogo 5.3
+NetLogo 5.3.1
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@
