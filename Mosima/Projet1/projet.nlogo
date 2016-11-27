@@ -3,8 +3,6 @@ breed [agents agent]
 globals [
   high-effort
   low-effort
-  noiseSum
-  noiseCount
 ]
 
 patches-own [
@@ -534,6 +532,7 @@ to-report simulateFigure9
 
   set typeBlack 7
   set nbAgentsBlack nbAgentsSimulation
+  set nbAgentTypes 1
 
   foreach noiseLevels
   [
@@ -555,7 +554,7 @@ to-report simulateFigure9
     ]
     go
     let meanEffort mean [effort] of turtles
-    while [i < 100]
+    while [i < 200]
     [
       go
       set meanEffort mean [effort] of turtles
@@ -746,7 +745,7 @@ CHOOSER
 nbAgentTypes
 nbAgentTypes
 1 2 3 4 5 6
-1
+0
 
 TEXTBOX
 1370
@@ -827,7 +826,7 @@ nbAgentsBlack
 nbAgentsBlack
 0
 X * Y
-0
+500
 1
 1
 NIL
@@ -842,7 +841,7 @@ nbAgentsRed
 nbAgentsRed
 0
 X * Y
-900
+500
 1
 1
 NIL
@@ -916,7 +915,7 @@ CHOOSER
 typeBlack
 typeBlack
 0 1 2 3 4 5 6 7 8 9
-6
+7
 
 CHOOSER
 1597
@@ -926,7 +925,7 @@ CHOOSER
 typeRed
 typeRed
 0 1 2 3 4 5 6 7 8 9
-2
+5
 
 CHOOSER
 1597
@@ -998,7 +997,7 @@ noiseValue
 noiseValue
 1
 50
-50
+45
 1
 1
 %
@@ -1119,7 +1118,7 @@ stdToleranceSimulation
 stdToleranceSimulation
 0
 1
-5.0E-4
+1
 0.0001
 1
 NIL
@@ -1134,7 +1133,7 @@ nbTestsSimulation
 nbTestsSimulation
 2
 500
-500
+2
 1
 1
 NIL
@@ -1343,17 +1342,6 @@ true
 false
 "" ""
 PENS
-
-MONITOR
-1115
-487
-1204
-532
-averageNoise
-noiseSum / noiseCount
-17
-1
-11
 
 @#$#@#$#@
 ## WHAT IS IT?

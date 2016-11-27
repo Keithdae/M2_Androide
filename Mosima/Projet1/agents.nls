@@ -130,13 +130,9 @@ to workAgent
       [
         ifelse noiseSwitch 
         [
-          set noiseSum  noiseSum + (1 - (noiseValue / 100) + (random(noiseValue * 2 + 1) / 100))
-          set noiseCount noiseCount + 1
           let noiseEffort currPartnerEffort * (1 - (noiseValue / 100) + (random(noiseValue * 2 + 1) / 100))
           if noiseEffort < low-effort [set noiseEffort low-effort]
           if noiseEffort > high-effort [set noiseEffort high-effort] 
-          
-          print (word "Curr : " currPartnerEffort " , noise : " noiseEffort)
           set otherEffort noiseEffort
           ; print noiseEffort
         ]
