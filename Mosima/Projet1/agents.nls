@@ -6,7 +6,8 @@ to calculateProfits
   ask agents [
     if partner != -1[    
       ;print (word "oeff : " otherEffort " partner : " partner " self : " self)
-      set profit (5 * sqrt(effort + otherEffort) - (effort * effort))
+      ifelse Variante [set profit (5 * sqrt(effort + otherEffort) + (effort - otherEffort))]
+      [set profit (5 * sqrt(effort + otherEffort) - (effort * effort))]
       set otherProfit (5 * sqrt(effort + otherEffort) - (otherEffort * otherEffort))
       
       set lastProfit profit

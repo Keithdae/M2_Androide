@@ -826,7 +826,7 @@ nbAgentsBlack
 nbAgentsBlack
 0
 X * Y
-500
+900
 1
 1
 NIL
@@ -841,7 +841,7 @@ nbAgentsRed
 nbAgentsRed
 0
 X * Y
-500
+0
 1
 1
 NIL
@@ -925,7 +925,7 @@ CHOOSER
 typeRed
 typeRed
 0 1 2 3 4 5 6 7 8 9
-5
+0
 
 CHOOSER
 1597
@@ -935,7 +935,7 @@ CHOOSER
 typeGreen
 typeGreen
 0 1 2 3 4 5 6 7 8 9
-9
+0
 
 CHOOSER
 1597
@@ -945,7 +945,7 @@ CHOOSER
 typeViolet
 typeViolet
 0 1 2 3 4 5 6 7 8 9
-9
+0
 
 CHOOSER
 1598
@@ -955,7 +955,7 @@ CHOOSER
 typeYellow
 typeYellow
 0 1 2 3 4 5 6 7 8 9
-9
+0
 
 CHOOSER
 1598
@@ -997,7 +997,7 @@ noiseValue
 noiseValue
 1
 50
-9
+5
 1
 1
 %
@@ -1118,7 +1118,7 @@ stdToleranceSimulation
 stdToleranceSimulation
 0.0001
 1
-1.0E-4
+5.0E-4
 0.0001
 1
 NIL
@@ -1133,7 +1133,7 @@ nbTestsSimulation
 nbTestsSimulation
 2
 500
-2
+500
 1
 1
 NIL
@@ -1342,6 +1342,17 @@ true
 true
 "" ""
 PENS
+
+SWITCH
+1190
+149
+1293
+182
+Variante
+Variante
+1
+1
+-1000
 
 @#$#@#$#@
 ## WHAT IS IT?
