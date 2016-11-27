@@ -282,12 +282,12 @@ end
 ;------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 to run-simulations
-  let fig6 simulateFigure6
+  ;let fig6 simulateFigure6
   let fig7 simulateFigure7
   simulateFigure9
-  fill-plot "Figure 6" fig6
+  ;fill-plot "Figure 6" fig6
   fill-plot "Figure 7" fig7
-  export-plot "Figure 6" "simulation_figure6.txt"
+  ;export-plot "Figure 6" "simulation_figure6.txt"
   export-plot "Figure 7" "simulation_figure7.txt"
 end
 
@@ -466,6 +466,25 @@ to-report simulateFigure7
   let agentTypeList [ 3 6 ]
   let paramList []
   let penList []
+
+  ; valeurs expectées pour cette simulation
+  let expPen (list "Expected" [])
+  let expValList lput (list 0 0.92101) (item 1 expPen)
+  set expPen replace-item 1 expPen expValList
+  set expValList lput (list 0.6 0.92701) (item 1 expPen)
+  set expPen replace-item 1 expPen expValList
+  set expValList lput (list 5.6 0.98101) (item 1 expPen)
+  set expPen replace-item 1 expPen expValList
+  set expValList lput (list 33.3 1.28100) (item 1 expPen)
+  set expPen replace-item 1 expPen expValList
+  set expValList lput (list 66.7 1.64100) (item 1 expPen)
+  set expPen replace-item 1 expPen expValList
+  set expValList lput (list 100 2.00100) (item 1 expPen)
+  set expPen replace-item 1 expPen expValList
+
+  show expPen
+
+  set penList lput expPen penList
 
   foreach agentTypeList
   [
@@ -759,7 +778,7 @@ nbAgentsBlack
 nbAgentsBlack
 0
 X * Y
-0
+900
 1
 1
 NIL
@@ -774,7 +793,7 @@ nbAgentsRed
 nbAgentsRed
 0
 X * Y
-500
+491
 1
 1
 NIL
@@ -848,7 +867,7 @@ CHOOSER
 typeBlack
 typeBlack
 0 1 2 3 4 5 6 7 8 9
-6
+5
 
 CHOOSER
 1597
@@ -858,7 +877,7 @@ CHOOSER
 typeRed
 typeRed
 0 1 2 3 4 5 6 7 8 9
-3
+0
 
 CHOOSER
 1597
@@ -907,7 +926,7 @@ SWITCH
 277
 noiseSwitch
 noiseSwitch
-1
+0
 1
 -1000
 
