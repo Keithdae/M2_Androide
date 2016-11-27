@@ -997,7 +997,7 @@ noiseValue
 noiseValue
 1
 50
-45
+9
 1
 1
 %
@@ -1116,9 +1116,9 @@ SLIDER
 716
 stdToleranceSimulation
 stdToleranceSimulation
-0
+0.0001
 1
-1
+1.0E-4
 0.0001
 1
 NIL
@@ -1126,9 +1126,9 @@ HORIZONTAL
 
 SLIDER
 765
-690
+684
 937
-723
+717
 nbTestsSimulation
 nbTestsSimulation
 2
