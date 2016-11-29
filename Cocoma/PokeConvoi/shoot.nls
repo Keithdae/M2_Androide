@@ -33,7 +33,7 @@ to update-shoots
     
     
     if not missed? and target != nobody [ face target ]
-    fd 0.42
+    fd (0.14 * simu-speed) ; Valeur arbitraire
     ifelse target-breed = convois
     [
       let prey one-of convois-here

@@ -26,6 +26,8 @@ to setup-ennemis
     setxyz x y solAlt
     
     set dead? false
+    
+    set speed (ennemi-speed * simu-speed)
   ]
 end
 
@@ -82,7 +84,7 @@ to ennemi-random-move ; ennemi procedure
   ]
   [
     set pitch 0
-    fd ennemi-speed
+    fd speed
   ]
   
   if destination = patch-here 

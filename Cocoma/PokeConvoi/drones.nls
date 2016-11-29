@@ -24,15 +24,26 @@ to setup-drones
     set munitions drone-nb-munitions
     set fuel drone-fuel
     set dead? false
+    set leader? false
+    set area "Center"
+    set returnTime "Late"
     set incoming-queue []
     set beliefs []
     set intentions []
     set currentReload drone-reloadRate
+    set speed (simu-speed * drone-speed)
     
     set objective nobody
     set backObjective one-of patches with [base?] 
     
     add-intention "drone-takeOff" "drone-hasTakenOff"
+  ]
+  
+  ask one-of drones [
+    set color orange
+    set leader? true 
+    set returnTime "Late"
+    add-intention "drone-sendInstructions" "true"
   ]
   
 end
@@ -41,6 +52,7 @@ end
 to drones-think 
   ask drones [
     execute-intentions
+    drone-receive
     if fuel < 0 [
      die 
     ]
@@ -68,23 +80,25 @@ to drone-checkSight
 end
 
 to drone-shoot ; drone procedure
-
-  ifelse ( currentReload < drone-reloadRate )
+  if munitions > 0
   [
-    set currentReload ( currentReload + 1 )
-  ]
-  ; else
-  [
-    set shootingTargets ennemis in-radius-nowrap drone-vision
-    drone-checkSight
-    if any? shootingTargets
+    ifelse ( currentReload < drone-reloadRate )
     [
-      let miss? (random 100) > drone-accuracy
-      build-shot shootingTargets miss?
-      set currentReload 0
+      set currentReload ( currentReload + 1 )
     ]
-  ] ; ifelse
-  
+    ; else
+    [
+      set shootingTargets ennemis in-radius-nowrap drone-vision
+      ; drone-checkSight  ; Fonction trop coûteuse en performance
+      if any? shootingTargets
+      [
+        let miss? (random 100) > drone-accuracy
+        build-shot shootingTargets miss?
+        set currentReload 0
+        set munitions munitions - 1
+      ]
+    ] ; ifelse
+  ]
 end
 
 to drone-takeOff
@@ -131,9 +145,25 @@ to-report drone-hasTakenOff
   ]
 end
 
-to drone-setObjective [obj]
+to drone-setToProtect [obj]
   ask drones [
-   set objective obj 
+   set convoiToProtect obj 
+   drone-adaptObjective
+  ]
+end
+
+to drone-adaptObjective
+  if area = "Center"
+  [
+    set objective convoiToProtect
+  ]  
+  if area = "Front" ; TO-DO Récupérer un patch plus loin sur le chemin
+  [
+    set objective convoiToProtect
+  ]
+  if area = "Back" ; TO-DO Récupérer un patch derrière l'objective (convoi to-protect)
+  [
+    set objective convoiToProtect
   ]
 end
 
@@ -191,14 +221,21 @@ to-report return-cost
     ]
     let deltaX (abs(xcor - targetX))
     let deltaY (abs(ycor - targetY))
-    report deltaX + deltaY + 0.1 * drone-fuel
+    if returnTime = "Late" 
+    [
+      report deltaX + deltaY + 0.1 * drone-fuel
+    ]
+    if returnTime = "Early" 
+    [
+      report deltaX + deltaY + 0.6 * drone-fuel
+    ]
   ]
   
   report -1
 end
 
 to-report drone-escortDone
-  if fuel < return-cost [
+  if fuel < return-cost or objective = nobody [
    add-intention "drone-back" "drone-backDone"
    report true 
   ]
@@ -278,6 +315,7 @@ to-report drone-backDone
     set pitch 0
     set zcor 1
     add-intention "drone-refuel" "drone-refuelDone"
+    if returnTime = "Early" [set returnTime "Late"]
     report true
   ]
   report false
@@ -300,14 +338,68 @@ to drone-step
     ]
     ;else 
     [
-      fd drone-speed
+      fd speed
       if dz >= 0 [
-        set fuel fuel - (abs(dx * drone-speed) + abs(dy * drone-speed) + (abs(dz * drone-speed) * 5))
+        set fuel fuel - (abs(dx * speed) + abs(dy * speed) + (abs(dz * speed) * 5))
       ]
     ]
   ]
   ;else
   [
     set fuel 0 
+  ]
+end
+
+
+to drone-sendInstructions
+    let dest other drones in-radius drone-communication-radius
+    
+    let msgRE create-message "ReturnTime"
+    let msgRL create-message "ReturnTime"
+    
+    let msgAF create-message "Area"
+    let msgAC create-message "Area"
+    let msgAB create-message "Area"
+    
+    let i 0
+    let j 0
+    ask dest 
+    [
+      ifelse i mod 2 = 0 [set msgRE add-receiver self msgRE]
+      [set msgRL add-receiver self msgRL]
+      
+      if j mod 3 = 0 [set msgAF add-receiver self msgAF]
+      if j mod 3 = 1 [set msgAC add-receiver self msgAC]
+      if j mod 3 = 2 [set msgAB add-receiver self msgAB]
+      
+      set i i + 1 
+      set j j + 1
+    ]
+    
+    set msgRE add-content "Early" msgRE
+    set msgRL add-content "Late" msgRL
+    set msgAF add-content "Front" msgAF
+    set msgAC add-content "Center" msgAC
+    set msgAB add-content "Back" msgAB
+    
+    send msgRE
+    send msgRL
+    send msgAF
+    send msgAC
+    send msgAB
+end
+
+
+to drone-receive
+  let msg get-message
+  while [msg != "no_message"] 
+  [
+    let perf get-performative msg
+    let cont get-content msg
+    
+    if perf = "ReturnTime"[set returnTime cont]
+    if perf = "Area"[set area cont]    
+    
+    set msg get-message
   ]
 end
