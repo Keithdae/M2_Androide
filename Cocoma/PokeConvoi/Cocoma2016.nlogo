@@ -850,7 +850,7 @@ SWITCH
 373
 show_messages
 show_messages
-1
+0
 1
 -1000
 
@@ -883,7 +883,7 @@ nb-drones
 nb-drones
 1
 30
-5
+10
 1
 1
 NIL
@@ -928,7 +928,7 @@ drone-speed
 drone-speed
 0.01
 0.3
-0.075
+0.08
 0.001
 1
 NIL

@@ -177,6 +177,12 @@ to-report getObjectivePatch [dir relativePos]
     if relativePos = "Back"[
       report patch-at 0 -5 0
     ]
+    if relativePos = "Right"[
+      report patch-at 5 0 0
+    ]
+    if relativePos = "Left"[
+      report patch-at -5 0 0
+    ]
   ]
   if (dir <= 225 and dir >= 135)[ ; directionné vers le bas
     if relativePos = "Front"[
@@ -184,6 +190,12 @@ to-report getObjectivePatch [dir relativePos]
     ]
     if relativePos = "Back"[
       report patch-at 0 5 0
+    ]
+    if relativePos = "Right"[
+      report patch-at -5 0 0
+    ]
+    if relativePos = "Left"[
+      report patch-at 5 0 0
     ]
   ]
   if (dir < 315 and dir > 225)[ ; directionné vers la gauche
@@ -193,6 +205,12 @@ to-report getObjectivePatch [dir relativePos]
     if relativePos = "Back"[
       report patch-at 5 0 0
     ]
+    if relativePos = "Right"[
+      report patch-at 0 5 0
+    ]
+    if relativePos = "Left"[
+      report patch-at 0 -5 0
+    ]
   ]
   if (dir < 135 and dir > 45)[ ; directionné vers la droite
     if relativePos = "Front"[
@@ -200,6 +218,12 @@ to-report getObjectivePatch [dir relativePos]
     ]
     if relativePos = "Back"[
       report patch-at -5 0 0
+    ]
+    if relativePos = "Right"[
+      report patch-at 0 -5 0
+    ]
+    if relativePos = "Left"[
+      report patch-at 0 5 0
     ]
   ]
   
@@ -407,6 +431,8 @@ to drone-sendInstructions
     let msgAF create-message "Area" ; area front
     let msgAC create-message "Area" ; area center
     let msgAB create-message "Area" ; area back
+    let msgAR create-message "Area" ; area right
+    let msgAL create-message "Area" ; area left
     
     let i 0
     let j 0
@@ -415,9 +441,11 @@ to drone-sendInstructions
       ifelse i mod 2 = 0 [set msgRE add-receiver self msgRE]
       [set msgRL add-receiver self msgRL]
       
-      if j mod 3 = 0 [set msgAF add-receiver self msgAF]
-      if j mod 3 = 1 [set msgAC add-receiver self msgAC]
-      if j mod 3 = 2 [set msgAB add-receiver self msgAB]
+      if j mod 5 = 0 [set msgAF add-receiver self msgAF]
+      if j mod 5 = 1 [set msgAC add-receiver self msgAC]
+      if j mod 5 = 2 [set msgAB add-receiver self msgAB]
+      if j mod 5 = 3 [set msgAR add-receiver self msgAR]
+      if j mod 5 = 4 [set msgAL add-receiver self msgAL]
       
       set i i + 1 
       set j j + 1
@@ -428,12 +456,16 @@ to drone-sendInstructions
     set msgAF add-content "Front" msgAF
     set msgAC add-content "Center" msgAC
     set msgAB add-content "Back" msgAB
+    set msgAR add-content "Right" msgAR
+    set msgAL add-content "Left" msgAL
     
     send msgRE
     send msgRL
     send msgAF
     send msgAC
     send msgAB
+    send msgAR
+    send msgAL
 end
 
 
