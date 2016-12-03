@@ -1035,10 +1035,10 @@ NIL
 HORIZONTAL
 
 SLIDER
-978
-356
-1150
-389
+961
+336
+1133
+369
 drone-accuracy
 drone-accuracy
 1
@@ -1392,7 +1392,7 @@ Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
 
 @#$#@#$#@
-NetLogo 3D 5.3
+NetLogo 3D 5.3.1
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@

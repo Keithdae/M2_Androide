@@ -285,16 +285,16 @@ end
 ;------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 to run-simulations
-  let fig6 simulateFigure6
+  ;let fig6 simulateFigure6
   let fig7 simulateFigure7
-  let fig9 simulateFigure9
-  fill-plot "Figure 6" fig6 true
-  fill-plot "Figure 7" fig7 true
-  fill-plot "Figure 9" fig9 false
-  export-plot "Figure 6" "simulation_figure6.txt"
-  export-plot "Figure 7" "simulation_figure7.txt"
-  export-plot "Figure 9" "simulation_figure9.txt"
-  export-world "simulation.csv"
+  ;let fig9 simulateFigure9
+  ;fill-plot "Figure 6" fig6 true
+  ;fill-plot "Figure 7" fig7 true
+  ;fill-plot "Figure 9" fig9 false
+  ;export-plot "Figure 6" "simulation_figure6.txt"
+  ;export-plot "Figure 7" "simulation_figure7.txt"
+  ;export-plot "Figure 9" "simulation_figure9.txt"
+  ;export-world "simulation.csv"
 end
 
 ; La penList est une liste contenant des listes de la forme [ "penName" [ [x1 y1] [x2 y2] ... ] ]
@@ -745,7 +745,7 @@ CHOOSER
 nbAgentTypes
 nbAgentTypes
 1 2 3 4 5 6
-0
+1
 
 TEXTBOX
 1370
@@ -826,7 +826,7 @@ nbAgentsBlack
 nbAgentsBlack
 0
 X * Y
-900
+0
 1
 1
 NIL
@@ -841,7 +841,7 @@ nbAgentsRed
 nbAgentsRed
 0
 X * Y
-0
+500
 1
 1
 NIL
@@ -915,7 +915,7 @@ CHOOSER
 typeBlack
 typeBlack
 0 1 2 3 4 5 6 7 8 9
-7
+6
 
 CHOOSER
 1597
@@ -925,7 +925,7 @@ CHOOSER
 typeRed
 typeRed
 0 1 2 3 4 5 6 7 8 9
-0
+5
 
 CHOOSER
 1597
@@ -935,7 +935,7 @@ CHOOSER
 typeGreen
 typeGreen
 0 1 2 3 4 5 6 7 8 9
-0
+9
 
 CHOOSER
 1597
@@ -945,7 +945,7 @@ CHOOSER
 typeViolet
 typeViolet
 0 1 2 3 4 5 6 7 8 9
-0
+9
 
 CHOOSER
 1598
@@ -955,7 +955,7 @@ CHOOSER
 typeYellow
 typeYellow
 0 1 2 3 4 5 6 7 8 9
-0
+9
 
 CHOOSER
 1598
@@ -974,7 +974,7 @@ SWITCH
 277
 noiseSwitch
 noiseSwitch
-0
+1
 1
 -1000
 
@@ -997,7 +997,7 @@ noiseValue
 noiseValue
 1
 50
-5
+9
 1
 1
 %
@@ -1118,7 +1118,7 @@ stdToleranceSimulation
 stdToleranceSimulation
 0.0001
 1
-5.0E-4
+0.001
 0.0001
 1
 NIL
@@ -1342,17 +1342,6 @@ true
 true
 "" ""
 PENS
-
-SWITCH
-1190
-149
-1293
-182
-Variante
-Variante
-1
-1
--1000
 
 @#$#@#$#@
 ## WHAT IS IT?

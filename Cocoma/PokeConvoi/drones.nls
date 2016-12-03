@@ -153,18 +153,56 @@ to drone-setToProtect [obj]
 end
 
 to drone-adaptObjective
-  if area = "Center"
+  let obj nobody
+  let relativePos area
+  ifelse area = "Center"
   [
     set objective convoiToProtect
-  ]  
-  if area = "Front" ; TO-DO Récupérer un patch plus loin sur le chemin
+  ] 
   [
-    set objective convoiToProtect
+    if convoiToProtect != nobody[
+      ask convoiToProtect[
+        set obj getObjectivePatch heading relativePos
+      ]
+      set objective obj
+    ]
   ]
-  if area = "Back" ; TO-DO Récupérer un patch derrière l'objective (convoi to-protect)
-  [
-    set objective convoiToProtect
+end
+
+to-report getObjectivePatch [dir relativePos]
+  if (dir <= 45 or dir >= 315)[ ; directionné vers le haut
+    if relativePos = "Front"[
+      report patch-at 0 5 0
+    ]
+    if relativePos = "Back"[
+      report patch-at 0 -5 0
+    ]
   ]
+  if (dir <= 225 and dir >= 135)[ ; directionné vers le bas
+    if relativePos = "Front"[
+      report patch-at 0 -5 0
+    ]
+    if relativePos = "Back"[
+      report patch-at 0 5 0
+    ]
+  ]
+  if (dir < 315 and dir > 225)[ ; directionné vers la gauche
+    if relativePos = "Front"[
+      report patch-at -5 0 0
+    ]
+    if relativePos = "Back"[
+      report patch-at 5 0 0
+    ]
+  ]
+  if (dir < 135 and dir > 45)[ ; directionné vers la droite
+    if relativePos = "Front"[
+      report patch-at 5 0 0
+    ]
+    if relativePos = "Back"[
+      report patch-at -5 0 0
+    ]
+  ]
+  
 end
 
 to drone-moveToObjective
@@ -186,9 +224,18 @@ to drone-moveToObjective
     let y ycor
     let diff 0
     
-    ask objective [
-     set diff  ( abs(xcor - x) + abs(ycor - y) )
+    
+    ifelse is-convoi? objective[ 
+      ask objective [
+        set diff  ( abs(xcor - x) + abs(ycor - y) )
+      ]
     ]
+    [
+      ask objective [
+        set diff  ( abs(pxcor - x) + abs(pycor - y) )
+      ]
+    ]
+    
     if diff > 0 [
       drone-step
     ]
@@ -354,12 +401,12 @@ end
 to drone-sendInstructions
     let dest other drones in-radius drone-communication-radius
     
-    let msgRE create-message "ReturnTime"
-    let msgRL create-message "ReturnTime"
+    let msgRE create-message "ReturnTime" ;return early
+    let msgRL create-message "ReturnTime" ;return late
     
-    let msgAF create-message "Area"
-    let msgAC create-message "Area"
-    let msgAB create-message "Area"
+    let msgAF create-message "Area" ; area front
+    let msgAC create-message "Area" ; area center
+    let msgAB create-message "Area" ; area back
     
     let i 0
     let j 0
