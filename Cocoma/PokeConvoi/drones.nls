@@ -182,64 +182,6 @@ end
 ;-----------------------------------------------------------------------------------------------------------------------------------------------------
 
 to-report getObjectivePatch [dir relativePos]
-;  if (dir <= 45 or dir >= 315)[ ; directionné vers le haut
-;    if relativePos = "Front"[
-;      report patch-at 0 5 0
-;    ]
-;    if relativePos = "Back"[
-;      report patch-at 0 -5 0
-;    ]
-;    if relativePos = "Right"[
-;      report patch-at 5 0 0
-;    ]
-;    if relativePos = "Left"[
-;      report patch-at -5 0 0
-;    ]
-;  ]
-;  if (dir <= 225 and dir >= 135)[ ; directionné vers le bas
-;    if relativePos = "Front"[
-;      report patch-at 0 -5 0
-;    ]
-;    if relativePos = "Back"[
-;      report patch-at 0 5 0
-;    ]
-;    if relativePos = "Right"[
-;      report patch-at -5 0 0
-;    ]
-;    if relativePos = "Left"[
-;      report patch-at 5 0 0
-;    ]
-;  ]
-;  if (dir < 315 and dir > 225)[ ; directionné vers la gauche
-;    if relativePos = "Front"[
-;      report patch-at -5 0 0
-;    ]
-;    if relativePos = "Back"[
-;      report patch-at 5 0 0
-;    ]
-;    if relativePos = "Right"[
-;      report patch-at 0 5 0
-;    ]
-;    if relativePos = "Left"[
-;      report patch-at 0 -5 0
-;    ]
-;  ]
-;  if (dir < 135 and dir > 45)[ ; directionné vers la droite
-;    if relativePos = "Front"[
-;      report patch-at 5 0 0
-;    ]
-;    if relativePos = "Back"[
-;      report patch-at -5 0 0
-;    ]
-;    if relativePos = "Right"[
-;      report patch-at 0 -5 0
-;    ]
-;    if relativePos = "Left"[
-;      report patch-at 0 5 0
-;    ]
-;  ]
-  
-  
   if relativePos = "Front"[
     report patch-ahead 5
   ]
@@ -252,7 +194,6 @@ to-report getObjectivePatch [dir relativePos]
   if relativePos = "Left"[
     report patch-left-and-ahead 90 5
   ]
-  
 end
 
 ;-----------------------------------------------------------------------------------------------------------------------------------------------------
