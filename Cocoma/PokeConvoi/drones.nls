@@ -83,6 +83,13 @@ end
 
 ;-----------------------------------------------------------------------------------------------------------------------------------------------------
 
+to drone-detectEnnemis
+  set shootingTargets ennemis in-radius-nowrap drone-vision
+  drone-checkSight 
+end
+
+;-----------------------------------------------------------------------------------------------------------------------------------------------------
+
 to drone-shoot ; drone procedure
   if munitions > 0
   [
@@ -92,8 +99,6 @@ to drone-shoot ; drone procedure
     ]
     ; else
     [
-      set shootingTargets ennemis in-radius-nowrap drone-vision
-      drone-checkSight  ; Fonction trop coûteuse en performance
       if any? shootingTargets
       [
         let miss? (random 100) > drone-accuracy
@@ -290,11 +295,28 @@ to drone-spacing
  ]
 end
 
+;-----------------------------------------------------------------------------------------------------------------------------------------------------
+
 to drone-escort 
   set pitch 0
   drone-moveToObjective
+  drone-detectEnnemis
   drone-shoot
   drone-spacing
+end
+
+;-----------------------------------------------------------------------------------------------------------------------------------------------------
+
+to drone-reportEnnemis
+  ask drones with [not leader?][
+    let dest other drones in-radius-nowrap drone-communication-radius with [leader?]
+    let msg create-message "reportEnnemis"
+    foreach dest[
+      set msg add-receiver ? msg 
+    ]
+    set msg add-content shootingTargets msg
+    send msg
+  ]
 end
 
 ;-----------------------------------------------------------------------------------------------------------------------------------------------------
