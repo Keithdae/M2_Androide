@@ -59,7 +59,7 @@ to drones-think
     ]
     drone-receive
     if fuel < 0 [
-     die 
+      die 
     ]
   ]
 end
@@ -72,9 +72,11 @@ to drone-checkSight
   [
     let oldHeading heading
     face myself
+	
     let step (0.14 * simu-speed)
     let dist step
     let patchToCheck patch-ahead dist
+	
     let done false
     while [not done] [
       if [obstacle?] of patchToCheck [
@@ -85,17 +87,10 @@ to drone-checkSight
       set dist (dist + step) 
       set patchToCheck patch-ahead dist
       
-      if true  [
+      if member? [patch-here] of myself (patch-set patchToCheck ([neighbors6-nowrap] of patchToCheck))  [
         set done true 
       ]
     ]
-    
-;    let p patches in-cone (distance myself) 9
-;    if any? p with [obstacle?]
-;    [
-;       set toRemove (turtle-set toRemove self)
-;    ]
-    
     
     set heading oldHeading
   ]
@@ -109,7 +104,7 @@ end
 
 to drone-detectEnnemis
   set shootingTargets ennemis in-radius-nowrap drone-vision
-  ;drone-checkSight 
+  drone-checkSight 
 end
 
 ;-----------------------------------------------------------------------------------------------------------------------------------------------------

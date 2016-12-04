@@ -86,7 +86,9 @@ to ennemi-follow-target
     ]
     
     set heading ( heading + dirCorrection )
-    fd speed
+	if not detect-obstacle-ennemi [
+		fd speed
+	]
   ]
 end
 
