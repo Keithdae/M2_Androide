@@ -54,13 +54,15 @@ to update-shoots
           set life (life - 1)
           if life = 0[           
             set nb-cars ( nb-cars - 1 )
-            if nb-cars > 0 [
+            if nb-cars > 0 and who != max [who] of convois [
               let i 1
               while [convoi (who + i) = nobody][
+                print (word "who+i:" (who + i))
                 set i i + 1
               ]
               ask convoi (who + i) [
                 set leader? true
+                if not to-protect? [ set color orange ]
               ]
             ]
             die

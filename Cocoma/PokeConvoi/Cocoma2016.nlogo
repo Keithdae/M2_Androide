@@ -723,7 +723,7 @@ simu-speed
 simu-speed
 0
 10
-10
+3
 1
 1
 NIL
@@ -897,7 +897,7 @@ nb-drones
 nb-drones
 1
 30
-4
+10
 1
 1
 NIL
