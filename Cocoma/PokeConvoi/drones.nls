@@ -213,8 +213,8 @@ to drone-moveToObjective
     
     set heading ( heading + dirCorrection )
     
-    let x xcor
-    let y ycor
+    let x pxcor
+    let y pycor
     let diff 0
     
     
@@ -239,8 +239,8 @@ end
 ;-----------------------------------------------------------------------------------------------------------------------------------------------------
 
 to drone-spacing 
- let tooClose drones in-cone-nowrap 1 30
- if any? tooClose and ((count tooClose) > 1 or not member? self tooClose)[
+ let tooClose other drones in-cone-nowrap 1 30
+ if any? tooClose [
    rt random-float 180
  ]
 end
