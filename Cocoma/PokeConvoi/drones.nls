@@ -72,11 +72,31 @@ to drone-checkSight
   [
     let oldHeading heading
     face myself
-    let p patches in-cone (distance myself) 9
-    if any? p with [obstacle?]
-    [
-       set toRemove (turtle-set toRemove self)
+    let step (0.14 * simu-speed)
+    let dist step
+    let patchToCheck patch-ahead dist
+    let done false
+    while [not done] [
+      if [obstacle?] of patchToCheck [
+        set toRemove (turtle-set toRemove self)
+        set done true
+      ]
+            
+      set dist (dist + step) 
+      set patchToCheck patch-ahead dist
+      
+      if true  [
+        set done true 
+      ]
     ]
+    
+;    let p patches in-cone (distance myself) 9
+;    if any? p with [obstacle?]
+;    [
+;       set toRemove (turtle-set toRemove self)
+;    ]
+    
+    
     set heading oldHeading
   ]
   if toRemove != nobody
