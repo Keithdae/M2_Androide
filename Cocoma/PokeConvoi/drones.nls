@@ -32,6 +32,7 @@ to setup-drones
     set intentions []
     set currentReload drone-reloadRate
     set speed (simu-speed * drone-speed)
+    set ennemisList turtle-set nobody
     
     set objective nobody
     set backObjective one-of patches with [base?] 
@@ -51,9 +52,11 @@ end
 ;-----------------------------------------------------------------------------------------------------------------------------------------------------
 
 to drones-think 
-  drone-reportEnnemis
   ask drones [
     execute-intentions
+    if not leader?[
+      drone-reportEnnemis
+    ]
     drone-receive
     if fuel < 0 [
      die 
@@ -86,7 +89,7 @@ end
 
 to drone-detectEnnemis
   set shootingTargets ennemis in-radius-nowrap drone-vision
-  drone-checkSight 
+  ;drone-checkSight 
 end
 
 ;-----------------------------------------------------------------------------------------------------------------------------------------------------
@@ -264,15 +267,18 @@ end
 ;-----------------------------------------------------------------------------------------------------------------------------------------------------
 
 to drone-reportEnnemis
-  ask drones with [not leader?][
-    let dest other drones in-radius-nowrap drone-communication-radius with [leader?]
-    let msg create-message "reportEnnemis"
-    ask dest[
-      set msg add-receiver self msg 
-    ]
-    set msg add-content shootingTargets msg
-    send msg
+  let dest other drones in-radius-nowrap drone-communication-radius with [leader?]
+  let msg create-message "reportEnnemis"
+  ask dest[
+    set msg add-receiver self msg 
   ]
+  ifelse shootingTargets = 0[
+    set msg add-content turtle-set nobody msg
+  ]
+  [
+    set msg add-content shootingTargets msg
+  ]
+  send msg
 end
 
 ;-----------------------------------------------------------------------------------------------------------------------------------------------------
@@ -478,6 +484,9 @@ end
 
 to drone-receive
   let msg get-message
+  if leader?[
+    set ennemisList turtle-set nobody
+  ]
   while [msg != "no_message"] 
   [
     let perf get-performative msg
@@ -485,7 +494,21 @@ to drone-receive
     
     if perf = "ReturnTime"[set returnTime cont]
     if perf = "Area"[set area cont]    
-    
+    if perf = "reportEnnemis"[
+      set ennemisList (turtle-set ennemisList cont) 
+    ]
     set msg get-message
+  ]
+  if leader? [
+    if shootingTargets != 0[
+      set ennemisList (turtle-set ennemisList shootingTargets) 
+    ]
+    let dest other convois in-radius-nowrap drone-communication-radius with [leader?]
+    let convoiMsg create-message "reportEnnemis"
+    ask dest[
+      set convoiMsg add-receiver self convoiMsg 
+    ]
+    set convoiMsg add-content ennemisList convoiMsg
+    send convoiMsg 
   ]
 end

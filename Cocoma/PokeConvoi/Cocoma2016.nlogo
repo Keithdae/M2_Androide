@@ -70,6 +70,7 @@ drones-own[
  returnTime ; "Early" / "Late" : détermine l'instant où le drone retourne à la base ("Late" => Quand on ne dispose que de l'essence pour rentrer / "Early" => deux fois plus tôt)
  dead?
  leader?
+ ennemisList ; list of ennemis to send to convoy by drone-leader
 ]
 
 ;***********************
@@ -719,7 +720,7 @@ simu-speed
 simu-speed
 0
 10
-3
+10
 1
 1
 NIL
@@ -791,7 +792,7 @@ nb-ennemis
 nb-ennemis
 1
 100
-40
+100
 1
 1
 NIL
@@ -860,7 +861,7 @@ SWITCH
 373
 show_messages
 show_messages
-0
+1
 1
 -1000
 
@@ -968,7 +969,7 @@ drone-nb-munitions
 drone-nb-munitions
 1
 50
-12
+5
 1
 1
 NIL
@@ -1053,7 +1054,7 @@ drone-accuracy
 drone-accuracy
 1
 100
-100
+32
 1
 1
 NIL

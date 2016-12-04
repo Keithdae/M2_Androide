@@ -35,11 +35,16 @@ to convois-think
     let need-path false
     let zone-ennemi nobody
     ask convois with [leader? and not finished? and not dead?] [
+      set ennemis-seen turtle-set nobody
+      convoi-receive
       if check-ennemis [
         ask ennemis-seen [
           set zone-ennemi (patch-set zone-ennemi patches in-radius-nowrap (convoi-vision - 1))
         ]
         if zone-ennemi != nobody [
+          ask patches with [ennemi?][
+            set ennemi? false
+          ]
           ask zone-ennemi [
             set ennemi? true 
           ] 
@@ -107,6 +112,8 @@ to convois-think
   ]
 end
 
+;-----------------------------------------------------------------------------------------------------------------------------------------------------
+
 to-report detect-obstacle
   if any? other patches in-cone 10 60 with [obstacle?] [report true]
   ; if any? other patches in-cone 10 90 [report true]
@@ -114,11 +121,15 @@ to-report detect-obstacle
   report false
 end
 
+;-----------------------------------------------------------------------------------------------------------------------------------------------------
+
 to turn-away
   ;let free-patches neighbors with [not any? patches ]
   ;if any? free-patches [face one-of free-patches]
   rt random 10 - 5
 end
+
+;-----------------------------------------------------------------------------------------------------------------------------------------------------
 
 to check-convoi-finished
   ; Critere d'arret: on est a cote de l'objectif
@@ -142,6 +153,8 @@ to check-convoi-finished
     ]
   ]
 end
+
+;-----------------------------------------------------------------------------------------------------------------------------------------------------
 
 ; Avancer une voiture
 ; Permet de faire avancer les voitures d'un convoi (cortege et leader)
@@ -186,9 +199,29 @@ to move-convoi [goal slowdown? cortege?]
   fd tmp-speed ; Avance
 end
 
+;-----------------------------------------------------------------------------------------------------------------------------------------------------
+
+to convoi-receive
+  let msg get-message
+  while [msg != "no_message"] 
+  [
+    let perf get-performative msg
+    let cont get-content msg
+       
+    if perf = "reportEnnemis"[
+      set ennemis-seen (turtle-set ennemis-seen cont) 
+    ]
+    
+    set msg get-message
+  ]
+    
+end
+
+;-----------------------------------------------------------------------------------------------------------------------------------------------------
+
 to-report check-ennemis
   let res false
-  set ennemis-seen ennemis in-cone-nowrap convoi-vision 120
+  set ennemis-seen (turtle-set ennemis-seen (ennemis in-cone-nowrap convoi-vision 120))
   if any? ennemis-seen
   [
     set res true
