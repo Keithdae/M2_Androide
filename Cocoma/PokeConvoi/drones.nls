@@ -182,61 +182,75 @@ end
 ;-----------------------------------------------------------------------------------------------------------------------------------------------------
 
 to-report getObjectivePatch [dir relativePos]
-  if (dir <= 45 or dir >= 315)[ ; directionné vers le haut
-    if relativePos = "Front"[
-      report patch-at 0 5 0
-    ]
-    if relativePos = "Back"[
-      report patch-at 0 -5 0
-    ]
-    if relativePos = "Right"[
-      report patch-at 5 0 0
-    ]
-    if relativePos = "Left"[
-      report patch-at -5 0 0
-    ]
+;  if (dir <= 45 or dir >= 315)[ ; directionné vers le haut
+;    if relativePos = "Front"[
+;      report patch-at 0 5 0
+;    ]
+;    if relativePos = "Back"[
+;      report patch-at 0 -5 0
+;    ]
+;    if relativePos = "Right"[
+;      report patch-at 5 0 0
+;    ]
+;    if relativePos = "Left"[
+;      report patch-at -5 0 0
+;    ]
+;  ]
+;  if (dir <= 225 and dir >= 135)[ ; directionné vers le bas
+;    if relativePos = "Front"[
+;      report patch-at 0 -5 0
+;    ]
+;    if relativePos = "Back"[
+;      report patch-at 0 5 0
+;    ]
+;    if relativePos = "Right"[
+;      report patch-at -5 0 0
+;    ]
+;    if relativePos = "Left"[
+;      report patch-at 5 0 0
+;    ]
+;  ]
+;  if (dir < 315 and dir > 225)[ ; directionné vers la gauche
+;    if relativePos = "Front"[
+;      report patch-at -5 0 0
+;    ]
+;    if relativePos = "Back"[
+;      report patch-at 5 0 0
+;    ]
+;    if relativePos = "Right"[
+;      report patch-at 0 5 0
+;    ]
+;    if relativePos = "Left"[
+;      report patch-at 0 -5 0
+;    ]
+;  ]
+;  if (dir < 135 and dir > 45)[ ; directionné vers la droite
+;    if relativePos = "Front"[
+;      report patch-at 5 0 0
+;    ]
+;    if relativePos = "Back"[
+;      report patch-at -5 0 0
+;    ]
+;    if relativePos = "Right"[
+;      report patch-at 0 -5 0
+;    ]
+;    if relativePos = "Left"[
+;      report patch-at 0 5 0
+;    ]
+;  ]
+  
+  
+  if relativePos = "Front"[
+    report patch-ahead 5
   ]
-  if (dir <= 225 and dir >= 135)[ ; directionné vers le bas
-    if relativePos = "Front"[
-      report patch-at 0 -5 0
-    ]
-    if relativePos = "Back"[
-      report patch-at 0 5 0
-    ]
-    if relativePos = "Right"[
-      report patch-at -5 0 0
-    ]
-    if relativePos = "Left"[
-      report patch-at 5 0 0
-    ]
+  if relativePos = "Back"[
+    report patch-right-and-ahead 180 5
   ]
-  if (dir < 315 and dir > 225)[ ; directionné vers la gauche
-    if relativePos = "Front"[
-      report patch-at -5 0 0
-    ]
-    if relativePos = "Back"[
-      report patch-at 5 0 0
-    ]
-    if relativePos = "Right"[
-      report patch-at 0 5 0
-    ]
-    if relativePos = "Left"[
-      report patch-at 0 -5 0
-    ]
+  if relativePos = "Right"[
+    report patch-right-and-ahead 90 5
   ]
-  if (dir < 135 and dir > 45)[ ; directionné vers la droite
-    if relativePos = "Front"[
-      report patch-at 5 0 0
-    ]
-    if relativePos = "Back"[
-      report patch-at -5 0 0
-    ]
-    if relativePos = "Right"[
-      report patch-at 0 -5 0
-    ]
-    if relativePos = "Left"[
-      report patch-at 0 5 0
-    ]
+  if relativePos = "Left"[
+    report patch-left-and-ahead 90 5
   ]
   
 end
@@ -458,10 +472,10 @@ to drone-sendInstructions
     let msgRL create-message "ReturnTime" ;return late
     
     let msgAF create-message "Area" ; area front
-    let msgAC create-message "Area" ; area center
     let msgAB create-message "Area" ; area back
     let msgAR create-message "Area" ; area right
     let msgAL create-message "Area" ; area left
+    let msgAC create-message "Area" ; area center
     
     let i 0
     let j 0
@@ -471,10 +485,10 @@ to drone-sendInstructions
       [set msgRL add-receiver self msgRL]
       
       if j mod 5 = 0 [set msgAF add-receiver self msgAF]
-      if j mod 5 = 1 [set msgAC add-receiver self msgAC]
-      if j mod 5 = 2 [set msgAB add-receiver self msgAB]
-      if j mod 5 = 3 [set msgAR add-receiver self msgAR]
-      if j mod 5 = 4 [set msgAL add-receiver self msgAL]
+      if j mod 5 = 1 [set msgAB add-receiver self msgAB]
+      if j mod 5 = 2 [set msgAR add-receiver self msgAR]
+      if j mod 5 = 3 [set msgAL add-receiver self msgAL]
+      if j mod 5 = 4 [set msgAC add-receiver self msgAC]
       
       set i i + 1 
       set j j + 1
