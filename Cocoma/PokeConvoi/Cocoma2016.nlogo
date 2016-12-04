@@ -723,7 +723,7 @@ simu-speed
 simu-speed
 0
 10
-3
+10
 1
 1
 NIL
