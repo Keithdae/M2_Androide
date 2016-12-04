@@ -973,7 +973,7 @@ drone-nb-munitions
 drone-nb-munitions
 1
 50
-5
+8
 1
 1
 NIL
