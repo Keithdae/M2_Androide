@@ -100,7 +100,7 @@ to convois-think
       ; S'il n'y a pas de lien devant, c'est probablement que la voiture est morte, donc on devient leader
       [
         set leader? true
-        set genlongpath? true
+        set genlongpath? false
         if not to-protect? [ set color orange ]
       ]
     ]

@@ -36,6 +36,7 @@ convois-own[
   last-send-time ; communication historical time-stamp
   ennemis-seen
   incoming-queue ; file de messages
+  life ; barre de vie de ce convoi
 ]
 
 ennemis-own[
@@ -44,6 +45,7 @@ ennemis-own[
   currentReload ; Compteur
   destination ; destination random pour le mouvement
   speed
+  life ;  barre de vie de cet ennemi
 ]
 
 shoots-own[
@@ -107,6 +109,8 @@ to setup
   reset-ticks
 end
 
+;-----------------------------------------------------------------------------------------------------------------------------------------------------
+
 ; Initial parameters
 to setup-globals
   set mapAlt 0
@@ -129,6 +133,7 @@ to setup-globals
   set astar-gen-curr astar-gen-cd
 end
 
+;-----------------------------------------------------------------------------------------------------------------------------------------------------
 
 ; Precaches places en global variables for static components in order to speed-up the processes.
 to setup-precache
@@ -137,6 +142,7 @@ to setup-precache
   set base-central min-one-of (base-patches with-min [pxcor]) [pycor]
 end
 
+;-----------------------------------------------------------------------------------------------------------------------------------------------------
 
 ;environment definition
 to setup-env
@@ -238,7 +244,7 @@ to setup-env
   ask patches with [[obstacle?] of patch-at 0 0 -1] [set obstacle? true]
 end
 
-
+;-----------------------------------------------------------------------------------------------------------------------------------------------------
 
 to setup-convois
   if nb-cars > 0 [
@@ -270,6 +276,7 @@ to setup-convois
       set to-protect? false
       set genlongpath? false
       set dead? false
+      set life convoi-lifeSpan
 
       ; Visu
       set label who ; display the car names
@@ -466,6 +473,7 @@ to-report plan-astar [start goal longpath?] ; start et goal sont des patchs
   report path
 end
 
+;-----------------------------------------------------------------------------------------------------------------------------------------------------
 
 ; Return the 6 neighbours without the world wrap
 to-report neighbors6-nowrap
@@ -505,7 +513,9 @@ to go
   update-shoots
 
   ask convois with [to-protect?] [
-      drone-setToProtect self
+    ask drones[
+      drone-setToProtect myself
+    ]
   ]
 
 
@@ -607,7 +617,7 @@ INPUTBOX
 159
 115
 nb-mountains
-3
+5
 1
 0
 Number
@@ -883,7 +893,7 @@ nb-drones
 nb-drones
 1
 30
-10
+5
 1
 1
 NIL
@@ -1044,6 +1054,36 @@ drone-accuracy
 1
 100
 100
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+501
+384
+673
+417
+convoi-lifeSpan
+convoi-lifeSpan
+1
+10
+2
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+938
+43
+1110
+76
+ennemi-lifeSpan
+ennemi-lifeSpan
+1
+10
+1
 1
 1
 NIL

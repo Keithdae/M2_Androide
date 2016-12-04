@@ -48,6 +48,7 @@ to setup-drones
   
 end
 
+;-----------------------------------------------------------------------------------------------------------------------------------------------------
 
 to drones-think 
   ask drones [
@@ -59,6 +60,7 @@ to drones-think
   ]
 end
 
+;-----------------------------------------------------------------------------------------------------------------------------------------------------
 
 to drone-checkSight
   let toRemove nobody
@@ -79,6 +81,8 @@ to drone-checkSight
   ]
 end
 
+;-----------------------------------------------------------------------------------------------------------------------------------------------------
+
 to drone-shoot ; drone procedure
   if munitions > 0
   [
@@ -89,7 +93,7 @@ to drone-shoot ; drone procedure
     ; else
     [
       set shootingTargets ennemis in-radius-nowrap drone-vision
-      ; drone-checkSight  ; Fonction trop coûteuse en performance
+      drone-checkSight  ; Fonction trop coûteuse en performance
       if any? shootingTargets
       [
         let miss? (random 100) > drone-accuracy
@@ -100,6 +104,8 @@ to drone-shoot ; drone procedure
     ] ; ifelse
   ]
 end
+
+;-----------------------------------------------------------------------------------------------------------------------------------------------------
 
 to drone-takeOff
   ;; orientation en z
@@ -133,6 +139,8 @@ to drone-takeOff
   drone-step
 end
 
+;-----------------------------------------------------------------------------------------------------------------------------------------------------
+
 to-report drone-hasTakenOff
   ifelse zcor >= 5 [
     set pitch 0
@@ -145,12 +153,14 @@ to-report drone-hasTakenOff
   ]
 end
 
+;-----------------------------------------------------------------------------------------------------------------------------------------------------
+
 to drone-setToProtect [obj]
-  ask drones [
-   set convoiToProtect obj 
-   drone-adaptObjective
-  ]
+  set convoiToProtect obj 
+  drone-adaptObjective
 end
+
+;-----------------------------------------------------------------------------------------------------------------------------------------------------
 
 to drone-adaptObjective
   let obj nobody
@@ -168,6 +178,8 @@ to drone-adaptObjective
     ]
   ]
 end
+
+;-----------------------------------------------------------------------------------------------------------------------------------------------------
 
 to-report getObjectivePatch [dir relativePos]
   if (dir <= 45 or dir >= 315)[ ; directionné vers le haut
@@ -229,6 +241,8 @@ to-report getObjectivePatch [dir relativePos]
   
 end
 
+;-----------------------------------------------------------------------------------------------------------------------------------------------------
+
 to drone-moveToObjective
   
   if (objective != nobody ) [
@@ -267,6 +281,7 @@ to drone-moveToObjective
   
 end
 
+;-----------------------------------------------------------------------------------------------------------------------------------------------------
 
 to drone-spacing 
  let tooClose drones in-cone-nowrap 1 30
@@ -281,6 +296,8 @@ to drone-escort
   drone-shoot
   drone-spacing
 end
+
+;-----------------------------------------------------------------------------------------------------------------------------------------------------
 
 to-report return-cost
   if backObjective != nobody [
@@ -305,6 +322,8 @@ to-report return-cost
   report -1
 end
 
+;-----------------------------------------------------------------------------------------------------------------------------------------------------
+
 to-report drone-escortDone
   if fuel < return-cost or objective = nobody [
    add-intention "drone-back" "drone-backDone"
@@ -312,6 +331,8 @@ to-report drone-escortDone
   ]
   report false
 end
+
+;-----------------------------------------------------------------------------------------------------------------------------------------------------
 
 to drone-refuel
   ifelse fuel < drone-fuel[
@@ -323,6 +344,8 @@ to drone-refuel
   ]
 end
 
+;-----------------------------------------------------------------------------------------------------------------------------------------------------
+
 to-report drone-refuelDone
   if fuel = drone-fuel [
    add-intention "drone-takeOff" "drone-hasTakenOff"
@@ -330,6 +353,8 @@ to-report drone-refuelDone
   ]
   report false
 end
+
+;-----------------------------------------------------------------------------------------------------------------------------------------------------
 
 to drone-back
   if not [base?] of patch-at 0 0 -1
@@ -381,6 +406,8 @@ to drone-back
   ]
 end
 
+;-----------------------------------------------------------------------------------------------------------------------------------------------------
+
 to-report drone-backDone
   if [base?] of patch-at 0 0 -1 [
     set pitch 0
@@ -392,6 +419,7 @@ to-report drone-backDone
   report false
 end
 
+;-----------------------------------------------------------------------------------------------------------------------------------------------------
 
 to drone-step
   ifelse fuel > 0 [
@@ -421,6 +449,7 @@ to drone-step
   ]
 end
 
+;-----------------------------------------------------------------------------------------------------------------------------------------------------
 
 to drone-sendInstructions
     let dest other drones in-radius drone-communication-radius
@@ -468,6 +497,7 @@ to drone-sendInstructions
     send msgAL
 end
 
+;-----------------------------------------------------------------------------------------------------------------------------------------------------
 
 to drone-receive
   let msg get-message

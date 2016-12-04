@@ -42,7 +42,10 @@ to update-shoots
         set nb-cars ( nb-cars - 1 )
         ask prey
         [
-          die
+          set life (life - 1)
+          if life = 0[
+            die
+          ]
         ]
         die
       ]
@@ -56,7 +59,10 @@ to update-shoots
         [
           ask prey
           [
-            set dead? true
+            set life (life - 1)
+            if life = 0[
+              set dead? true
+            ]
           ]
           die
         ]

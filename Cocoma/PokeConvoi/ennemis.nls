@@ -26,6 +26,7 @@ to setup-ennemis
     setxyz x y solAlt
     
     set dead? false
+    set life ennemi-lifeSpan
     
     set speed (ennemi-speed * simu-speed)
   ]
