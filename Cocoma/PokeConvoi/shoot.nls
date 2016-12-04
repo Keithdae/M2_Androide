@@ -1,7 +1,17 @@
 to build-shot [targetsForShoots miss?]
-  hatch-shoots 1 [ set color red
+  hatch-shoots 1 [ 
+    set color white
     set shape "line half"
-    set target one-of targetsForShoots
+    let test one-of targetsForShoots
+    ifelse is-ennemi? test[
+      ask convois with [to-protect?][
+        set targetsForShoots sort-by [distance ?1 < distance ?2] targetsForShoots
+      ]
+      set target item 0 targetsForShoots
+    ]
+    [
+      set target one-of targetsForShoots
+    ]
     set missed? miss?
     if target != nobody 
     [
@@ -44,7 +54,7 @@ to update-shoots
           set life (life - 1)
           if life = 0[           
             set nb-cars ( nb-cars - 1 )
-            if nb-cars > 0 and leader?[
+            if nb-cars > 0[
               let i 1
               while [convoi (who + i) = nobody][
                 set i i + 1
