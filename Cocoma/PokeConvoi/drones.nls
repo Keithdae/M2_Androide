@@ -25,6 +25,7 @@ to setup-drones
     set fuel drone-fuel
     set dead? false
     set leader? false
+    set secondaryLeader? false
     set area "Center"
     set returnTime "Late"
     set incoming-queue []
@@ -43,6 +44,7 @@ to setup-drones
   ask one-of drones [
     set color orange
     set leader? true 
+    set secondaryLeader? true
     set returnTime "Late"
     add-intention "drone-sendInstructions" "true"
   ]
@@ -346,8 +348,14 @@ end
 ;-----------------------------------------------------------------------------------------------------------------------------------------------------
 
 to-report drone-escortDone
-  if fuel < return-cost or objective = nobody [
+  if fuel < return-cost or objective = nobody [    
    add-intention "drone-back" "drone-backDone"
+   
+   if secondaryLeader? [
+     set leader? false
+     set color violet 
+   ]
+   
    report true 
   ]
   report false
@@ -370,6 +378,12 @@ end
 to-report drone-refuelDone
   if fuel = drone-fuel [
    add-intention "drone-takeOff" "drone-hasTakenOff"
+   
+   if secondaryLeader? [
+     set leader? true 
+     set color orange
+   ]
+   
    report true 
   ]
   report false
@@ -483,11 +497,15 @@ to drone-sendInstructions
     let msgAL create-message "Area" ; area left
     let msgAC create-message "Area" ; area center
     
-    let i 0
+    let msgSL create-message "Leader" ; secondary leader
+    
+    
     let j 0
     ask dest 
     [
-      ifelse i mod 2 = 0 [set msgRE add-receiver self msgRE]
+      if j = 0 [set msgSL add-receiver self msgSL]
+      
+      ifelse j mod 2 = 0 [set msgRE add-receiver self msgRE]
       [set msgRL add-receiver self msgRL]
       
       if j mod 5 = 0 [set msgAF add-receiver self msgAF]
@@ -496,25 +514,31 @@ to drone-sendInstructions
       if j mod 5 = 3 [set msgAL add-receiver self msgAL]
       if j mod 5 = 4 [set msgAC add-receiver self msgAC]
       
-      set i i + 1 
+      
       set j j + 1
     ]
     
     set msgRE add-content "Early" msgRE
     set msgRL add-content "Late" msgRL
+    
     set msgAF add-content "Front" msgAF
     set msgAC add-content "Center" msgAC
     set msgAB add-content "Back" msgAB
     set msgAR add-content "Right" msgAR
     set msgAL add-content "Left" msgAL
     
+    set msgSL add-content true msgSL
+    
     send msgRE
     send msgRL
+    
     send msgAF
     send msgAC
     send msgAB
     send msgAR
     send msgAL
+    
+    send msgSL
 end
 
 ;-----------------------------------------------------------------------------------------------------------------------------------------------------
@@ -534,6 +558,7 @@ to drone-receive
     if perf = "reportEnnemis"[
       set ennemisList (turtle-set ennemisList cont) 
     ]
+    if perf = "Leader" [set secondaryLeader? true]
     set msg get-message
   ]
   if leader? [

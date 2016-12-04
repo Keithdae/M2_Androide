@@ -71,6 +71,7 @@ drones-own[
  returnTime ; "Early" / "Late" : détermine l'instant où le drone retourne à la base ("Late" => Quand on ne dispose que de l'essence pour rentrer / "Early" => deux fois plus tôt)
  dead?
  leader?
+ secondaryLeader? ; Drone qui prend la relève quand le leader rentre à la base
  ennemisList ; list of ennemis to send to convoy by drone-leader
 ]
 
