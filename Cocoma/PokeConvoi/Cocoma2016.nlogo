@@ -584,12 +584,12 @@ Environnement \n
 1
 
 INPUTBOX
-20
-55
-70
-115
+502
+427
+675
+487
 number-cars
-3
+5
 1
 0
 Number
@@ -612,10 +612,10 @@ NIL
 1
 
 INPUTBOX
-81
-55
-159
-115
+25
+51
+103
+111
 nb-mountains
 5
 1
@@ -623,10 +623,10 @@ nb-mountains
 Number
 
 INPUTBOX
-162
-55
-214
-115
+106
+51
+158
+111
 nb-lakes
 2
 1
@@ -634,10 +634,10 @@ nb-lakes
 Number
 
 INPUTBOX
-218
-55
-271
-115
+162
+51
+215
+111
 nb-rivers
 2
 1
@@ -791,7 +791,7 @@ nb-ennemis
 nb-ennemis
 1
 100
-20
+40
 1
 1
 NIL
