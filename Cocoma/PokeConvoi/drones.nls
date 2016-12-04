@@ -400,7 +400,6 @@ end
 
 to drone-step
   ifelse fuel > 0 [
-    
     let nextpx 0
     let nextpy 0
     
