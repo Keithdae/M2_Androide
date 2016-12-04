@@ -194,16 +194,38 @@ end
 to drone-adaptObjective
   let obj nobody
   let relativePos area
-  ifelse area = "Center"
+  if area = "Center"
   [
     set objective convoiToProtect
   ] 
-  [
+  if area = "Back"[
     if convoiToProtect != nobody[
       ask convoiToProtect[
         set obj getObjectivePatch heading relativePos
       ]
       set objective obj
+    ]
+  ]
+  if area = "Right" or area = "Front" or area = "Left"[
+    if convoiToProtect != nobody[
+      ifelse [leader?] of convoiToProtect[
+        ask convoiToProtect[
+          set obj getObjectivePatch heading relativePos
+        ]
+        set objective obj
+      ]
+      [
+        let done false
+        let i 1
+        while [not done][
+          if [leader?] of (convoi (([who] of convoiToProtect) - i))[set done true]
+          set i i + 1
+        ]
+        ask convoi (([who] of convoiToProtect) - (i - 1))[
+          set obj getObjectivePatch heading relativePos
+        ]
+        set objective obj
+      ]
     ]
   ]
 end

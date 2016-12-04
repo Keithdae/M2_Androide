@@ -44,6 +44,15 @@ to update-shoots
           set life (life - 1)
           if life = 0[           
             set nb-cars ( nb-cars - 1 )
+            if nb-cars > 0 and leader?[
+              let i 1
+              while [convoi (who + i) = nobody][
+                set i i + 1
+              ]
+              ask convoi (who + i) [
+                set leader? true
+              ]
+            ]
             die
           ]
         ]
