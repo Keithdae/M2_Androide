@@ -621,7 +621,7 @@ INPUTBOX
 103
 111
 nb-mountains
-5
+3
 1
 0
 Number
@@ -723,7 +723,7 @@ simu-speed
 simu-speed
 0
 10
-6
+3
 1
 1
 NIL
