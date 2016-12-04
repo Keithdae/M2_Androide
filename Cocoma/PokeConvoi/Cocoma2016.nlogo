@@ -584,12 +584,12 @@ Environnement \n
 1
 
 INPUTBOX
-500
-426
-674
-486
+20
+55
+70
+115
 number-cars
-5
+3
 1
 0
 Number
@@ -612,21 +612,21 @@ NIL
 1
 
 INPUTBOX
-15
-50
-93
-110
+81
+55
+159
+115
 nb-mountains
-3
+5
 1
 0
 Number
 
 INPUTBOX
-96
-50
-148
-110
+162
+55
+214
+115
 nb-lakes
 2
 1
@@ -634,10 +634,10 @@ nb-lakes
 Number
 
 INPUTBOX
-152
-50
-205
-110
+218
+55
+271
+115
 nb-rivers
 2
 1
@@ -791,7 +791,7 @@ nb-ennemis
 nb-ennemis
 1
 100
-50
+20
 1
 1
 NIL
@@ -806,7 +806,7 @@ ennemi-vision
 ennemi-vision
 0
 10
-5
+3
 0.1
 1
 NIL
@@ -968,7 +968,7 @@ drone-nb-munitions
 drone-nb-munitions
 1
 50
-8
+12
 1
 1
 NIL
@@ -1038,7 +1038,7 @@ ennemi-accuracy
 ennemi-accuracy
 1
 100
-75
+50
 1
 1
 NIL
