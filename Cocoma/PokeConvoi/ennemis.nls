@@ -35,7 +35,15 @@ end
 ; Comportement des ennemis
 to ennemis-think
   ask ennemis [
-   ennemi-random-move
+   ennemi-observe
+   
+   ifelse any? targets [
+     ennemi-follow-target
+   ]
+   [
+     ennemi-random-move
+   ]
+   
    ennemi-shoot
    
    if dead? [
@@ -60,6 +68,26 @@ to-report detect-obstacle-ennemi ; ennemi procedure
   [set answer true]
 
   report answer
+end
+
+
+to ennemi-follow-target
+  let t one-of targets
+  set destination ([patch-here] of t)
+  if (destination != nobody ) [
+    let headingFlag (towards-nowrap destination)
+    let dirCorrection subtract-headings headingFlag heading
+    
+    if dirCorrection > 30 [
+     set dirCorrection 30 
+    ]
+    if dirCorrection < -30 [
+     set dirCorrection -30
+    ]
+    
+    set heading ( heading + dirCorrection )
+    fd speed
+  ]
 end
 
 ; Deplacement aleatoire
@@ -95,6 +123,10 @@ to ennemi-random-move ; ennemi procedure
 
 end
 
+to ennemi-observe
+  set targets convois in-radius-nowrap ennemi-vision
+end
+
 to ennemi-shoot ; ennemi procedure
 
   ifelse ( currentReload < ennemi-reloadRate )
@@ -103,7 +135,6 @@ to ennemi-shoot ; ennemi procedure
   ]
   ; else
   [
-    set targets convois in-radius-nowrap ennemi-vision
     if any? targets
     [
       let miss? (random 100) > ennemi-accuracy
