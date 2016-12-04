@@ -26,7 +26,7 @@ to update-shoots
     if [obstacle?] of patch-here [
       die 
     ]
-    if target = nobody
+    if [pzcor] of patch-here = 0
     [
       die 
     ]
@@ -39,11 +39,11 @@ to update-shoots
       let prey one-of convois-here
       if prey != nobody
       [
-        set nb-cars ( nb-cars - 1 )
         ask prey
         [
           set life (life - 1)
-          if life = 0[
+          if life = 0[           
+            set nb-cars ( nb-cars - 1 )
             die
           ]
         ]

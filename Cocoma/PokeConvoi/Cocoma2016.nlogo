@@ -19,6 +19,7 @@ globals [mapAlt solAlt basseAlt hauteAlt ; variables topologiques Z discretise: 
   is-movie-recording?
   nb-cars
   astar-gen-curr ; cooldown for using astar to plan again
+  deltaRayon
   ]
 
 patches-own [obstacle? base? hangar? objectif? bridge? ; variables topologiques au niveau mapAlt, permet de definir les patchs praticables et ceux qui sont des obstacles
@@ -132,6 +133,8 @@ to setup-globals
   set is-movie-recording? false
 
   set astar-gen-curr astar-gen-cd
+
+  set deltaRayon convoi-vision - 1
 end
 
 ;-----------------------------------------------------------------------------------------------------------------------------------------------------
@@ -720,7 +723,7 @@ simu-speed
 simu-speed
 0
 10
-10
+6
 1
 1
 NIL
@@ -894,7 +897,7 @@ nb-drones
 nb-drones
 1
 30
-5
+4
 1
 1
 NIL
@@ -1039,7 +1042,7 @@ ennemi-accuracy
 ennemi-accuracy
 1
 100
-50
+49
 1
 1
 NIL
@@ -1054,7 +1057,7 @@ drone-accuracy
 drone-accuracy
 1
 100
-32
+100
 1
 1
 NIL

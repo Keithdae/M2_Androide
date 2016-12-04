@@ -39,12 +39,9 @@ to convois-think
       convoi-receive
       if check-ennemis [
         ask ennemis-seen [
-          set zone-ennemi (patch-set zone-ennemi patches in-radius-nowrap (convoi-vision - 1))
+          set zone-ennemi (patch-set zone-ennemi patches in-radius-nowrap (deltaRayon))
         ]
         if zone-ennemi != nobody [
-          ask patches with [ennemi?][
-            set ennemi? false
-          ]
           ask zone-ennemi [
             set ennemi? true 
           ] 
@@ -56,10 +53,16 @@ to convois-think
     ifelse need-path and astar-gen-curr >= astar-gen-cd [
       ; plan astar
       let start-path (plan-astar ([[patch-at 0 0 (pzcor * -1)] of patch-here] of one-of convois with [leader?]) (one-of patches with [objectif?]) false)
-      set as-path replace-item 0 as-path start-path 
-      set astar-gen-curr 0
+      ifelse empty? start-path[
+        if deltaRayon > 0[set deltaRayon deltaRayon - 1]
+      ]
+      [
+        set as-path replace-item 0 as-path start-path 
+        set astar-gen-curr 0
+        set deltaRayon convoi-vision - 1
+      ]
       ; reset des patches
-      ask zone-ennemi [
+      ask patches with [ennemi?][
         set ennemi? false 
       ] 
     ]
