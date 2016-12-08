@@ -52,7 +52,7 @@
 	<classpathentry kind="lib" path="ressources/lib/weka/weka-3-6-14/weka.jar"/>
 	<classpathentry kind="lib" path="ressources/lib/prolog/jpl.jar">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="/users/Etu8/3500778/swi-prolog/lib/amd64"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="C:/Program Files/swipl/bin"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
