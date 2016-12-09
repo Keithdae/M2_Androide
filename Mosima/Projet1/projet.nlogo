@@ -1,6 +1,9 @@
 __includes ["agents.nls"]
 breed [agents agent]
-globals [high-effort low-effort]
+globals [
+  high-effort
+  low-effort
+]
 
 patches-own [
   occupied?
@@ -282,17 +285,20 @@ end
 ;------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 to run-simulations
-  let fig6 simulateFigure6
+  ;let fig6 simulateFigure6
   let fig7 simulateFigure7
-  simulateFigure9
-  fill-plot "Figure 6" fig6
-  fill-plot "Figure 7" fig7
-  export-plot "Figure 6" "simulation_figure6.txt"
-  export-plot "Figure 7" "simulation_figure7.txt"
+  ;let fig9 simulateFigure9
+  ;fill-plot "Figure 6" fig6 true
+  ;fill-plot "Figure 7" fig7 true
+  ;fill-plot "Figure 9" fig9 false
+  ;export-plot "Figure 6" "simulation_figure6.txt"
+  ;export-plot "Figure 7" "simulation_figure7.txt"
+  ;export-plot "Figure 9" "simulation_figure9.txt"
+  ;export-world "simulation.csv"
 end
 
 ; La penList est une liste contenant des listes de la forme [ "penName" [ [x1 y1] [x2 y2] ... ] ]
-to fill-plot [ plotName penList ]
+to fill-plot [ plotName penList drawCross? ]
   set-current-plot plotName
   let colorPen 15
   foreach penList
@@ -301,7 +307,23 @@ to fill-plot [ plotName penList ]
     create-temporary-plot-pen first ?
     set-plot-pen-color colorPen
     ; Le deuxième élément est une liste de paires de points à dessiner que l'on parcourt
-    foreach last ? [ plotxy first ? last ? ]
+    foreach last ? [
+      let px first ?
+      let py last ?
+      ; On trace le point
+      plotxy px py
+      if drawCross? [
+        ; Permet de tracer une croix autour du point
+        plotxy px + (plot-x-max / 50) py
+        plotxy px - (plot-x-max / 50) py
+        plot-pen-up
+        plotxy px py + (plot-y-max / 50)
+        plot-pen-down
+        plotxy px py - (plot-y-max / 50)
+        ; on se replace sur le point pour bien tracer la lgine vers le point suivant
+        plotxy px py
+      ]
+    ]
     ; On passe à la couleur suivante
     set colorPen colorPen + 10
   ]
@@ -314,6 +336,7 @@ end
 to-report simulate [ paramList stdTolerance nbTests ]
   let result -1
   let i 0
+  ; Initialisation des quantités et types d'agents
   foreach paramList
   [
     let currType first ?
@@ -350,15 +373,20 @@ to-report simulate [ paramList stdTolerance nbTests ]
     ]
     set i i + 1
   ]
+  ; On active le nombre d'agents nécessaires à la simulation
+  set nbAgentTypes i
 
+  ; Setup pour créer et initialiser les agents
   setup
 
+
   let done false
+  ; On fait un premier tick pour obtenir les premières valeurs
   go
   let lastSTD standard-deviation [effort] of turtles
   let currSTD lastSTD
-  let n 0
-  let meanList []
+  let n 0         ; Compteur de succès à la suite servant pour l'arrêt
+  let meanList [] ;
   let meanEffort mean [effort] of turtles
   let loopCount 0
   let loopStdTolerance stdTolerance
@@ -367,25 +395,29 @@ to-report simulate [ paramList stdTolerance nbTests ]
     go
     set currSTD standard-deviation [effort] of turtles
     set meanEffort mean [effort] of turtles
+    ; On compare l'écart-type actuel avec celui du tick précédent
     ifelse abs(currSTD - lastSTD) < loopStdTolerance
     [
+      ; Succès, on augmente notre compteur et on ajoute la moyenne courante à notre liste
       set n n + 1
       set meanList lput meanEffort meanList
     ]
-    ; else, chaine cassee
+    ; else, échec la suite est brisée, on oublie nos valeurs et on remet le comteur à 0
     [
       set meanList []
       set n 0
     ]
 
+    ; Dans le cas où notre compteur atteind le nombre demandé, on renvoie la moyenne des moyennes d'effort stockées dans notre liste
     if n >= nbTests
     [
-       set result mean meanList
+       set result precision mean meanList 6
        set done true
     ]
 
     set lastSTD currSTD
 
+    ; Après 2001 ticks sans succès on augmente la valeur de la tolérance
     set loopCount loopCount + 1
     if loopCount > 2000
     [
@@ -443,6 +475,25 @@ to-report simulateFigure7
   let paramList []
   let penList []
 
+  ; valeurs expectées pour cette simulation
+  let expPen (list "Expected" [])
+  let expValList lput (list 0 0.92101) (item 1 expPen)
+  set expPen replace-item 1 expPen expValList
+  set expValList lput (list 0.6 0.92701) (item 1 expPen)
+  set expPen replace-item 1 expPen expValList
+  set expValList lput (list 5.6 0.98101) (item 1 expPen)
+  set expPen replace-item 1 expPen expValList
+  set expValList lput (list 33.3 1.28100) (item 1 expPen)
+  set expPen replace-item 1 expPen expValList
+  set expValList lput (list 66.7 1.64100) (item 1 expPen)
+  set expPen replace-item 1 expPen expValList
+  set expValList lput (list 100 2.00100) (item 1 expPen)
+  set expPen replace-item 1 expPen expValList
+
+  show expPen
+
+  set penList lput expPen penList
+
   foreach agentTypeList
   [
     let currType ?
@@ -475,8 +526,48 @@ to-report simulateFigure7
   report penList
 end
 
-to simulateFigure9
+to-report simulateFigure9
+  let noiseLevels [ 0 15 30 45 ]
+  let penList []
 
+  set typeBlack 7
+  set nbAgentsBlack nbAgentsSimulation
+  set nbAgentTypes 1
+
+  foreach noiseLevels
+  [
+    setup
+
+    let i 0
+    let noise ?
+    let currPen nobody
+    ifelse noise = 0 [
+      set noiseSwitch false
+      set currPen (list "Perfect Observability" [])
+    ]
+    [
+      set noiseValue noise
+      set noiseSwitch true
+      if noise = 15 [set currPen (list "Noise : low level" [])]
+      if noise = 30 [set currPen (list "Noise : medium level" [])]
+      if noise = 45 [set currPen (list "Noise : high level" [])]
+    ]
+    go
+    let meanEffort mean [effort] of turtles
+    while [i < 200]
+    [
+      go
+      set meanEffort mean [effort] of turtles
+      set meanEffort precision meanEffort 6
+      let newValList lput (list ticks meanEffort) (item 1 currPen)
+      set currPen replace-item 1 currPen newValList
+      set i i + 1
+    ]
+
+    set penList lput currPen penList
+  ]
+
+  report penList
 end
 
 ; Converts a type number to the corresponding name for plots
@@ -499,7 +590,7 @@ to go
   randomMove
   workAgent
   calculateProfits
-  drawEfforts
+  if effortWindow [drawEfforts]
   adaptEffort
   tick
 end
@@ -518,8 +609,8 @@ GRAPHICS-WINDOW
 1
 1
 0
-0
-0
+1
+1
 1
 0
 60
@@ -654,7 +745,7 @@ CHOOSER
 nbAgentTypes
 nbAgentTypes
 1 2 3 4 5 6
-5
+1
 
 TEXTBOX
 1370
@@ -735,7 +826,7 @@ nbAgentsBlack
 nbAgentsBlack
 0
 X * Y
-497
+0
 1
 1
 NIL
@@ -750,7 +841,7 @@ nbAgentsRed
 nbAgentsRed
 0
 X * Y
-3
+500
 1
 1
 NIL
@@ -824,7 +915,7 @@ CHOOSER
 typeBlack
 typeBlack
 0 1 2 3 4 5 6 7 8 9
-1
+6
 
 CHOOSER
 1597
@@ -877,9 +968,9 @@ typeCyan
 9
 
 SWITCH
-1176
+1197
 244
-1299
+1320
 277
 noiseSwitch
 noiseSwitch
@@ -888,9 +979,9 @@ noiseSwitch
 -1000
 
 TEXTBOX
-1176
+1197
 217
-1220
+1241
 235
 Noise :
 12
@@ -898,25 +989,25 @@ Noise :
 1
 
 SLIDER
-1175
+1196
 288
-1300
+1321
 321
 noiseValue
 noiseValue
 1
 50
-1
+9
 1
 1
 %
 HORIZONTAL
 
 PLOT
-21
-429
-464
-617
+16
+471
+459
+659
 Effort
 NIL
 NIL
@@ -932,10 +1023,10 @@ PENS
 "Std" 1.0 0 -7500403 true "" "plot standard-deviation [effort] of agents"
 
 PLOT
-492
-429
-892
-617
+487
+471
+887
+659
 Profit
 NIL
 NIL
@@ -965,8 +1056,8 @@ PLOT
 664
 1096
 Figure 6
-NIL
-NIL
+High effort agents proportion (%)
+Average effort
 0.0
 100.0
 0.0
@@ -1025,9 +1116,9 @@ SLIDER
 716
 stdToleranceSimulation
 stdToleranceSimulation
-0
+0.0001
 1
-5.0E-4
+0.001
 0.0001
 1
 NIL
@@ -1035,9 +1126,9 @@ HORIZONTAL
 
 SLIDER
 765
-690
+684
 937
-723
+717
 nbTestsSimulation
 nbTestsSimulation
 2
@@ -1049,18 +1140,205 @@ NIL
 HORIZONTAL
 
 PLOT
-777
-761
-1370
-1096
+685
+760
+1278
+1095
 Figure 7
-NIL
-NIL
+High effort agents proportion (%)
+Average effort
 0.0
 100.0
 0.0
 2.1
 false
+true
+"" ""
+PENS
+
+TEXTBOX
+885
+266
+900
+285
+■
+16
+105.0
+1
+
+TEXTBOX
+910
+266
+925
+285
+■
+16
+95.0
+1
+
+TEXTBOX
+936
+266
+951
+285
+■
+16
+85.0
+1
+
+TEXTBOX
+962
+266
+977
+285
+■
+16
+75.0
+1
+
+TEXTBOX
+1018
+266
+1033
+285
+■
+16
+55.0
+1
+
+TEXTBOX
+1049
+266
+1064
+285
+■
+16
+45.0
+1
+
+TEXTBOX
+989
+266
+1004
+285
+■
+16
+65.0
+1
+
+TEXTBOX
+1080
+266
+1095
+285
+■
+16
+25.0
+1
+
+TEXTBOX
+1107
+266
+1122
+285
+■
+16
+15.0
+1
+
+TEXTBOX
+1135
+266
+1150
+285
+■
+16
+14.0
+1
+
+TEXTBOX
+876
+249
+1174
+279
+0  0.2  0.4  0.6  0.8  1.0  1.2  1.4  1.6  1.8  2.0
+12
+0.0
+1
+
+TEXTBOX
+879
+221
+1029
+239
+Effort chromatic scale:\n
+12
+0.0
+0
+
+MONITOR
+909
+471
+1005
+516
+Average effort
+mean [effort] of agents
+6
+1
+11
+
+MONITOR
+909
+521
+1006
+566
+STD effort
+standard-deviation [effort] of agents
+6
+1
+11
+
+MONITOR
+909
+572
+1006
+617
+Average profit
+mean [profit] of agents
+6
+1
+11
+
+BUTTON
+879
+10
+965
+43
+step once
+go
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+PLOT
+1299
+761
+1869
+1094
+Figure 9
+Time
+Average Effort
+0.0
+10.0
+0.0
+2.1
+true
 true
 "" ""
 PENS
@@ -1408,7 +1686,7 @@ Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
 
 @#$#@#$#@
-NetLogo 5.3
+NetLogo 5.3.1
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@

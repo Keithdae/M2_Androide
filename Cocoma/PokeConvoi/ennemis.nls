@@ -26,13 +26,24 @@ to setup-ennemis
     setxyz x y solAlt
     
     set dead? false
+    set life ennemi-lifeSpan
+    
+    set speed (ennemi-speed * simu-speed)
   ]
 end
 
 ; Comportement des ennemis
 to ennemis-think
   ask ennemis [
-   ennemi-random-move
+   ennemi-observe
+   
+   ifelse any? targets [
+     ennemi-follow-target
+   ]
+   [
+     ennemi-random-move
+   ]
+   
    ennemi-shoot
    
    if dead? [
@@ -59,6 +70,28 @@ to-report detect-obstacle-ennemi ; ennemi procedure
   report answer
 end
 
+
+to ennemi-follow-target
+  let t one-of targets
+  set destination ([patch-here] of t)
+  if (destination != nobody ) [
+    let headingFlag (towards-nowrap destination)
+    let dirCorrection subtract-headings headingFlag heading
+    
+    if dirCorrection > 30 [
+     set dirCorrection 30 
+    ]
+    if dirCorrection < -30 [
+     set dirCorrection -30
+    ]
+    
+    set heading ( heading + dirCorrection )
+	if not detect-obstacle-ennemi [
+		fd speed
+	]
+  ]
+end
+
 ; Deplacement aleatoire
 to ennemi-random-move ; ennemi procedure
   if destination = nobody
@@ -82,7 +115,7 @@ to ennemi-random-move ; ennemi procedure
   ]
   [
     set pitch 0
-    fd ennemi-speed
+    fd speed
   ]
   
   if destination = patch-here 
@@ -90,6 +123,10 @@ to ennemi-random-move ; ennemi procedure
     set destination nobody 
   ]
 
+end
+
+to ennemi-observe
+  set targets convois in-radius-nowrap ennemi-vision
 end
 
 to ennemi-shoot ; ennemi procedure
@@ -100,7 +137,6 @@ to ennemi-shoot ; ennemi procedure
   ]
   ; else
   [
-    set targets convois in-radius-nowrap ennemi-vision
     if any? targets
     [
       let miss? (random 100) > ennemi-accuracy

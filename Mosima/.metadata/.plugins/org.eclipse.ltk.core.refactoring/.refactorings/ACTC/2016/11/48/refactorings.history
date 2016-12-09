@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring accessors="true" comment="Delete 4 elements from project &apos;ACTC&apos;&#x0A;- Original project: &apos;ACTC&apos;&#x0A;- Original elements:&#x0A;     ACTC/test/prologTest.jpl7&#x0A;     ACTC/test/prologTest.jpl7.fli&#x0A;     ACTC/test/prologTest.jpl7.test&#x0A;     ACTC/test/prologTest.jpl7.util" description="Delete elements" element1="/test&lt;prologTest.jpl7.util" element2="/test&lt;prologTest.jpl7.test" element3="/test&lt;prologTest.jpl7.fli" element4="/test&lt;prologTest.jpl7" elements="4" flags="589830" id="org.eclipse.jdt.ui.delete" resources="0" stamp="1480328586551" subPackages="false" version="1.0"/>
+</session>

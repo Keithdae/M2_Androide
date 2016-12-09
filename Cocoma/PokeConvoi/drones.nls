@@ -24,10 +24,16 @@ to setup-drones
     set munitions drone-nb-munitions
     set fuel drone-fuel
     set dead? false
+    set leader? false
+    set secondaryLeader? false
+    set area "Center"
+    set returnTime "Late"
     set incoming-queue []
     set beliefs []
     set intentions []
     set currentReload drone-reloadRate
+    set speed (simu-speed * drone-speed)
+    set ennemisList turtle-set nobody
     
     set objective nobody
     set backObjective one-of patches with [base?] 
@@ -35,18 +41,32 @@ to setup-drones
     add-intention "drone-takeOff" "drone-hasTakenOff"
   ]
   
+  ask one-of drones [
+    set color orange
+    set leader? true 
+    set secondaryLeader? true
+    set returnTime "Late"
+    add-intention "drone-sendInstructions" "true"
+  ]
+  
 end
 
+;-----------------------------------------------------------------------------------------------------------------------------------------------------
 
 to drones-think 
   ask drones [
     execute-intentions
-    if fuel < 0 [
-     die 
+    if not leader?[
+      drone-reportEnnemis
+    ]
+    drone-receive
+    if fuel <= 0 [
+      die 
     ]
   ]
 end
 
+;-----------------------------------------------------------------------------------------------------------------------------------------------------
 
 to drone-checkSight
   let toRemove nobody
@@ -54,11 +74,26 @@ to drone-checkSight
   [
     let oldHeading heading
     face myself
-    let p patches in-cone (distance myself) 9
-    if any? p with [obstacle?]
-    [
-       set toRemove (turtle-set toRemove self)
+	
+    let step (0.14 * simu-speed)
+    let dist step
+    let patchToCheck patch-ahead dist
+	
+    let done false
+    while [not done] [
+      if [obstacle?] of patchToCheck [
+        set toRemove (turtle-set toRemove self)
+        set done true
+      ]
+            
+      set dist (dist + step) 
+      set patchToCheck patch-ahead dist
+      
+      if member? [patch-here] of myself (patch-set patchToCheck ([neighbors6-nowrap] of patchToCheck))  [
+        set done true 
+      ]
     ]
+    
     set heading oldHeading
   ]
   if toRemove != nobody
@@ -67,25 +102,36 @@ to drone-checkSight
   ]
 end
 
-to drone-shoot ; drone procedure
+;-----------------------------------------------------------------------------------------------------------------------------------------------------
 
-  ifelse ( currentReload < drone-reloadRate )
-  [
-    set currentReload ( currentReload + 1 )
-  ]
-  ; else
-  [
-    set shootingTargets ennemis in-radius-nowrap drone-vision
-    drone-checkSight
-    if any? shootingTargets
-    [
-      let miss? (random 100) > drone-accuracy
-      build-shot shootingTargets miss?
-      set currentReload 0
-    ]
-  ] ; ifelse
-  
+to drone-detectEnnemis
+  set shootingTargets ennemis in-radius-nowrap drone-vision
+  drone-checkSight 
 end
+
+;-----------------------------------------------------------------------------------------------------------------------------------------------------
+
+to drone-shoot ; drone procedure
+  if munitions > 0
+  [
+    ifelse ( currentReload < drone-reloadRate )
+    [
+      set currentReload ( currentReload + 1 )
+    ]
+    ; else
+    [
+      if any? shootingTargets
+      [
+        let miss? (random 100) > drone-accuracy
+        build-shot shootingTargets miss?
+        set currentReload 0
+        set munitions munitions - 1
+      ]
+    ] ; ifelse
+  ]
+end
+
+;-----------------------------------------------------------------------------------------------------------------------------------------------------
 
 to drone-takeOff
   ;; orientation en z
@@ -119,6 +165,8 @@ to drone-takeOff
   drone-step
 end
 
+;-----------------------------------------------------------------------------------------------------------------------------------------------------
+
 to-report drone-hasTakenOff
   ifelse zcor >= 5 [
     set pitch 0
@@ -131,11 +179,72 @@ to-report drone-hasTakenOff
   ]
 end
 
-to drone-setObjective [obj]
-  ask drones [
-   set objective obj 
+;-----------------------------------------------------------------------------------------------------------------------------------------------------
+
+to drone-setToProtect [obj]
+  set convoiToProtect obj 
+  drone-adaptObjective
+end
+
+;-----------------------------------------------------------------------------------------------------------------------------------------------------
+
+to drone-adaptObjective
+  let obj nobody
+  let relativePos area
+  if area = "Center"
+  [
+    set objective convoiToProtect
+  ] 
+  if area = "Back"[
+    if convoiToProtect != nobody[
+      ask convoiToProtect[
+        set obj getObjectivePatch heading relativePos
+      ]
+      set objective obj
+    ]
+  ]
+  if area = "Right" or area = "Front" or area = "Left"[
+    if convoiToProtect != nobody[
+      ifelse [leader?] of convoiToProtect[
+        ask convoiToProtect[
+          set obj getObjectivePatch heading relativePos
+        ]
+        set objective obj
+      ]
+      [
+        let done false
+        let i 1
+        while [not done][
+          if [leader?] of (convoi (([who] of convoiToProtect) - i))[set done true]
+          set i i + 1
+        ]
+        ask convoi (([who] of convoiToProtect) - (i - 1))[
+          set obj getObjectivePatch heading relativePos
+        ]
+        set objective obj
+      ]
+    ]
   ]
 end
+
+;-----------------------------------------------------------------------------------------------------------------------------------------------------
+
+to-report getObjectivePatch [dir relativePos]
+  if relativePos = "Front"[
+    report patch-ahead 5
+  ]
+  if relativePos = "Back"[
+    report patch-right-and-ahead 180 5
+  ]
+  if relativePos = "Right"[
+    report patch-right-and-ahead 90 5
+  ]
+  if relativePos = "Left"[
+    report patch-left-and-ahead 90 5
+  ]
+end
+
+;-----------------------------------------------------------------------------------------------------------------------------------------------------
 
 to drone-moveToObjective
   
@@ -152,13 +261,22 @@ to drone-moveToObjective
     
     set heading ( heading + dirCorrection )
     
-    let x xcor
-    let y ycor
+    let x pxcor
+    let y pycor
     let diff 0
     
-    ask objective [
-     set diff  ( abs(xcor - x) + abs(ycor - y) )
+    
+    ifelse is-convoi? objective[ 
+      ask objective [
+        set diff  ( abs(xcor - x) + abs(ycor - y) )
+      ]
     ]
+    [
+      ask objective [
+        set diff  ( abs(pxcor - x) + abs(pycor - y) )
+      ]
+    ]
+    
     if diff > 0 [
       drone-step
     ]
@@ -166,20 +284,43 @@ to drone-moveToObjective
   
 end
 
+;-----------------------------------------------------------------------------------------------------------------------------------------------------
 
 to drone-spacing 
- let tooClose drones in-cone-nowrap 1 30
- if any? tooClose and ((count tooClose) > 1 or not member? self tooClose)[
+ let tooClose other drones in-cone-nowrap 1 30
+ if any? tooClose [
    rt random-float 180
  ]
 end
 
+;-----------------------------------------------------------------------------------------------------------------------------------------------------
+
 to drone-escort 
   set pitch 0
   drone-moveToObjective
+  drone-detectEnnemis
   drone-shoot
   drone-spacing
 end
+
+;-----------------------------------------------------------------------------------------------------------------------------------------------------
+
+to drone-reportEnnemis
+  let dest other drones in-radius-nowrap drone-communication-radius with [leader?]
+  let msg create-message "reportEnnemis"
+  ask dest[
+    set msg add-receiver self msg 
+  ]
+  ifelse shootingTargets = 0[
+    set msg add-content turtle-set nobody msg
+  ]
+  [
+    set msg add-content shootingTargets msg
+  ]
+  send msg
+end
+
+;-----------------------------------------------------------------------------------------------------------------------------------------------------
 
 to-report return-cost
   if backObjective != nobody [
@@ -191,19 +332,36 @@ to-report return-cost
     ]
     let deltaX (abs(xcor - targetX))
     let deltaY (abs(ycor - targetY))
-    report deltaX + deltaY + 0.1 * drone-fuel
+    if returnTime = "Late" 
+    [
+      report deltaX + deltaY + 0.1 * drone-fuel
+    ]
+    if returnTime = "Early" 
+    [
+      report deltaX + deltaY + 0.6 * drone-fuel
+    ]
   ]
   
   report -1
 end
 
+;-----------------------------------------------------------------------------------------------------------------------------------------------------
+
 to-report drone-escortDone
-  if fuel < return-cost [
+  if fuel < return-cost or objective = nobody [    
    add-intention "drone-back" "drone-backDone"
+   
+   if secondaryLeader? [
+     set leader? false
+     set color violet 
+   ]
+   
    report true 
   ]
   report false
 end
+
+;-----------------------------------------------------------------------------------------------------------------------------------------------------
 
 to drone-refuel
   ifelse fuel < drone-fuel[
@@ -215,13 +373,23 @@ to drone-refuel
   ]
 end
 
+;-----------------------------------------------------------------------------------------------------------------------------------------------------
+
 to-report drone-refuelDone
   if fuel = drone-fuel [
    add-intention "drone-takeOff" "drone-hasTakenOff"
+   
+   if secondaryLeader? [
+     set leader? true 
+     set color orange
+   ]
+   
    report true 
   ]
   report false
 end
+
+;-----------------------------------------------------------------------------------------------------------------------------------------------------
 
 to drone-back
   if not [base?] of patch-at 0 0 -1
@@ -273,20 +441,23 @@ to drone-back
   ]
 end
 
+;-----------------------------------------------------------------------------------------------------------------------------------------------------
+
 to-report drone-backDone
   if [base?] of patch-at 0 0 -1 [
     set pitch 0
     set zcor 1
     add-intention "drone-refuel" "drone-refuelDone"
+    if returnTime = "Early" [set returnTime "Late"]
     report true
   ]
   report false
 end
 
+;-----------------------------------------------------------------------------------------------------------------------------------------------------
 
 to drone-step
   ifelse fuel > 0 [
-    
     let nextpx 0
     let nextpy 0
     
@@ -300,14 +471,107 @@ to drone-step
     ]
     ;else 
     [
-      fd drone-speed
+      fd speed
       if dz >= 0 [
-        set fuel fuel - (abs(dx * drone-speed) + abs(dy * drone-speed) + (abs(dz * drone-speed) * 5))
+        set fuel fuel - (abs(dx * speed) + abs(dy * speed) + (abs(dz * speed) * 5))
       ]
     ]
   ]
   ;else
   [
     set fuel 0 
+  ]
+end
+
+;-----------------------------------------------------------------------------------------------------------------------------------------------------
+
+to drone-sendInstructions
+    let dest other drones in-radius drone-communication-radius
+    
+    let msgRE create-message "ReturnTime" ;return early
+    let msgRL create-message "ReturnTime" ;return late
+    
+    let msgAF create-message "Area" ; area front
+    let msgAB create-message "Area" ; area back
+    let msgAR create-message "Area" ; area right
+    let msgAL create-message "Area" ; area left
+    let msgAC create-message "Area" ; area center
+    
+    let msgSL create-message "Leader" ; secondary leader
+    
+    
+    let j 0
+    ask dest 
+    [
+      if j = 0 [set msgSL add-receiver self msgSL]
+      
+      ifelse j mod 2 = 0 [set msgRE add-receiver self msgRE]
+      [set msgRL add-receiver self msgRL]
+      
+      
+      if j mod 5 = 0 [set msgAC add-receiver self msgAC]
+      if j mod 5 = 1 [set msgAF add-receiver self msgAF]
+      if j mod 5 = 2 [set msgAB add-receiver self msgAB]
+      if j mod 5 = 3 [set msgAR add-receiver self msgAR]
+      if j mod 5 = 4 [set msgAL add-receiver self msgAL]
+      
+      
+      set j j + 1
+    ]
+    
+    set msgRE add-content "Early" msgRE
+    set msgRL add-content "Late" msgRL
+    
+    set msgAF add-content "Front" msgAF
+    set msgAC add-content "Center" msgAC
+    set msgAB add-content "Back" msgAB
+    set msgAR add-content "Right" msgAR
+    set msgAL add-content "Left" msgAL
+    
+    set msgSL add-content true msgSL
+    
+    send msgRE
+    send msgRL
+    
+    send msgAF
+    send msgAC
+    send msgAB
+    send msgAR
+    send msgAL
+    
+    send msgSL
+end
+
+;-----------------------------------------------------------------------------------------------------------------------------------------------------
+
+to drone-receive
+  let msg get-message
+  if leader?[
+    set ennemisList turtle-set nobody
+  ]
+  while [msg != "no_message"] 
+  [
+    let perf get-performative msg
+    let cont get-content msg
+    
+    if perf = "ReturnTime"[set returnTime cont]
+    if perf = "Area"[set area cont]    
+    if perf = "reportEnnemis"[
+      set ennemisList (turtle-set ennemisList cont) 
+    ]
+    if perf = "Leader" [set secondaryLeader? true]
+    set msg get-message
+  ]
+  if leader? [
+    if shootingTargets != 0[
+      set ennemisList (turtle-set ennemisList shootingTargets) 
+    ]
+    let dest other convois in-radius-nowrap drone-communication-radius with [leader?]
+    let convoiMsg create-message "reportEnnemis"
+    ask dest[
+      set convoiMsg add-receiver self convoiMsg 
+    ]
+    set convoiMsg add-content ennemisList convoiMsg
+    send convoiMsg 
   ]
 end

@@ -14,13 +14,12 @@ directed-link-breed [convoi-links convoi-link]
 globals [mapAlt solAlt basseAlt hauteAlt ; variables topologiques Z discretise: definit le niveau ou se trouvent toutes les informations de la carte (obstacles base etc.) car en 2D, niveau au sol ou se trouvent les agents, niveau basse altitude et niveau haute altitude
   base-patches base-entry base-central ; precache: definit ou se trouvent les patchs de la base d'atterrissage, le patch d'entree sur la piste d'atterrissage, et le patch ou doivent s'arreter les drones pour se recharger. Permet d'evaluer rapidement la distance et les besoins des drones (quand ils doivent rentrer a la base)
   as-cost as-path ; variables globales pour les chemins AStar: le cout d'un pas sur un patch, et as-path est la liste des plans, un pour chaque convoi leader
-  ;max-fuel max-ammo ; fuel and ammo for drones.
-  ;fuel-dec ; how much fuel will be decremented at each iteration
   mission-completed? mission-failed?
   send-interval ; communication period
   is-movie-recording?
   nb-cars
   astar-gen-curr ; cooldown for using astar to plan again
+  deltaRayon
   ]
 
 patches-own [obstacle? base? hangar? objectif? bridge? ; variables topologiques au niveau mapAlt, permet de definir les patchs praticables et ceux qui sont des obstacles
@@ -38,6 +37,7 @@ convois-own[
   last-send-time ; communication historical time-stamp
   ennemis-seen
   incoming-queue ; file de messages
+  life ; barre de vie de ce convoi
 ]
 
 ennemis-own[
@@ -45,6 +45,8 @@ ennemis-own[
   targets ; convois a portee de vue
   currentReload ; Compteur
   destination ; destination random pour le mouvement
+  speed
+  life ;  barre de vie de cet ennemi
 ]
 
 shoots-own[
@@ -55,16 +57,22 @@ shoots-own[
 
 drones-own[
  fuel     ; Carburant (quantite)
- dead?
  munitions ; quantite de tirs possibles
  incoming-queue ; file de messages
+ speed
  beliefs
  intentions
  currentReload ; Compteur
  shootingTargets ; Ennemis a portee de tir
- objective ; Cible a suivre / proteger
+ convoiToProtect ; Cible à protéger
+ objective ; Position a couvrir
  backObjective ; Patch base
+ area ; "Front" / "Center" / "Back" : détermine la zone à couvrir par rapport au convoi
+ returnTime ; "Early" / "Late" : détermine l'instant où le drone retourne à la base ("Late" => Quand on ne dispose que de l'essence pour rentrer / "Early" => deux fois plus tôt)
+ dead?
  leader?
+ secondaryLeader? ; Drone qui prend la relève quand le leader rentre à la base
+ ennemisList ; list of ennemis to send to convoy by drone-leader
 ]
 
 ;***********************
@@ -104,6 +112,8 @@ to setup
   reset-ticks
 end
 
+;-----------------------------------------------------------------------------------------------------------------------------------------------------
+
 ; Initial parameters
 to setup-globals
   set mapAlt 0
@@ -124,8 +134,11 @@ to setup-globals
   set is-movie-recording? false
 
   set astar-gen-curr astar-gen-cd
+
+  set deltaRayon convoi-vision - 1
 end
 
+;-----------------------------------------------------------------------------------------------------------------------------------------------------
 
 ; Precaches places en global variables for static components in order to speed-up the processes.
 to setup-precache
@@ -134,6 +147,7 @@ to setup-precache
   set base-central min-one-of (base-patches with-min [pxcor]) [pycor]
 end
 
+;-----------------------------------------------------------------------------------------------------------------------------------------------------
 
 ;environment definition
 to setup-env
@@ -151,7 +165,7 @@ to setup-env
         let done false
         while [not done] [
           ask patch-at x y mapAlt [
-            ifelse (x > 15) or (y > 15)
+            ifelse (x > 20) or (y > 20)
             [set done true]
             [set x random-xcor
              set y random-ycor]
@@ -235,7 +249,7 @@ to setup-env
   ask patches with [[obstacle?] of patch-at 0 0 -1] [set obstacle? true]
 end
 
-
+;-----------------------------------------------------------------------------------------------------------------------------------------------------
 
 to setup-convois
   if nb-cars > 0 [
@@ -267,6 +281,7 @@ to setup-convois
       set to-protect? false
       set genlongpath? false
       set dead? false
+      set life convoi-lifeSpan
 
       ; Visu
       set label who ; display the car names
@@ -463,6 +478,7 @@ to-report plan-astar [start goal longpath?] ; start et goal sont des patchs
   report path
 end
 
+;-----------------------------------------------------------------------------------------------------------------------------------------------------
 
 ; Return the 6 neighbours without the world wrap
 to-report neighbors6-nowrap
@@ -480,14 +496,33 @@ end
 ;***********************
 
 to go
+  if not any? convois with [to-protect?]
+  [
+    show "Mission failed"
+    stop
+  ]
+  if all? convois [ finished? ]
+  [
+    show "Mission success"
+    stop
+  ]
+  if not any? convois
+  [
+    show "Mission failed"
+    stop
+  ]
+
   convois-think
   ennemis-think
   drones-think
   update-shoots
 
-  ask convois with [leader?] [
-      drone-setObjective self
+  ask convois with [to-protect?] [
+    ask drones[
+      drone-setToProtect myself
+    ]
   ]
+
 
   tick
 end
@@ -554,12 +589,12 @@ Environnement \n
 1
 
 INPUTBOX
-20
-55
-70
-115
+502
+427
+675
+487
 number-cars
-3
+5
 1
 0
 Number
@@ -582,10 +617,10 @@ NIL
 1
 
 INPUTBOX
-81
-55
-159
-115
+25
+51
+103
+111
 nb-mountains
 3
 1
@@ -593,10 +628,10 @@ nb-mountains
 Number
 
 INPUTBOX
-162
-55
-214
-115
+106
+51
+158
+111
 nb-lakes
 2
 1
@@ -604,10 +639,10 @@ nb-lakes
 Number
 
 INPUTBOX
-218
-55
-271
-115
+162
+51
+215
+111
 nb-rivers
 2
 1
@@ -761,7 +796,7 @@ nb-ennemis
 nb-ennemis
 1
 100
-19
+100
 1
 1
 NIL
@@ -789,10 +824,10 @@ SLIDER
 158
 ennemi-speed
 ennemi-speed
-0
-1
-0.08
-0.01
+0.001
+0.1
+0.027
+0.001
 1
 NIL
 HORIZONTAL
@@ -861,9 +896,9 @@ SLIDER
 330
 nb-drones
 nb-drones
-0
+1
 30
-4
+10
 1
 1
 NIL
@@ -907,9 +942,9 @@ SLIDER
 drone-speed
 drone-speed
 0.01
-1
-0.2
-0.01
+0.3
+0.08
+0.001
 1
 NIL
 HORIZONTAL
@@ -938,7 +973,7 @@ drone-nb-munitions
 drone-nb-munitions
 1
 50
-12
+8
 1
 1
 NIL
@@ -1008,22 +1043,52 @@ ennemi-accuracy
 ennemi-accuracy
 1
 100
-50
+49
 1
 1
 NIL
 HORIZONTAL
 
 SLIDER
-978
-356
-1150
-389
+961
+336
+1133
+369
 drone-accuracy
 drone-accuracy
 1
 100
 100
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+501
+384
+673
+417
+convoi-lifeSpan
+convoi-lifeSpan
+1
+10
+2
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+938
+43
+1110
+76
+ennemi-lifeSpan
+ennemi-lifeSpan
+1
+10
+1
 1
 1
 NIL
@@ -1372,7 +1437,7 @@ Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
 
 @#$#@#$#@
-NetLogo 3D 5.3
+NetLogo 3D 5.3.1
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@

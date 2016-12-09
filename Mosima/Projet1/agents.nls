@@ -4,8 +4,10 @@
 
 to calculateProfits
   ask agents [
-    if partner != -1[      
-      set profit (5 * sqrt(effort + otherEffort) - (effort * effort))
+    if partner != -1[    
+      ;print (word "oeff : " otherEffort " partner : " partner " self : " self)
+      ifelse Variante [set profit (5 * sqrt(effort + otherEffort) + (effort - otherEffort))]
+      [set profit (5 * sqrt(effort + otherEffort) - (effort * effort))]
       set otherProfit (5 * sqrt(effort + otherEffort) - (otherEffort * otherEffort))
       
       set lastProfit profit
@@ -24,14 +26,33 @@ to randomMove
     set heading direction
     
     let occ false
-    if patch-ahead 1 != nobody [
-      if [occupied?] of patch-ahead 1 = TRUE [  ; on vérifie si le patch devant nous est libre
-        set occ TRUE
+    let dist 1
+    let tp false
+    
+    ; Gère le wrapping en x avec effortWindow
+    if effortWindow = true and ( (xcor = 0 and direction = 270) or (xcor = (X - 1) and direction = 90) ) [
+         set dist (dist + 1 + X)
+         set tp true
+    ]
+    
+    if patch-ahead dist != nobody [
+      if [occupied?] of patch-ahead dist = true [  ; on vérifie si le patch devant nous est libre
+        set occ true
       ]
     ]
+    
     if not occ [
+      let t false
       set occupied? false  ; patch d'où on part
-      fd 1
+      ifelse tp[
+        if xcor = 0 [
+          set xcor (X - 1) 
+          set t true]
+        if xcor = (X - 1) and not t [set xcor 0]
+      ]
+      [
+        fd 1
+      ]
       set occupied? true   ; patch où l'on arrive
     ]
     set partner -1
@@ -54,8 +75,11 @@ to initAgent ; agent procedure
   if typeAgent = 0 [ ;null effort agent
     set effort low-effort
   ]
-  if typeAgent = 5 or typeAgent = 7 [ ;high effort agent
+  if typeAgent = 5 or typeAgent = 7 [ ;high effort agent / winner imitator
     set effort high-effort
+  ]
+  if typeAgent = 4 or typeAgent = 8 [ ; Comparators
+    set effort (effort + 0.1) 
   ]
   if effort > high-effort [set effort high-effort]
   if effort < low-effort [set effort low-effort]
@@ -68,50 +92,55 @@ to workAgent
     let deltax 0
     let deltay 0
     let dir direction
-    if patch-ahead 1 != nobody [
-      ifelse direction = 0[
-        set deltay 1
-      ]
+    ifelse direction = 0[
+      set deltay 1
+    ]
+    [
+      ifelse direction = 90[
+        set deltax 1 
+      ] 
       [
-        ifelse direction = 90[
-          set deltax 1 
+        ifelse direction = 180[
+          set deltay -1 
         ] 
         [
-          ifelse direction = 180[
-            set deltay -1 
+          if direction = 270[
+            set deltax -1 
           ] 
-          [
-            if direction = 270[
-              set deltax -1 
-            ] 
-          ]
         ]
-      ] ;definition du x et y 
-      if any? agents-at deltax deltay [ ;agent dans la case en face
-        let currPartnerEffort -1
-        ask agents-at deltax deltay [
-          if direction = (dir + 180) mod 360 [ ;si l'agent en face nous regarde, on travaille ensemble
-            set partner myself
-            set numInt (numInt + 1)
-            set currPartnerEffort effort
-            ; print(word "effort: " effort)
-          ]
+      ]
+    ] ;definition du x et y 
+    
+      ; Si la fenetre effort est activé, on doit modifier le wrapping pour les agents sur les bords en x
+    if effortWindow = true and ( (xcor = 0 and direction = 270) or (xcor = (X - 1) and direction = 90) ) [
+      if xcor = 0 [set deltax (deltax - 1 - X)]
+      if xcor = (X - 1) [set deltax (deltax + 1 + X)] 
+    ]
+    
+    if any? agents-at deltax deltay [ ;agent dans la case en face
+      let currPartnerEffort -1
+      ask agents-at deltax deltay [
+        if direction = (dir + 180) mod 360 [ ;si l'agent en face nous regarde, on travaille ensemble
+          set partner myself
+          set numInt (numInt + 1)
+          set currPartnerEffort effort
+          ; print(word "effort: " effort)
         ]
-        if currPartnerEffort != -1 
+      ]
+      if currPartnerEffort != -1 
+      [
+        ifelse noiseSwitch 
         [
-          ifelse noiseSwitch 
-          [
-            let noiseEffort currPartnerEffort * (1 - (noiseValue / 100) + random-float (noiseValue * 2 / 100))
-            if noiseEffort < low-effort [set noiseEffort low-effort]
-            if noiseEffort > high-effort [set noiseEffort high-effort] 
-            set otherEffort noiseEffort
-            print noiseEffort
-          ]
-          [
-            set otherEffort currPartnerEffort
-          ]
-          set sumEffort (sumEffort + otherEffort)
+          let noiseEffort currPartnerEffort * (1 - (noiseValue / 100) + (random(noiseValue * 2 + 1) / 100))
+          if noiseEffort < low-effort [set noiseEffort low-effort]
+          if noiseEffort > high-effort [set noiseEffort high-effort] 
+          set otherEffort noiseEffort
+          ; print noiseEffort
         ]
+        [
+          set otherEffort currPartnerEffort
+        ]
+        set sumEffort (sumEffort + otherEffort)
       ]
     ]
   ]
@@ -121,48 +150,50 @@ end
 
 to adaptEffort
   ask agents[
-    if typeAgent = 1 [ ;shrinking effort agent
-      set effort (lastPartnerEffort / 2)
-    ]
-    if typeAgent = 2 [ ;replicator agent
-      set effort lastPartnerEffort
-    ]
-    if typeAgent = 3 [ ;rational agent
-      let aux (( (- 32) * lastPartnerEffort ^ 3  + 15 * 3 ^ (1 / 2) * (675 - 64 * lastPartnerEffort ^ 3) ^ (1 / 2)  + 675) ^ (1 / 3))
-      set effort ((1 / 6) * ( aux / (2 ^ (2 / 3)) + (4 * 2 ^ (2 / 3) * lastPartnerEffort ^ 2) / aux - 2 * lastPartnerEffort))
-    ]
-    if typeAgent = 4 [ ;profit comparator agent
-      if lastPartnerProfit < lastProfit[
-        set effort effort * 1.1 
+    if partner != -1 [
+      if typeAgent = 1 [ ;shrinking effort agent
+        set effort (lastPartnerEffort / 2)
       ]
-      if lastPartnerProfit > lastProfit[
-        set effort effort * 0.9
+      if typeAgent = 2 [ ;replicator agent
+        set effort lastPartnerEffort
       ]
-    ]
-    if typeAgent = 6 [ ;average rational agent
-      if numInt > 0 [
-        let avergeEffort (sumEffort / numInt)
-        let aux (( (- 32) * avergeEffort ^ 3  + 15 * 3 ^ (1 / 2) * (675 - 64 * avergeEffort ^ 3) ^ (1 / 2)  + 675) ^ (1 / 3))
-        set effort ((1 / 6) * ( aux / (2 ^ (2 / 3)) + (4 * 2 ^ (2 / 3) * avergeEffort ^ 2) / aux - 2 * avergeEffort))
+      if typeAgent = 3 [ ;rational agent
+        let aux (( (- 32) * lastPartnerEffort ^ 3  + 15 * 3 ^ (1 / 2) * (675 - 64 * lastPartnerEffort ^ 3) ^ (1 / 2)  + 675) ^ (1 / 3))
+        set effort ((1 / 6) * ( aux / (2 ^ (2 / 3)) + (4 * 2 ^ (2 / 3) * lastPartnerEffort ^ 2) / aux - 2 * lastPartnerEffort))
       ]
-    ]
-    if typeAgent = 7 [ ;winner imitator agent
-      if lastProfit < lastPartnerProfit [
-        set effort lastPartnerEffort 
+      if typeAgent = 4 [ ;profit comparator agent
+        if lastPartnerProfit < lastProfit[
+          set effort effort * 1.1 
+        ]
+        if lastPartnerProfit > lastProfit[
+          set effort effort * 0.9
+        ]
       ]
-    ]
-    if typeAgent = 8 [ ;effort comparator agent
-      if lastEffort < lastPartnerEffort [
-        set effort effort * 1.10
+      if typeAgent = 6 [ ;average rational agent
+        if numInt > 0 [
+          let avergeEffort (sumEffort / numInt)
+          let aux (( (- 32) * avergeEffort ^ 3  + 15 * 3 ^ (1 / 2) * (675 - 64 * avergeEffort ^ 3) ^ (1 / 2)  + 675) ^ (1 / 3))
+          set effort ((1 / 6) * ( aux / (2 ^ (2 / 3)) + (4 * 2 ^ (2 / 3) * avergeEffort ^ 2) / aux - 2 * avergeEffort))
+        ]
       ]
-      if lastEffort > lastPartnerEffort [
-        set effort effort * 0.90 
+      if typeAgent = 7 [ ;winner imitator agent
+        if lastProfit < lastPartnerProfit [
+          set effort lastPartnerEffort 
+        ]
       ]
+      if typeAgent = 8 [ ;effort comparator agent
+        if lastEffort < lastPartnerEffort [
+          set effort effort * 1.10
+        ]
+        if lastEffort > lastPartnerEffort [
+          set effort effort * 0.90 
+        ]
+      ]
+      if typeAgent = 9 [ ;averager agent
+        set effort ( ( effort + lastPartnerEffort ) / 2 )
+      ]
+      if effort < low-effort [ set effort low-effort ]
+      if effort > high-effort [ set effort high-effort ]
     ]
-    if typeAgent = 9 [ ;averager agent
-      set effort ( ( effort + lastPartnerEffort ) / 2 )
-    ]
-    if effort < low-effort [ set effort low-effort ]
-    if effort > high-effort [ set effort high-effort ]
   ]
 end
