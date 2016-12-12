@@ -22,7 +22,7 @@ public class fishingtest {
 	
 	static boolean openFishing() {
 		System.out.print("Open fishing...");
-		String t0 = "consult('fishing.pl')";
+		String t0 = "consult('src/fishing.pl')";
 
 		if (!Query.hasSolution(t0)) {
 			System.out.println(t0 + " failed");

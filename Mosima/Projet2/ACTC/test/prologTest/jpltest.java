@@ -55,7 +55,7 @@ public class jpltest {
 	static void test_0() {
 		System.out.print("test 0...");
 		//loading the file
-		String t0 = "consult('test.pl')";
+		String t0 = "consult('ressources/prolog/test/test.pl')";
 
 		//
 		if (!Query.hasSolution(t0)) {
