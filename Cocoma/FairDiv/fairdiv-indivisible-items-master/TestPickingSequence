@@ -1,0 +1,23 @@
+3 agents, 8 ressources :
+
+Meilleure séquence average max envy :
+[1,2,3,1,3,2,2,3] : 
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+= Number of experiments:                50000
+= Average egalitarian sw:               14.4163
+= Ratio of proportional:              0.99734
+= Ratio of envy free:                  0.88952
+= Average number of envious:           0.11444
+= Average max envy:                    0.15652
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+Meilleure séquence average egalitarian social welfare :
+[1,1,2,3,2,3,3,2] :
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+= Number of experiments:                50000
+= Average egalitarian sw:              14.46434
+= Ratio of proportional:               0.9799
+= Ratio of envy free:                  0.87688
+= Average number of envious:            0.1272
+= Average max envy:                    0.23606
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
