@@ -883,10 +883,12 @@ public class Environment extends SimpleApplication {
 			ray.setLimit(FIELDOFVIEW);
 			CollisionResults results = new CollisionResults();
 			shootables.collideWith(ray, results);
-			CollisionResult closest = results.getCollision(1);
-			
-			if (agentPosition.distance(enemyPosition)<=FIELDOFVIEW && closest.getGeometry().equals(players.get(enemy))) {
-				res.add(new Tuple2<Vector3f, String>(enemyPosition, enemy));
+			if (results.size()!=0){
+				CollisionResult closest = results.getCollision(1);
+
+				if (agentPosition.distance(enemyPosition)<=FIELDOFVIEW && closest.getGeometry().equals(players.get(enemy))) {
+					res.add(new Tuple2<Vector3f, String>(enemyPosition, enemy));
+				}
 			}
 		}
 		return res;
