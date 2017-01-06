@@ -132,7 +132,7 @@ public class Principal {
 		} catch (StaleProxyException e) {
 			e.printStackTrace();
 			System.out.println("Launching of rma agent failed");
-		}
+		} 
 
 		System.out.println("Launching  Sniffer agent on the main container...");
 		AgentController snif=null;
@@ -145,7 +145,7 @@ public class Principal {
 			e.printStackTrace();
 			System.out.println("launching of sniffer agent failed");
 
-		}		
+		}	
 
 
 	}
