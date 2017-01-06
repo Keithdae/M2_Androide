@@ -883,7 +883,7 @@ public class Environment extends SimpleApplication {
 			ray.setLimit(FIELDOFVIEW);
 			CollisionResults results = new CollisionResults();
 			shootables.collideWith(ray, results);
-			if (results.size()!=0){
+			if (results.size()> 1){
 				CollisionResult closest = results.getCollision(1);
 
 				if (agentPosition.distance(enemyPosition)<=FIELDOFVIEW && closest.getGeometry().equals(players.get(enemy))) {

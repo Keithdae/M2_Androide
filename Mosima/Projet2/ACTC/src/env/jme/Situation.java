@@ -56,4 +56,18 @@ public class Situation {
 		this.agents = agents;
 	}
 	
+	public String toString()
+	{
+		String res = "";
+		res += "Agent's altitude : "+ this.agentAltitude + "\n";
+		res += "lowest : " + this.minAltitude + "\n";
+		res += "highest : " + this.maxAltitude + "\n";
+		res += "average :" + this.avgAltitude + "\n";
+		res += "fieldOfView : " + this.fieldOfView + "\n";
+		res += "maxDepth : " + this.maxDepth + "\n";
+		res += "Consistency : " + this.consistency + "\n";
+		res += "Agents : " + this.agents + "\n";
+		return res;
+	}
+	
 }
