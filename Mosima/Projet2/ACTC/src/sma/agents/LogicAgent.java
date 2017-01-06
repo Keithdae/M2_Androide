@@ -2,6 +2,7 @@ package sma.agents;
 
 import env.jme.Environment;
 import sma.AbstractAgent;
+import sma.actionsBehaviours.FollowBehaviour;
 import sma.actionsBehaviours.RandomWalkBehaviour;
 
 public class LogicAgent extends AbstractAgent {
@@ -14,6 +15,8 @@ public class LogicAgent extends AbstractAgent {
 	public boolean friendorFoe;
 	
 	public RandomWalkBehaviour randomWalk;
+	public FollowBehaviour followWalk;
+
 	
 	protected void setup(){
 		super.setup();
@@ -36,7 +39,9 @@ public class LogicAgent extends AbstractAgent {
 		}
 
 		randomWalk = new RandomWalkBehaviour(this);
-		addBehaviour(randomWalk);
+		followWalk = new FollowBehaviour(this);
+		//addBehaviour(randomWalk);
+		addBehaviour(followWalk);
 		
 		System.out.println("the player "+this.getLocalName()+ " is started. Tag (0==enemy): " + friendorFoe);
 		

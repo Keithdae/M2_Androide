@@ -15,7 +15,7 @@ public class RandomWalkBehaviour extends TickerBehaviour {
 	
 	public RandomWalkBehaviour(final AbstractAgent myagent) {
 		// TODO Auto-generated constructor stub
-		super(myagent, 200);
+		super(myagent, 100);
 	}
 
 	@Override
