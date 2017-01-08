@@ -18,6 +18,14 @@ public class LogicAgent extends AbstractAgent {
 	public FollowBehaviour followWalk;
 
 	
+	// Variables pour Prolog
+	public static boolean highGround = false;
+	public static boolean lowHealth = false;
+	public static boolean largeFoW = false;
+	public static boolean smallFoW = false;
+	public static boolean heightOverAverage = false;
+	public static boolean enemyInSight = false;
+	
 	protected void setup(){
 		super.setup();
 		

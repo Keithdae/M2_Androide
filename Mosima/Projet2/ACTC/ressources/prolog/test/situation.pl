@@ -33,6 +33,14 @@ use_module(library(jpl)).
 	heightOverAverage/1.
 
 
+enemyInSight(agent) :- jpl_get('sma.agents.LogicAgent', 'enemyInSight', R), jpl_is_true(R).
+highGround(agent) :- jpl_get('sma.agents.LogicAgent', 'highGround', R), jpl_is_true(R).
+smallFoW(agent) :- jpl_get('sma.agents.LogicAgent', 'smallFoW', R), jpl_is_true(R).
+largeFoW(agent) :- jpl_get('sma.agents.LogicAgent', 'largeFoW', R), jpl_is_true(R).
+lowHealth(agent) :- jpl_get('sma.agents.LogicAgent', 'lowHealth', R), jpl_is_true(R).
+heightOverAverage(agent) :- jpl_get('sma.agents.LogicAgent', 'heightOverAverage', R), jpl_is_true(R).
+
+
 % badSituation(X)
 %
 badSituation(X) :- smallFoW(X), !.
@@ -56,6 +64,5 @@ perfectSituation(X) :-
 	highGround(X),
 	largeFoW(X),
 	heightOverAverage(X), !.
-	
 	
 	
