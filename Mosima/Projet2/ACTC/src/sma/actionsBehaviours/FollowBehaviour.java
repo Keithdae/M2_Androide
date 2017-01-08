@@ -64,7 +64,7 @@ public class FollowBehaviour extends TickerBehaviour {
 		{
 			if(enemypos != null)
 			{
-				if (dest == null || approximativeEqualsCoordinates(enemypos, dest))
+				if (dest == null || !approximativeEqualsCoordinates(enemypos, dest))
 				{
 					((AbstractAgent)this.myAgent).moveTo(enemypos);
 				}
