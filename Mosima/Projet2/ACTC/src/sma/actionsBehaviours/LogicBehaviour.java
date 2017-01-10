@@ -13,15 +13,16 @@ import sma.actionsBehaviours.LegalActions.LegalAction;
 import sma.agents.LogicAgent;
 import jade.core.behaviours.TickerBehaviour;
 
-public class FollowBehaviour extends TickerBehaviour {
+public class LogicBehaviour extends TickerBehaviour {
 
 	private static final long serialVersionUID = 1L;
 	private String enemy = null;
+	private Vector3f enemyPos = null;
 	
 	private LogicAgent ag;
 	private String query = "";
 	
-	public FollowBehaviour(final AbstractAgent myagent) {
+	public LogicBehaviour(final AbstractAgent myagent) {
 		// TODO Auto-generated constructor stub
 		super(myagent, 100);
 		ag = (LogicAgent) myagent;
@@ -33,9 +34,9 @@ public class FollowBehaviour extends TickerBehaviour {
 	protected void onTick() {	
 		Vector3f currentpos  = ag.getCurrentPosition();
 		Vector3f dest = ag.getDestination();
-		Vector3f enemypos = null;
+		enemyPos = null;
 		
-		
+		// Observation
 		Situation sit = ag.observeAgents();
 		
 		// System.out.println(sit);
@@ -44,24 +45,18 @@ public class FollowBehaviour extends TickerBehaviour {
 		
 		if(!targets.isEmpty())
 		{
-			ag.enemyInSight = true;
+			LogicAgent.enemyInSight = true;
 			enemy = targets.get(0).getSecond();
-			enemypos = targets.get(0).getFirst();
-			System.out.println("Target in sight : " + enemy);
-			try{
-				ag.shoot(enemy);
-			}
-			catch(Exception e)
-			{
-				System.out.println("Shoot Exception triggered.");
-			}
+			enemyPos = targets.get(0).getFirst();
 		}
 		else
 		{
-			ag.enemyInSight = false;
+			LogicAgent.enemyInSight = false;
 		}
 		
-		if(!ag.enemyInSight)
+		
+		// Action
+		if(!LogicAgent.enemyInSight)
 		{
 			if (dest==null || approximativeEqualsCoordinates(currentpos, dest))
 			{
@@ -70,15 +65,24 @@ public class FollowBehaviour extends TickerBehaviour {
 		}
 		else
 		{
-			if(enemypos != null)
+			if(enemyPos != null)
 			{
-				if (dest == null || !approximativeEqualsCoordinates(enemypos, dest))
+				if (dest == null || !approximativeEqualsCoordinates(enemyPos, dest))
 				{
-					ag.moveTo(enemypos);
+					ag.moveTo(enemyPos);
+				}
+				System.out.println("Target in sight : " + enemy);
+				try{
+					ag.shoot(enemy);
+				}
+				catch(Exception e)
+				{
+					System.out.println("Shoot Exception triggered.");
 				}
 			}			
 		}
 		
+		// Prolog
 		System.out.println("**Test Prolog**");
 		query = "goodSituation(agent)";
 		boolean gSol = Query.hasSolution(query);
@@ -92,4 +96,22 @@ public class FollowBehaviour extends TickerBehaviour {
 	private boolean approximativeEquals(float a, float b) {
 		return b-2.5 <= a && a <= b+2.5;
 	}
+	
+	// Pas necessaire avec moveTo() ?
+	/*private int lookAtPoint(Vector3f p)
+	{
+		int res = -1;
+		Vector3f agPos = ag.getCurrentPosition();
+		Vector3f agPosGround = new Vector3f(agPos.x,0,agPos.z);
+		if(p != null)
+		{
+			Vector3f posGround = new Vector3f(p.x,0,p.z);
+			Vector3f dir = enPosGround.subtract(agPosGround).normalize();
+			System.out.println(agPosGround);
+			System.out.println(posGround);
+			System.out.println(dir);
+		}
+		
+		return res;
+	}*/
 }
