@@ -1,0 +1,118 @@
+<!DOCTYPE html >
+<html lang="en">
+
+<head>
+<meta charset="utf-8">
+<title>LITETALK DEVELOPER PAGE</title>
+
+<script type="text/javascript" src="../../litetalk.code.js"> </script>   <!-- first:  litetalk code        -->
+<script type="text/javascript" src="developer.code.js">  </script>    <!-- second: Application:  developer -->
+
+<style>
+.head1 {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 24px;
+	color: #330;
+}
+.normal {
+	font-family: Arial, Helvetica, sans-serif;
+	font-sie: 12px;
+	color: #006;
+}
+
+</style>
+</head>
+
+
+
+<body>
+<h1 class="head1"> LiteTalk developer page</h1>
+<p>Click on SEND Button to activate a session</p>
+<p>This page contains : Two Bots (Cyril and Elsi on left) and four Topics (Cyril, Elsi, Counter, User).<br>
+  This page uses the &quot;DEVELOPER&quot; WEB page interface of LiteTalk</p>
+<p>GOTO &nbsp; &nbsp; <a href="../../litetalkwebsite/litetalk.main.html">LiteTalk Home page</a> &nbsp;&nbsp; &nbsp; <a href="../../litetalkdoc/doc-code-ref.html">LiteTalk toolkit developer manual</a></p>
+<div style="position:relative; left:50px; top:50px; height:120px; width:450px; border:0px solid blue;">
+  &nbsp; 
+  <img id="imagecyril" src="picts/cyril.png" width="100" height="100" style="border:0px solid yellow">
+  &nbsp; 
+  <img id="imageelsi" src="picts/elsi.png"  width="100" height="100"  style="border:0px solid yellow">
+  &nbsp; 
+  <textarea id="usertextfield" cols="9" rows="2" spellcheck="false" style="visibility:visible;">TOPIC: user</textarea>
+<div id="divcounter"style="position:absolute; left:380px; top:20px; height:80px; width:100px; border:0px solid green;">
+	<p id="countertextfield"  style="font-family: Arial; font-size:60px; font-weight:bold; margin:0px;" >0</p> </div>
+</div>
+
+<div style="position:relative; left:50px; top:50px; height:100px; width:450px; border:0px solid red;">
+	<p class="normal">
+    Bot &nbsp;&nbsp;&nbsp;
+	<input id="litetalkbot" type="text" size="18" value=".">
+	&nbsp;&nbsp; &nbsp;   Topic  &nbsp; <input id="litetalktopic" type="text" size="20" value=".">  <BR> <BR> 
+    Emote 
+	<input id="litetalkemote" type="text" size="58" value=".">  <BR>   
+    Short &nbsp;
+	<input id="litetalkballoonshort" type="text" size="58" value="."> <BR>   
+    Long &nbsp; 
+	<textarea id="litetalkballoonlong" cols="50" rows="2" spellcheck="false">.</textarea> 
+	</p> 
+    <span class="norml"> Chatbox &nbsp; <span> 
+	<input id="litetalkchatbox" type="text" size="40" 
+    
+    value="ask age" 
+    
+    
+    onKeyPress="BOT_chatboxOnKeypress(this,event);"> &nbsp;
+  	<input type="submit" name="sendButton" id="sendButton" value="SEND" onClick="BOT_chatboxOnSend('litetalkchatbox');"> &nbsp;<BR>
+	
+    
+    <div id="litetalkstatustext" align="left" style= "font-family:Verdana, Geneva, sans-serif;  font-size:10px;
+    	width:450px; height:60px; border:0px solid pink;">.</div> <BR>
+        
+  	<input type="button" name="variables" id="variables" value="SHOW MAIN VARIABLES" onClick="BOT_printModelVariables()">   &nbsp; 
+  	<input type="button" name="trace" id="trace" value="REFRESH TRACE" onClick="BOT_printTraceBox()">   &nbsp;
+  	<input type="button" name="test" id="test" value="BOT_test" onClick="BOT_test()"><BR>   
+	<p> <textarea id="litetalktracebox" cols="55" rows="20" spellcheck="false" style="visibility:visible;">.</textarea> </p>    <!--  com  -->
+    JavaScript &nbsp;
+    <input id="javascriptinput" type="text" size="38" 
+    
+    value="1+1" 
+    
+    
+    > &nbsp; 
+    <input type="button" name="eval"    id="eval"    value="EVAL" onClick="BOT_javaScriptEval()"><BR>
+    <input type="button" name="inspect" id="inspect" value="INSPECT ALL GLOBAL VARIABLES" onClick="BOT_inspectGlobalVar()"> <BR>
+    <input type="button" name="inspect" id="inspect" value="cyrilTopic" onClick="BOT_inspectTopic('cyrilTopic')"> &nbsp;
+    <input type="button" name="inspect" id="inspect" value="elsiTopic" onClick="BOT_inspectTopic('elsiTopic')"> &nbsp;
+    <input type="button" name="inspect" id="inspect" value="counterTopic" onClick="BOT_inspectTopic('counterTopic')"> &nbsp;
+    <input type="button" name="inspect" id="inspect" value="userTopic" onClick="BOT_inspectTopic('userTopic')"> &nbsp;
+    
+    <BR>
+    <p> <textarea id="javascriptoutput" cols="80" rows="20" spellcheck="false" style="visibility:visible;">.</textarea> </p> 
+
+
+</div>
+
+
+
+<script type="text/javascript">
+	BOT_theInterface 	= "DEVELOPER";
+	BOT_traceFlag		= true; 
+	BOT_statusFlag		= true; 
+	COUNTER_frameBot('cyrilBot','4px solid yellow');  // selects cyril
+	COUNTER_loop(); // launches counter process (but don't count)
+</script> 
+
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

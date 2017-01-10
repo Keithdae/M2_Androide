@@ -1,0 +1,18 @@
+LITETALK LICENSING INFORMATION
+==============================
+
+
+// ********************************************************************************************************************
+// ********************************************************************************************************************
+//                         Jean-Paul Sansonnet  LiteTalk VERSION 1.0   February 1, 2012
+//
+// ********************************************************************************************************************
+//
+// COPYRIGHT: Jean-Paul Sansonnet & LIMSI-CNRS, 2012
+// This source code can be downloaded and used freely to develop applications dealing with Teaching and Research only
+// No commercial exploitation of this source code, even modified, is authorized. (for commercial use, contact author)
+// No technical support is provided by Jean-Paul Sansonnet or LIMSI-CNRS 2012 (see documentation and code) 
+//***
+// ********************************************************************************************************************
+// ********************************************************************************************************************
+

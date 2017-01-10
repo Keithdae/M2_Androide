@@ -41,7 +41,7 @@ public class FollowBehaviour extends TickerBehaviour {
 			enemypos = targets.get(0).getFirst();
 			System.out.println("Target in sight : " + enemy);
 			try{
-				((AbstractAgent)this.myAgent).shoot(enemy);
+				//((AbstractAgent)this.myAgent).shoot(enemy);
 			}
 			catch(Exception e)
 			{
@@ -57,7 +57,7 @@ public class FollowBehaviour extends TickerBehaviour {
 		{
 			if (dest==null || approximativeEqualsCoordinates(currentpos, dest))
 			{
-				((AbstractAgent)this.myAgent).randomMove();
+				((AbstractAgent)this.myAgent).moveTo(sit.maxAltitude);
 			}
 		}
 		else

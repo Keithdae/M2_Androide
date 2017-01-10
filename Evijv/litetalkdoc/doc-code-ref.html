@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+
+<!-- Mirrored from perso.limsi.fr/jps/online/litetalk/litetalkdoc/doc-code-ref.html by HTTrack Website Copier/3.x [XR&CO'2013], Wed, 12 Nov 2014 10:24:16 GMT -->
+<head>
+<title>LITETALK REFERENCE</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="jps.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+.red {
+	color: #9B0000;
+}
+</style>
+</head>
+
+<body>
+<h1><strong>Litetalk toolkit developer manual</strong> </h1>
+ 
+ 
+ 
+ 
+ 
+<p>GOTO <a href="../../litetalkwebsite/litetalk.site.main.html">litetalk home page</a></p>
+<h2>Developer environment</h2>
+<p>Developers would be interested in using the <a href="../demos/demo_developer/developer.main.html">Litetalk developer page</a></p>
+<p>Contains of the download folder <span class="red">litetalk 1.0</span></p>
+<ul>
+  <li>File <span class="red">litetalk.code.js</span> contains all the litetalk toolkit (25k)</li>
+  <li>File <span class="red">LITETALK LICENSING INFORMATION</span> is eponymous </li>
+  <li>Folder <span class="red">demos</span> contains the code of two demos:
+    <ul>
+      <li>the <a href="../demos/demo_developer/developer.main.html">Litetalk developer page</a> which uses the DEVELOPER GUI interface</li>
+      <li>the <a href="../demos/demo_fifi/fifi.main.html">Fifi and Daisie example page </a>which uses the STANDARD GUI interface</li>
+    </ul>
+  </li>
+</ul>
+<p> Note:<br>
+  - 
+<a href="../../divalitewebsite/divalite.site.html">DIVAITE demos</a> that use litetalk are not discussed here because they need the DIVALITE toolkit<br>
+- They use
+the DIVALITE GUI interface</p>
+<h2>Integrating litetalk agents into a Web page</h2>
+<p>We use the coe dof  <a href="../demos/demo_fifi/fifi.main.html">Fifi and Daisie example page </a> to explain the process<br>
+  Below are excerpts of folder <span class="red">demo_fifi </span>files:<br>
+  - 
+<span class="red">fifi.main.html</span> contains the integration of the embodiment of agents and the WEB page interface<span class="red"><br>
+- 
+</span><span class="red">fifi.code.js</span> contains the description of the model of the application: topics and specific code</p>
+<p>&nbsp;</p>
+<h3>1 HTML PAGE: fifi.main.html</h3>
+<p><img src="picts/code-1.png" width="1165" height="328" alt="code-1"></p>
+<p>&nbsp;</p>
+<p><img src="picts/code-2.png" width="1221" height="659"></p>
+<p><img src="picts/code-3.png" width="1230" height="468" alt="code-3"></p>
+<p><img src="picts/code-4.png" width="1108" height="313" alt="code-4"></p>
+<p>&nbsp;</p>
+<h3>2 JAVASCRIPT APPLICATION PAGE: fifi.code.js</h3>
+<p><strong>SYNTAX</strong></p>
+<p>A Topic is Javascript data structure: an array of arrays of couples<br>
+  A Topic is a list of ELEMENTS tha is basic constituents of the topic: Attributes, Functions, ..
+</p>
+<p>var topicName = [ array of ELEMENTS ];<br>
+  ELEMENT = [ [TAG1, expr1], [TAG2, expr2], .. [TAGn, expr-n] ]</p>
+<p>ELEMENTS describe an entity (a part) of a Topic<br>
+  TAG1 must be &quot;KEY&quot; and cannot be omited<br>
+Any other TAGS can be omited<br>
+Within an ELEMENT a TAG cannot occur more than once</p>
+<p>Main TAGS are:</p>
+<table width="623" border="0" cellspacing="5" cellpadding="2">
+  <tr>
+    <td width="64">KEY</td>
+    <td width="536">denotes attributes names </td>
+  </tr>
+  <tr>
+    <td>VAL</td>
+    <td>denotes the value of the ELEMENT: value of attribute; internal name of a function, ..</td>
+  </tr>
+  <tr>
+    <td>CAT</td>
+    <td>denotes the category of the ELEMENT. typicalcategories are:<br>
+INFO	static information -- default<br>
+VAR		dynamic information<br>
+ACT		static action <br>
+PRO		static process  -- nyi TODO<br>
+REL	    dynamic pointer to another topic</td>
+  </tr>
+  <tr>
+    <td>TYPE</td>
+    <td><p>denotes the type of the VAL of the ELEMENT. typical types are:<br>
+STR		string or array of strings -- default<br>
+INT		integer or array of integer<br>
+BOOL	boolean<br>
+EXPR	code wrapped into a string    </p></td>
+  </tr>
+  <tr>
+    <td>ONASK</td>
+    <td>replaces the expr of VAL with command ask (enables to compute dynamically etc.)</td>
+  </tr>
+  <tr>
+    <td>WHY</td>
+    <td>explains teh reason of the expr in TAG VAL </td>
+  </tr>
+  <tr>
+    <td>HOW</td>
+    <td>explains how an operation in ELEMENT can be done</td>
+  </tr>
+  <tr>
+    <td>EFFECT</td>
+    <td>expalins teh effect of function in ELEMENT</td>
+  </tr>
+  <tr>
+    <td>REVERSE</td>
+    <td>denots the action that can reverse function in ELEMENT</td>
+  </tr>
+  <tr>
+    <td>...</td>
+    <td>any other the developer wants to define</td>
+  </tr>
+</table>
+<p><strong>COMPOSED KEYS</strong></p>
+<h6><strong>Normally values of KEYS are simple symbols: </strong>
+</h6>
+<p>Normally values of TAG &quot;KEYS&quot; are symbols: age, name, gender, stop ..<br>
+  However it is also possible to use composed values [&quot;symbol1&quot;, &quot;Symbol&quot;2, ..]
+for example [ &quot;KEY&quot;, [&quot;phone&quot;,&quot;home&quot;] ]<br>
+Then these sentences will work:<br>
+ask your home phone<br>
+ask your  phone<br>
+ask your  phone home<br>
+when several keys share symbols the first best match is returned
+</p>
+<p><img src="picts/code-5.png" width="1105" height="828" alt="code-5"></p>
+<p><img src="picts/code-6.png" width="1076" height="309" alt="code-6"></p>
+<p>&nbsp;</p>
+<p><em>Last updated: February 03, 2012</em></p>
+<p>&nbsp;</p>
+</body>
+
+<!-- Mirrored from perso.limsi.fr/jps/online/litetalk/litetalkdoc/doc-code-ref.html by HTTrack Website Copier/3.x [XR&CO'2013], Wed, 12 Nov 2014 10:26:16 GMT -->
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html >
+<html lang="en">
+
+<head>
+<meta charset="utf-8">
+<title>FIFI AND DAISIE HOME PAGE</title>
+
+<link href="jps.css" rel="stylesheet" type="text/css">                <!-- *** JPSMODIFY **** -->
+<script type="text/javascript" src="../../litetalk.code.js"> </script>   <!-- first:  litetalk code        -->
+<script type="text/javascript" src="fifi.code.js">  </script>         <!-- second: Application: fifi    -->
+
+</head>
+
+
+
+<body>
+<h1> The page of Fifi and Daisie</h1>
+
+<div id="test">
+</div>
+
+<p>
+You can interact in litetalk language with the dog Fifi or the flower Daisie.<br>
+Type a litetalk sentence in the chat box, followed by a carriage return or click the send button.<br>
+I you click on Fifi or Daisie pict it becomes the current locutor.
+</p>
+<p>
+<em>Go to Litetalk <a href="../../litetalkwebsite/litetalk.main.html">home page</a> <br>
+Page under construction. May 11, 2011.</em>
+</p>
+
+<div style="position:relative; left:100px; top:20px; height:230px; width:500px; border:0px solid red;">
+
+	<div id= style="position:absolute; left:0px; top:0px; height:200px; width:300px; border:0px solid blue;">
+	<textarea id="fifiballoon" cols="30" rows="2" spellcheck="false" style="overflow:hidden; border:hidden; visibility:hidden; 
+    font-family:Segoe Print;">.</textarea> <br />
+			<div style="position:absolute; top:60px;">
+    		<img id="fifipict" src="picts/fifi.png" width="120" height="146" alt="fifi" onClick="BOT_standardSwitchToChar('fifiBot');" />  
+			</div>
+    </div>
+	<div style="position:absolute; left:180px; top:0px; height:200px; width:300px; border:0px solid green;">
+	<textarea id="daisieballoon" cols="30" rows="2" spellcheck="false" style="overflow:hidden; border:hidden; visibility:hidden; font-family:Segoe Print; ">.</textarea> <br />
+			<div style="position:absolute; top:60px;" >
+    		<img id="daisiepict" src="picts/daisie.jpg" width="163" height="146" alt="daisie" onClick="BOT_standardSwitchToChar('daisieBot');"/>
+			</div>
+	</div>
+    
+    <div id="divcounter"style="position:absolute; left:400px; top:100px; height:100px; width:200px; border:0px solid green;">
+	<p id="countertextfield"  style="font-family: Arial; font-size:72px; font-weight:bold; margin:0px;" >0</p> </div>
+	</div>
+
+</div>
+
+
+<div style="position:relative; left:100px; top:50px; height:520px; width:500px; border:0px solid red;">
+    <input id="litetalkchatbox" type="text" size="55" value="ask name"  onKeyPress="BOT_chatboxOnKeypress(this,event);"> &nbsp;
+  	<input type="submit" name="sendButton" id="sendButton" value="SEND" onClick="BOT_chatboxOnSend('litetalkchatbox');"> &nbsp;
+	<input type="button" value="+"  onClick="BOT_switchTraceBox(this)"><BR>
+    
+    <div id="litetalkstatustext" align="left" style= "font-family:Verdana, Geneva, sans-serif;  font-size:10px;
+    	width:450px; height:80px; border:0px solid pink;">.</div>  <BR>
+
+	<p> <textarea id="litetalktracebox" cols="55" rows="20" spellcheck="false" style="visibility:hidden;">.</textarea> </p> 
+
+</div>
+
+
+
+
+
+<script type="text/javascript">
+	BOT_theInterface 	= "STANDARD";
+	BOT_traceFlag		= false; 
+	BOT_statusFlag		= true; 
+	BOT_standardFrameBot('fifiBot','visible','4px solid yellow');	// shows fifi pict and balloon
+	FIFI_counterLoop(); 											// launches counter process (but does't count)
+</script> 
+
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
