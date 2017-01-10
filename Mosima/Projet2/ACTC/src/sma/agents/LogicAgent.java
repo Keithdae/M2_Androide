@@ -2,7 +2,7 @@ package sma.agents;
 
 import env.jme.Environment;
 import sma.AbstractAgent;
-import sma.actionsBehaviours.FollowBehaviour;
+import sma.actionsBehaviours.LogicBehaviour;
 import sma.actionsBehaviours.RandomWalkBehaviour;
 
 public class LogicAgent extends AbstractAgent {
@@ -15,8 +15,16 @@ public class LogicAgent extends AbstractAgent {
 	public boolean friendorFoe;
 	
 	public RandomWalkBehaviour randomWalk;
-	public FollowBehaviour followWalk;
+	public LogicBehaviour followWalk;
 
+	
+	// Variables pour Prolog
+	public static boolean highGround = false;
+	public static boolean lowHealth = false;
+	public static boolean largeFoW = false;
+	public static boolean smallFoW = false;
+	public static boolean heightOverAverage = false;
+	public static boolean enemyInSight = false;
 	
 	protected void setup(){
 		super.setup();
@@ -39,7 +47,7 @@ public class LogicAgent extends AbstractAgent {
 		}
 
 		randomWalk = new RandomWalkBehaviour(this);
-		followWalk = new FollowBehaviour(this);
+		followWalk = new LogicBehaviour(this);
 		//addBehaviour(randomWalk);
 		addBehaviour(followWalk);
 		

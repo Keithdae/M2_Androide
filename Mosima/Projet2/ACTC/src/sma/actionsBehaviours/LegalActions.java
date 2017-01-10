@@ -1,7 +1,7 @@
 package sma.actionsBehaviours;
 
 /**
- * This class contain all the authorized movemenst/actions of the agent in the environment
+ * This class contain all the authorized movements/actions of the agent in the environment
  * 
  *  8 possible direction (with the field of vision in the movment extension)
  *  8 possible orientation (no move, only a rotation and so only a modification of the field of vision)

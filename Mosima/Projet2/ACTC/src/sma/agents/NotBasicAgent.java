@@ -2,7 +2,7 @@ package sma.agents;
 
 import env.jme.Environment;
 import sma.AbstractAgent;
-import sma.actionsBehaviours.FollowBehaviour;
+import sma.actionsBehaviours.LogicBehaviour;
 import sma.actionsBehaviours.RandomWalkBehaviour;
 
 public class NotBasicAgent extends AbstractAgent {
@@ -15,7 +15,7 @@ public class NotBasicAgent extends AbstractAgent {
 	public boolean friendorFoe;
 	
 	public RandomWalkBehaviour randomWalk;
-	public FollowBehaviour followWalk;
+	public LogicBehaviour followWalk;
 	
 	protected void setup(){
 		super.setup();
