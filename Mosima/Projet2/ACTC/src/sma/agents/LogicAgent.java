@@ -25,6 +25,9 @@ public class LogicAgent extends AbstractAgent {
 	public static boolean smallFoW = false;
 	public static boolean heightOverAverage = false;
 	public static boolean enemyInSight = false;
+	public static boolean enemyObserved = false;
+	
+	public float highestAlt = -255.0f;
 	
 	protected void setup(){
 		super.setup();
