@@ -81,24 +81,17 @@ public class LogicBehaviour extends TickerBehaviour {
 			LogicAgent.enemyObserved = false;
 		}
 
-		if(ag.getHealth() < (ag.getMaxLife()/2)){
-			LogicAgent.lowHealth = true;
-		}
-		if(sit.agentAltitude.y > sit.avgAltitude){
-			LogicAgent.heightOverAverage = true;
-		}
+		
+		LogicAgent.lowHealth = ag.getHealth() < (ag.getMaxLife()/2);
+		
+		LogicAgent.heightOverAverage = currentpos.y > sit.avgAltitude;
 		
 		//mise a jour de la l'altitude maximum rencontrée et highGround
 		if(sit.maxAltitude.y > ag.highestAlt){
 			ag.highestAlt = sit.maxAltitude.y;
 		}
-		if(sit.agentAltitude.y > 0.8f * ag.highestAlt){
-			LogicAgent.highGround = true;
-		}
-		else{
-			LogicAgent.highGround = false;
-		}
-		
+			
+		LogicAgent.highGround = sit.agentAltitude.y > 0.8f * ag.highestAlt;
 		
 		// Action
 		if(!LogicAgent.enemyObserved)

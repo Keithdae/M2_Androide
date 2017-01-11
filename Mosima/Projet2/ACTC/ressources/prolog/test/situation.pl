@@ -22,7 +22,6 @@ use_module(library(jpl)).
 
 
 :-dynamic
-	badSituation/1,
 	goodSituation/1,
 	perfectSituation/1,
 	highGround/1,
@@ -56,5 +55,5 @@ perfectSituation(X) :- enemyInSight(X), attack(), !.
 goodSituation(X) :- \+ heightOverAverage(X), climb(), !.
 goodSituation(X) :- highGround(X), lowHealth(X), camping(), !.
 goodSituation(X) :- highGround(X), \+ lowHealth(X), explore(), !.
-goodSituation(X) :- \+ highGround(X), knownHighPoint(X), goto(), !.
+goodSituation(X) :- \+ highGround(X), knownHighPoint(X), goToHighpoint(), !.
 goodSituation(X) :- \+ highGround(X), \+ knownHighPoint(X), explore(), !.

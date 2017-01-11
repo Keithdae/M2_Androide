@@ -21,13 +21,11 @@ public class LogicAgent extends AbstractAgent {
 	// Variables pour Prolog
 	public static boolean highGround = false;
 	public static boolean lowHealth = false;
-	public static boolean largeFoW = false;
-	public static boolean smallFoW = false;
 	public static boolean heightOverAverage = false;
 	public static boolean enemyInSight = false;
 	public static boolean enemyObserved = false;
 	
-	public float highestAlt = -255.0f;
+	public float highestAlt = -250.0f;
 	
 	protected void setup(){
 		super.setup();
