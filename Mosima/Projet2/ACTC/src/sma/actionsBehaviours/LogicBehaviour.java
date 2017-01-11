@@ -65,19 +65,20 @@ public class LogicBehaviour extends TickerBehaviour {
 		}
 		else
 		{
+			System.out.println("Target in sight : " + enemy);
+			try{
+				ag.shoot(enemy);
+			}
+			catch(Exception e)
+			{
+				System.out.println("Shoot Exception triggered.");
+			}
+			
 			if(enemyPos != null)
 			{
 				if (dest == null || !approximativeEqualsCoordinates(enemyPos, dest))
 				{
 					ag.moveTo(enemyPos);
-				}
-				System.out.println("Target in sight : " + enemy);
-				try{
-					ag.shoot(enemy);
-				}
-				catch(Exception e)
-				{
-					System.out.println("Shoot Exception triggered.");
 				}
 			}			
 		}
@@ -98,7 +99,7 @@ public class LogicBehaviour extends TickerBehaviour {
 	}
 	
 	// Pas necessaire avec moveTo() ?
-	/*private int lookAtPoint(Vector3f p)
+	private int lookAtPoint(Vector3f p)
 	{
 		int res = -1;
 		Vector3f agPos = ag.getCurrentPosition();
@@ -106,12 +107,14 @@ public class LogicBehaviour extends TickerBehaviour {
 		if(p != null)
 		{
 			Vector3f posGround = new Vector3f(p.x,0,p.z);
-			Vector3f dir = enPosGround.subtract(agPosGround).normalize();
+			Vector3f dir = posGround.subtract(agPosGround).normalize();
+			Vector3f n = new Vector3f(0,0,1);
+			float a = n.angleBetween(dir);
 			System.out.println(agPosGround);
 			System.out.println(posGround);
 			System.out.println(dir);
 		}
 		
 		return res;
-	}*/
+	}
 }
