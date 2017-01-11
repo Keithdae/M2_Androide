@@ -61,7 +61,7 @@ public class LogicBehaviour extends TickerBehaviour {
 		// Observation
 		Situation sit = ag.observeAgents();
 		
-		// System.out.println(sit);
+		System.out.println(sit);
 		
 		List<Tuple2<Vector3f, String>> targets = sit.agents;
 		

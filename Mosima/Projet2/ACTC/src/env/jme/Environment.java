@@ -703,7 +703,7 @@ public class Environment extends SimpleApplication {
 	 * @param yOffset
 	 * @return the coordinates of the contact point, null if there isn't any contact.
 	 */
-	private Vector3f intersects(String ag, Camera camera, final float xOffset, final float yOffset) {
+	private synchronized Vector3f intersects(String ag, Camera camera, final float xOffset, final float yOffset) {
 	    final Vector3f point = players.get(ag).getWorldTranslation().clone();
 	    final Vector3f direction = camera.getDirection().clone();
 	    point.setX(point.getX() + xOffset);
@@ -756,11 +756,11 @@ public class Environment extends SimpleApplication {
 		HashMap<Float, Integer> heights = new HashMap<Float, Integer>();
 		
 		
-	    for (int x = 0; x < camera.getWidth() / 2; x = x + rayDistance) {
-	        for (int y = 0; y < camera.getHeight() / 2; y = y + rayDistance) {
+	    for (int x = -(camera.getWidth()/2); x < camera.getWidth() / 2; x = x + rayDistance) {
+	        for (int y = -(camera.getWidth()/2); y < camera.getHeight() / 2; y = y + rayDistance) {
 	        	
 	        	ArrayList<Vector3f> points = new ArrayList<Vector3f>();
-	        	Vector3f x1 = intersects(ag, camera, x, 0);
+	        	Vector3f x1 = intersects(ag, camera, x, y);
 	        	if (x1 != null) { 
 	        		points.add(x1);
 	        		nb++;
@@ -771,7 +771,7 @@ public class Environment extends SimpleApplication {
 	        		heights.put(x1.y, 1);
 	        		
 	        	}
-	        	Vector3f x2 = intersects(ag, camera, -x, 0);
+	        	/*Vector3f x2 = intersects(ag, camera, -x, 0);
 	        	if (x2 != null) {
 	        		points.add(x2);
 	        		nb++;
@@ -800,7 +800,7 @@ public class Environment extends SimpleApplication {
 	        			maxDepth = x4.distance(agentPos);
 	        		}
 	        		heights.put(x4.y, 1);
-	        	}
+	        	}*/
 	        	
 	        	if (points.size() > 0) {
 	        		Vector3f max = maxAltitude((ArrayList<Vector3f>)points.clone());

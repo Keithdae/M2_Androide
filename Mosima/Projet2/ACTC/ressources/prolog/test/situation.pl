@@ -58,8 +58,8 @@ goodSituation(X) :- largeFoW(X), !.
 goodSituation(X) :- heightOverAverage(X), !.
 goodSituation(X) :- enemyInSight(X), !.
 
-%perfectSituation(X)
-%
+% perfectSituation(X)
+% Une situation ou notre agent est en hauteur avec une grande profondeur de vision, et situe sur le point culminant
 perfectSituation(X) :-
 	highGround(X),
 	largeFoW(X),
