@@ -18,10 +18,10 @@ public class LogicBehaviour extends TickerBehaviour {
 	private static final float pi = (float) Math.PI;
 	
 	public enum CardinalAngle {
-		N(0.f, LegalAction.LOOKTO_NORTH), NE(pi / 4, LegalAction.LOOKTO_NORTHEAST)
-		, E(pi / 2, LegalAction.LOOKTO_EAST), SE((3*pi)/4, LegalAction.LOOKTO_SOUTHEAST)
-		, S(pi, LegalAction.LOOKTO_SOUTH), SW((5*pi)/4, LegalAction.LOOKTO_SOUTHWEST)
-		, W((3*pi)/2, LegalAction.LOOKTO_WEST), NW((7*pi)/2, LegalAction.LOOKTO_NORTHWEST);
+		N(0.f, LegalAction.MOVE_NORTH), NE(pi / 4, LegalAction.MOVE_NORTHEAST)
+		, E(pi / 2, LegalAction.MOVE_EAST), SE((3*pi)/4, LegalAction.MOVE_SOUTHEAST)
+		, S(pi, LegalAction.MOVE_SOUTH), SW((5*pi)/4, LegalAction.MOVE_SOUTHWEST)
+		, W((3*pi)/2, LegalAction.MOVE_WEST), NW((7*pi)/4, LegalAction.MOVE_NORTHWEST);
 		
 		private final float angle;
 		private final LegalAction action;
@@ -87,12 +87,15 @@ public class LogicBehaviour extends TickerBehaviour {
 		}
 		else
 		{
-			System.out.println("Target in sight : " + enemy);
+			//System.out.println("Target in sight : " + enemy);
 			
 			LegalAction dir = lookAtPoint(enemyPos);
 			if(dir != LegalAction.SHOOT)
 			{
-				ag.lookAt(dir);
+				if (dest != null || !approximativeEqualsCoordinates(currentpos, enemyPos))
+				{
+					ag.cardinalMove(dir);
+				}	
 			}
 			
 			try{
@@ -101,25 +104,15 @@ public class LogicBehaviour extends TickerBehaviour {
 			catch(Exception e)
 			{
 				System.out.println("Shoot Exception triggered.");
-			}
-			
-			if(enemyPos != null)
-			{
-				if (dest == null || !approximativeEqualsCoordinates(enemyPos, dest))
-				{
-					ag.moveTo(enemyPos);
-				}
-			}			
+			}	
 		}
 		
 		// Prolog
-		System.out.println("**Test Prolog**");
+		/*System.out.println("**Test Prolog**");
 		query = "goodSituation(agent)";
 		boolean gSol = Query.hasSolution(query);
-		System.out.println(query+" ?: "+gSol);
+		System.out.println(query+" ?: "+gSol);*/
 		
-		ag.lookAt(LegalAction.LOOKTO_EAST);
-		lookAtPoint(new Vector3f(currentpos.x, currentpos.y, currentpos.z - 1));
 	}
 	
 	private boolean approximativeEqualsCoordinates(Vector3f a, Vector3f b) {
@@ -127,7 +120,7 @@ public class LogicBehaviour extends TickerBehaviour {
 	}
 	
 	private boolean approximativeEquals(float a, float b) {
-		return Math.abs(a-b) <= 2.5;
+		return b-2.5 <= a && a <= b+2.5;
 	}
 	
 	/* Calcule le point cardinal le plus proche de l'angle forme entre la position de l'agent et le point fourni en parametre
@@ -142,8 +135,9 @@ public class LogicBehaviour extends TickerBehaviour {
 		{
 			Vector3f posGround = new Vector3f(p.x,0,p.z);
 			Vector3f dir = posGround.subtract(agPosGround).normalize();
-			Vector3f north = new Vector3f(0,0,1);
-			float a = north.angleBetween(dir);
+			Vector3f north = new Vector3f(0,0,-1);
+			Vector3f south = new Vector3f(0,0,1);
+			float a = north.angleBetween(dir) + ((p.x < agPos.x)?south.angleBetween(dir)*2:0);
 			CardinalAngle best = null;
 			float min = 100.f;
 			for(CardinalAngle ca : CardinalAngle.values())

@@ -615,7 +615,7 @@ public class Environment extends SimpleApplication {
 			Vector3f origin = getCurrentPosition(agent);
 			Vector3f target = getCurrentPosition(enemy);
 			Vector3f dir = target.subtract(origin).normalize();
-						
+			
 			if (isVisible(agent, enemy)) {
 				//				// arrow
 				//				((Arrow) (marks.get(agent).getMesh())).setArrowExtent(Vector3f.UNIT_Z.mult(origin.distance(closest.getContactPoint())));
