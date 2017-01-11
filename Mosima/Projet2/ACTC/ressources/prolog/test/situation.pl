@@ -32,9 +32,11 @@ use_module(library(jpl)).
 	heightOverAverage/1.
 
 
+setdecision(X) :- jpl_call('sma.actionsBehaviours.LogicBehaviour', 'setDecision', [X], @(void)).	
+	
 enemyObserved(agent) :- jpl_get('sma.agents.LogicAgent', 'enemyObserved', R), jpl_is_true(R).
 enemyInSight(agent) :- jpl_get('sma.agents.LogicAgent', 'enemyInSight', R), jpl_is_true(R), !.
-enemyInSight(agent) :- enemyObserved(agent), lookAtEnemy().
+enemyInSight(agent) :- enemyObserved(agent), setdecision(lookat).
 
 highGround(agent) :- jpl_get('sma.agents.LogicAgent', 'highGround', R), jpl_is_true(R).
 smallFoW(agent) :- jpl_get('sma.agents.LogicAgent', 'smallFoW', R), jpl_is_true(R).
@@ -47,13 +49,13 @@ heightOverAverage(agent) :- jpl_get('sma.agents.LogicAgent', 'heightOverAverage'
 %perfectSituation(X)
 %On peut tirer sur l'ennemi
 
-perfectSituation(X) :- enemyInSight(X), attack(), !.
+perfectSituation(X) :- enemyInSight(X), setdecision(attack), !.
 
 
 % goodSituation(X)
 % 
-goodSituation(X) :- \+ heightOverAverage(X), climb(), !.
-goodSituation(X) :- highGround(X), lowHealth(X), camping(), !.
-goodSituation(X) :- highGround(X), \+ lowHealth(X), explore(), !.
-goodSituation(X) :- \+ highGround(X), knownHighPoint(X), goToHighpoint(), !.
-goodSituation(X) :- \+ highGround(X), \+ knownHighPoint(X), explore(), !.
+goodSituation(X) :- \+ heightOverAverage(X), setdecision(climb), !.
+goodSituation(X) :- highGround(X), lowHealth(X), setdecision(camping), !.
+goodSituation(X) :- highGround(X), \+ lowHealth(X), setdecision(explore), !.
+goodSituation(X) :- \+ highGround(X), knownHighPoint(X), setdecision(gotohigh), !.
+goodSituation(X) :- \+ highGround(X), \+ knownHighPoint(X), setdecision(explore), !.

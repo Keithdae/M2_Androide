@@ -15,6 +15,8 @@ import jade.core.behaviours.TickerBehaviour;
 
 public class LogicBehaviour extends TickerBehaviour {
 
+	private static final long serialVersionUID = -6213008344104265259L;
+	
 	private static final float pi = (float) Math.PI;
 	
 	public enum CardinalAngle {
@@ -37,7 +39,17 @@ public class LogicBehaviour extends TickerBehaviour {
 		public String toString(){return "Angle : " + this.angle + ", Action : " + this.action +".\n";}
 	}
 	
-	private static final long serialVersionUID = 1L;
+	// NOP correspond a une absence d'action (valeur par defaut)
+	public static enum Decision {
+		ATTACK, EXPLORE, CLIMB, CAMPING, GOTOHIGH, LOOKAT, NOP;
+	}
+	
+	public static void setDecision(String s){
+		dec = Decision.valueOf(s.toUpperCase());
+	}
+	
+	private static Decision dec;
+	
 	private String enemy = null;
 	private Vector3f enemyPos = null;
 	
@@ -57,11 +69,12 @@ public class LogicBehaviour extends TickerBehaviour {
 		Vector3f currentpos  = ag.getCurrentPosition();
 		Vector3f dest = ag.getDestination();
 		enemyPos = null;
+		dec = Decision.NOP;
 		
 		// Observation
 		Situation sit = ag.observeAgents();
 		
-		System.out.println(sit);
+		//System.out.println(sit);
 		
 		List<Tuple2<Vector3f, String>> targets = sit.agents;
 		LogicAgent.enemyInSight = false;
@@ -81,18 +94,18 @@ public class LogicBehaviour extends TickerBehaviour {
 			LogicAgent.enemyObserved = false;
 		}
 
+		//mise a jour de la l'altitude maximum rencontrée et highGround
+		if(sit.maxAltitude.y > ag.highestAlt){
+			ag.highestAlt = sit.maxAltitude.y;
+		}
 		
 		LogicAgent.lowHealth = ag.getHealth() < (ag.getMaxLife()/2);
 		
 		LogicAgent.heightOverAverage = currentpos.y > sit.avgAltitude;
 		
-		//mise a jour de la l'altitude maximum rencontrée et highGround
-		if(sit.maxAltitude.y > ag.highestAlt){
-			ag.highestAlt = sit.maxAltitude.y;
-		}
-			
 		LogicAgent.highGround = sit.agentAltitude.y > 0.8f * ag.highestAlt;
 		
+		/*
 		// Action
 		if(!LogicAgent.enemyObserved)
 		{
@@ -131,6 +144,38 @@ public class LogicBehaviour extends TickerBehaviour {
 		boolean gSol = Query.hasSolution(query);
 		System.out.println(query+" ?: "+gSol);*/
 		
+		query = "perfectSituation(agent)";
+		boolean gSol = Query.hasSolution(query);
+		System.out.println(query+" ?: "+gSol);
+		System.out.println("Decision taken : " + dec);
+		if(!gSol)
+		{
+			query = "goodSituation(agent)";
+			gSol = Query.hasSolution(query);
+			System.out.println(query+" ?: "+gSol);
+			System.out.println("Decision taken : " + dec);
+		}
+		
+		switch(dec)
+		{
+		case ATTACK:
+			break;
+		case CAMPING:
+			break;
+		case CLIMB:
+			break;
+		case EXPLORE:
+			break;
+		case GOTOHIGH:
+			break;
+		case LOOKAT:
+			break;
+		case NOP:
+			break;
+		default:
+			System.err.println("INCORRECT VALUE FOR DECISION : " + dec);;
+			break;
+		}
 	}
 	
 	private boolean approximativeEqualsCoordinates(Vector3f a, Vector3f b) {
