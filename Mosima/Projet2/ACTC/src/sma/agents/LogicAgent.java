@@ -14,7 +14,7 @@ public class LogicAgent extends AbstractAgent {
 	 */
 	public boolean friendorFoe;
 	
-	public RandomWalkBehaviour randomWalk;
+	//public RandomWalkBehaviour randomWalk;
 	public LogicBehaviour followWalk;
 
 	
@@ -46,7 +46,7 @@ public class LogicAgent extends AbstractAgent {
 			System.exit(-1);
 		}
 
-		randomWalk = new RandomWalkBehaviour(this);
+		//randomWalk = new RandomWalkBehaviour(this);
 		followWalk = new LogicBehaviour(this);
 		//addBehaviour(randomWalk);
 		addBehaviour(followWalk);
