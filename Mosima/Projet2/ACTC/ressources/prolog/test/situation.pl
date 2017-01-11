@@ -33,7 +33,10 @@ use_module(library(jpl)).
 	heightOverAverage/1.
 
 
-enemyInSight(agent) :- jpl_get('sma.agents.LogicAgent', 'enemyInSight', R), jpl_is_true(R).
+enemyObserved(agent) :- jpl_get('sma.agents.LogicAgent', 'enemyObserved', R), jpl_is_true(R).
+enemyInSight(agent) :- jpl_get('sma.agents.LogicAgent', 'enemyInSight', R), jpl_is_true(R), !.
+enemyInSight(agent) :- enemyObserved(agent), lookAtEnemy().
+
 highGround(agent) :- jpl_get('sma.agents.LogicAgent', 'highGround', R), jpl_is_true(R).
 smallFoW(agent) :- jpl_get('sma.agents.LogicAgent', 'smallFoW', R), jpl_is_true(R).
 largeFoW(agent) :- jpl_get('sma.agents.LogicAgent', 'largeFoW', R), jpl_is_true(R).
@@ -41,28 +44,17 @@ lowHealth(agent) :- jpl_get('sma.agents.LogicAgent', 'lowHealth', R), jpl_is_tru
 heightOverAverage(agent) :- jpl_get('sma.agents.LogicAgent', 'heightOverAverage', R), jpl_is_true(R).
 
 
-% badSituation(X)
-%
-badSituation(X) :- smallFoW(X), !.
-badSituation(X) :-
-	lowHealth(X),
-	\+ highGround(X), !.
-badSituation(X) :-
-	lowHealth(X),
-	\+ heightOverAverage(X), !.
+
+%perfectSituation(X)
+%On peut tirer sur l'ennemi
+
+perfectSituation(X) :- enemyInSight(X), attack(), !.
+
 
 % goodSituation(X)
-% On considere que l'agent est dans une bonne situation si n'importe lequel de ces predicats est verifie
-goodSituation(X) :- highGround(X), !.
-goodSituation(X) :- largeFoW(X), !.
-goodSituation(X) :- heightOverAverage(X), !.
-goodSituation(X) :- enemyInSight(X), !.
-
-% perfectSituation(X)
-% Une situation ou notre agent est en hauteur avec une grande profondeur de vision, et situe sur le point culminant
-perfectSituation(X) :-
-	highGround(X),
-	largeFoW(X),
-	heightOverAverage(X), !.
-	
-	
+% 
+goodSituation(X) :- \+ heightOverAverage(X), climb(), !.
+goodSituation(X) :- highGround(X), lowHealth(X), camping(), !.
+goodSituation(X) :- highGround(X), \+ lowHealth(X), explore(), !.
+goodSituation(X) :- \+ highGround(X), knownHighPoint(X), goto(), !.
+goodSituation(X) :- \+ highGround(X), \+ knownHighPoint(X), explore(), !.

@@ -27,6 +27,18 @@ public class AbstractAgent extends Agent implements EnvironmentManager {
 	public AbstractAgent() {
 		registerO2AInterface(EnvironmentManager.class, this);
 	}
+	
+	public int getHealth(){
+		return (int) this.realEnv.getPlayer(getLocalName()).getUserData("life");
+	}
+	
+	public int getMaxLife(){
+		return this.realEnv.getLIFE();
+	}
+	
+	public boolean enemyInSight(String enemy){
+		return this.realEnv.isVisible(getLocalName(), enemy);
+	}
 
 	public Vector3f getCurrentPosition() {
 		return this.realEnv.getCurrentPosition(getLocalName());

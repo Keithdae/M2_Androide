@@ -64,16 +64,39 @@ public class LogicBehaviour extends TickerBehaviour {
 		System.out.println(sit);
 		
 		List<Tuple2<Vector3f, String>> targets = sit.agents;
-		
+		LogicAgent.enemyInSight = false;
+
+		// mise à jour des variables enemyObserved, lowHealth, heightOverAverage et enemyInSight
 		if(!targets.isEmpty())
 		{
-			LogicAgent.enemyInSight = true;
+			LogicAgent.enemyObserved = true;
 			enemy = targets.get(0).getSecond();
 			enemyPos = targets.get(0).getFirst();
 		}
 		else
 		{
-			LogicAgent.enemyInSight = false;
+			LogicAgent.enemyObserved = false;
+		}
+
+		if(ag.getHealth() < (ag.getMaxLife()/2)){
+			LogicAgent.lowHealth = true;
+		}
+		if(sit.agentAltitude.y > sit.avgAltitude){
+			LogicAgent.heightOverAverage = true;
+		}
+		if(ag.enemyInSight(enemy)){
+			LogicAgent.enemyInSight = true;
+		}
+		
+		//mise a jour de la l'altitude maximum rencontrée et highGround
+		if(sit.maxAltitude.y > ag.highestAlt){
+			ag.highestAlt = sit.maxAltitude.y;
+		}
+		if(sit.agentAltitude.y > 0.8f * ag.highestAlt){
+			LogicAgent.highGround = true;
+		}
+		else{
+			LogicAgent.highGround = false;
 		}
 		
 		
@@ -94,12 +117,13 @@ public class LogicBehaviour extends TickerBehaviour {
 			{
 				if (dest != null || !approximativeEqualsCoordinates(currentpos, enemyPos))
 				{
-					ag.cardinalMove(dir);
+					//ag.cardinalMove(dir);
+					ag.randomMove();
 				}	
 			}
 			
 			try{
-				ag.shoot(enemy);
+				//ag.shoot(enemy);
 			}
 			catch(Exception e)
 			{

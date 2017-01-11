@@ -78,6 +78,12 @@ public class Environment extends SimpleApplication {
 //	private Camera cam2;
 	
 	private HashMap<String, Spatial> players = new HashMap<String, Spatial>();
+	
+	public Spatial getPlayer(String agent) {
+		return players.get(agent);
+	}
+
+
 	private HashMap<String, LegalAction> lastActions = new HashMap<String, LegalAction>();
 //	private Node playersNode;
 //	private Node enemyNode;	
@@ -89,6 +95,8 @@ public class Environment extends SimpleApplication {
 	private final int LIFE = 9;
 	private final int DAMAGE = 3;
 	
+	
+	
 //	private Spatial player1;
 //	private PlayerControl physicsPlayer1;
 //	private Node player1Node;
@@ -99,6 +107,10 @@ public class Environment extends SimpleApplication {
 	
 	
 	
+	public int getLIFE() {
+		return LIFE;
+	}
+
 	public static void main(String[] args) {
 		Environment.launchRandom(64);
 //		Environment.launch("flat_terrain_64");
@@ -667,7 +679,7 @@ public class Environment extends SimpleApplication {
 	 * @param enemy the name of the target agent.
 	 * @return true if the enemy is visible, false if not.
 	 */
-	private boolean isVisible(String agent, String enemy) {
+	public boolean isVisible(String agent, String enemy) {
 		Vector3f origin = getCurrentPosition(agent);
 		Vector3f target = getCurrentPosition(enemy);
 		Vector3f dir = target.subtract(origin).normalize();
