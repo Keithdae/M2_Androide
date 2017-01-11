@@ -15,6 +15,28 @@ import jade.core.behaviours.TickerBehaviour;
 
 public class LogicBehaviour extends TickerBehaviour {
 
+	private static final float pi = (float) Math.PI;
+	
+	public enum CardinalAngle {
+		N(0.f, LegalAction.LOOKTO_NORTH), NE(pi / 4, LegalAction.LOOKTO_NORTHEAST)
+		, E(pi / 2, LegalAction.LOOKTO_EAST), SE((3*pi)/4, LegalAction.LOOKTO_SOUTHEAST)
+		, S(pi, LegalAction.LOOKTO_SOUTH), SW((5*pi)/4, LegalAction.LOOKTO_SOUTHWEST)
+		, W((3*pi)/2, LegalAction.LOOKTO_WEST), NW((7*pi)/2, LegalAction.LOOKTO_NORTHWEST);
+		
+		private final float angle;
+		private final LegalAction action;
+		private CardinalAngle(float ang, LegalAction la) 
+		{
+			this.angle = ang;
+			this.action = la;
+		}
+		
+		public float getAngle(){return this.angle;}
+		public LegalAction getAction(){return this.action;}
+		
+		public String toString(){return "Angle : " + this.angle + ", Action : " + this.action +".\n";}
+	}
+	
 	private static final long serialVersionUID = 1L;
 	private String enemy = null;
 	private Vector3f enemyPos = null;
@@ -66,6 +88,13 @@ public class LogicBehaviour extends TickerBehaviour {
 		else
 		{
 			System.out.println("Target in sight : " + enemy);
+			
+			LegalAction dir = lookAtPoint(enemyPos);
+			if(dir != LegalAction.SHOOT)
+			{
+				ag.lookAt(dir);
+			}
+			
 			try{
 				ag.shoot(enemy);
 			}
@@ -88,6 +117,9 @@ public class LogicBehaviour extends TickerBehaviour {
 		query = "goodSituation(agent)";
 		boolean gSol = Query.hasSolution(query);
 		System.out.println(query+" ?: "+gSol);
+		
+		ag.lookAt(LegalAction.LOOKTO_EAST);
+		lookAtPoint(new Vector3f(currentpos.x, currentpos.y, currentpos.z - 1));
 	}
 	
 	private boolean approximativeEqualsCoordinates(Vector3f a, Vector3f b) {
@@ -95,24 +127,37 @@ public class LogicBehaviour extends TickerBehaviour {
 	}
 	
 	private boolean approximativeEquals(float a, float b) {
-		return b-2.5 <= a && a <= b+2.5;
+		return Math.abs(a-b) <= 2.5;
 	}
 	
-	// Pas necessaire avec moveTo() ?
-	private int lookAtPoint(Vector3f p)
+	/* Calcule le point cardinal le plus proche de l'angle forme entre la position de l'agent et le point fourni en parametre
+	*  Rend la LegalAction correspondant a l'angle trouve
+	*/
+	private LegalAction lookAtPoint(Vector3f p)
 	{
-		int res = -1;
+		LegalAction res = LegalAction.SHOOT;
 		Vector3f agPos = ag.getCurrentPosition();
 		Vector3f agPosGround = new Vector3f(agPos.x,0,agPos.z);
 		if(p != null)
 		{
 			Vector3f posGround = new Vector3f(p.x,0,p.z);
 			Vector3f dir = posGround.subtract(agPosGround).normalize();
-			Vector3f n = new Vector3f(0,0,1);
-			float a = n.angleBetween(dir);
-			System.out.println(agPosGround);
-			System.out.println(posGround);
-			System.out.println(dir);
+			Vector3f north = new Vector3f(0,0,1);
+			float a = north.angleBetween(dir);
+			CardinalAngle best = null;
+			float min = 100.f;
+			for(CardinalAngle ca : CardinalAngle.values())
+			{
+				if(Math.abs((ca.getAngle()-a)) < min)
+				{
+					best = ca;
+					min = Math.abs((ca.getAngle()-a));
+				}
+			}
+			if(best != null)
+			{
+				res = best.getAction();
+			}
 		}
 		
 		return res;
