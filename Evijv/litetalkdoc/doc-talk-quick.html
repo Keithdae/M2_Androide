@@ -1,0 +1,509 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+
+<!-- Mirrored from perso.limsi.fr/jps/online/litetalk/litetalkdoc/doc-talk-quick.html by HTTrack Website Copier/3.x [XR&CO'2013], Wed, 12 Nov 2014 10:24:09 GMT -->
+<head>
+<title>LITETALK QUICK INTRODUCTION</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="jps.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+.boldGreen {
+	color: #008000;
+}
+.purple {
+	color: #800080;
+}
+.red {
+	color: #CE0000;
+}
+.litetalkJSVar {
+	color: #0000DD;
+}
+</style>
+</head>
+
+<body>
+<h1><strong>Litetalk quick introduction</strong>
+  
+</h1>
+ 
+<p>GOTO <a href="../../litetalkwebsite/litetalk.site.main.html">litetalk home page</a></p>
+<p>In this page, litetalk is introduced in an informal manner, mainly through commented examples of litetalk sentences, placed in the context of the <a href="../demos/demo_fifi/fifi.main.html">Fifi and Daisie web page</a>.<br>
+  For a formal definition of the litetalk language see the <a href="doc-code-ref.html">complete litetalk reference page</a>. </p>
+<h2>Introduction</h2>
+<p>Knowing three basic facts about litetalk can help:</p>
+<ul>
+  <li><strong>Purpose</strong>: litetalk was designed to interact with agents integrated into Web pages about <span class="purple">the content of the page</span>. Whereas Web chatbots like <a href="http://alice.pandorabots.com/">Alice</a>, <a href="http://www.jabberwacky.com/">Jabberwacky</a> etc. can support very general conversations, litetalk agents interact with the user about specific <span class="purple">topics</span>.</li>
+  <li><strong>Language</strong>: when people interact with an agent through textual messages, they are happy to use natural language but as they go along, they wish to type short, straightforward messages. Hence litetalk supports both natural language inputs and command-like inputs that can be mixed.</li>
+  <li><strong>Interaction</strong>: litetalk agents are built with internal knowledge about specific <span class="purple">topics</span>: an obvious topic is their own description; other topics can be elements of the Web page or abstract subjects of interest. Using litetalk, it is possible to exchange information with litetalk agents but also make them execute actions, to modify the Web page etc.</li>
+</ul>
+<table width="856" border="0" align="center" cellpadding="10">
+  <tr>
+    <td width="789"><div align="center"><img src="picts/fifi-daisie-help.png" alt="chat example" width="746" height="450" ></div></td>
+  </tr>
+  <tr>
+    <td><div align="center">
+      <p>The  best way to learn about litetalk is to chat with litetalk agents. This picture  is a screen shot of the <a href="../demos/demo_fifi/fifi.main.html">Fifi and Daisie web page</a> which contains two litetalk agents: Fifi the dog and Daisie the flower. It contains also four topics: one associated with Fifi; one associated with Daisie; one associated with you (the user); finally one associated with a Counter, which is a dynamic HTML object (displayed on screen by the integer on right). You can try  examples of litetalk sentences described below, in the Fifi &amp; Daisie Web page.</p>
+</div></td>
+  </tr>
+</table>
+ 
+<h2>Overview of the structure of litetalk sentences</h2>
+<p>In the following, technical notions of litetalk are typed in <span class="purple">purple format</span> when they are first introduced.<br>
+  The <span class="purple">purple format</span> is also used when displaying inline examples of litetalk sentences.</p>
+<h3>Basic typing conventions</h3>
+<p>When you interact with litetalk agents, you type a single elementary utterance, further called a <span class="purple">sentence</span> into the chatbox. Then you just have to click the <span class="purple">SEND</span> button or alternatively to stroke the <span class="purple">RETURN</span> key and wait for the agent's reaction. Litetalk has basic typing conventions, most of them being inherited from traditional chatbot systems:</p>
+<ol>
+  <li>LANGUAGE<br>
+  Litetalk is based on the English language, actually a very restricted subset of it. Good news is that if you are not very familiar with English, you can still speak litetalk very quickly.<br>
+  <br>
+  </li>
+  <li>CASE TYPING<br>
+  Litetalk is not case-sensitive: <span class="purple">Hello Fifi!</span> is the same as typing <span class="purple">hello fifi!</span> (e.g. acronyms like <span class="purple">USA</span> can also be entered as <span class="purple">usa</span>)<br>
+  <br>
+  </li>
+  <li>DISCARDED CHARACTERS<br>
+    - Litetalk discards non aphanumerical characters. For example, typing <span class="purple">Don't SAY 1$ =2 &euro; +10%!</span> is the same as typing <span class="purple">don t say 1 =2  10 !</span><br>
+    - Exceptions:<br>
+&nbsp;&nbsp;a) character &quot; is used for quoting <span class="purple">verbatim</span> text: composed names, adresses, long descriptions, technical information etc.<br>
+&nbsp;&nbsp;b) characters used for stressers. Placed at the end of a sentence, they indicate a pragmatic force upon the sentence: ! ? * @ etc. (not implemented in V 1.0)<br>
+- Plurals: 
+ Litetalk discards <span class="purple">s</span> at the end of most words! Hence <span class="purple">Have you friends?</span> is coerced to <span class="purple">Have you friend ?</span></li>
+ Some words however are supposed to end with a "s" ("dress", "serious"...): they can be added to a stop-list called <span class="litetalkJSVar">BOT_pluralExceptionList</span> in litetalk.code.js
+</ol>
+<h3>Basic syntax</h3>
+<p>Litetalk sentences can be simple or more complex, but they all share a basic inner structure which is inspired from the <span class="purple">command</span> metaphor: a typical litetalk sentence can be viewed as a command sent to the agent with zero, one or more parameters:</p>
+<blockquote>
+  <p>SYNTAX: &nbsp;&nbsp;<strong>COMMAND</strong> PARAM PARAM ..<br>
+    EXAMPLE: <strong>ask</strong> agent age<br>
+    EXAMPLE: <strong>bye</strong></p>
+</blockquote>
+<p>The command must be at the beginning of the sentence<br>
+  The 
+parameters can be given in no particular order: <strong>ask</strong> agent age = <strong>ask</strong> age agent</p>
+<h3>Mixing basic syntax with natural language</h3>
+<p>Litetalk propose also <span class="purple">variants</span> that enable the user to type more natural sentences or on the contrary more formal sentences:</p>
+<ol>
+  <li>NATURAL LANGUAGE TYPING<br>
+  Although simple, the command structure has the power to express most communicative needs. However in some cases, it can be considered a bit non-natural. Hence more natural variants are provided.<span class="purple"><br>
+EXAMPLE:
+  if you type &quot;What is your age?&quot; it will be coerced into the command form &quot;<strong>ask</strong> agent age&quot;<br>
+EXAMPLE:
+  if you type &quot;I would like to know the value of the counter please&quot; it will be coerced into the command form &quot;<strong>ask</strong> counter value&quot;<br>
+  <br>
+  </span></li>
+  <li>FORMAL TYPING<br>
+  On the contrary, you can find that typing <span class="purple">What is your age?</span> or even <span class="purple"><strong>ask</strong> agent age</span> is tiresome. Hence shortcut variants are provided.<br>
+  EXAMPLE: if you type <span class="purple"><strong>a</strong> y age</span> it will be coerced into <span class="purple">ask your age</span> then further into <span class="purple"><strong>ask</strong> agent age</span> </li>
+</ol>
+<h2>Main litetalk commands
+</h2>
+<p>Here is the table describing the 26 commands of litetalk:<br>
+</p>
+<table width="1003" border="0" cellspacing="4" cellpadding="1">
+  <tr>
+    <td width="43" valign="top" bgcolor="#FFFFEE"><strong>CODE</strong></td>
+    <td width="81" valign="top" bgcolor="#FFFFEE"><strong>COMMAND</strong></td>
+    <td width="143" valign="top" bgcolor="#FFFFEE"><p><strong>PARAMETERS</strong><br> 
+      There is no order<br>
+        Notations:<br>
+        B: Bot name<br>
+        T: Topic name<br>
+        A: Attribute name<br>
+        V: attribute Value<br>
+        F: function name
+        <br>
+        O: Operation name<br>
+        J: Judgement symbol<br>
+R: reference        <br>
+        _: empty
+        <br>
+    </p></td>
+    <td width="430" valign="top" bgcolor="#FFFFEE"><p><strong>DESCRIPTION<br>
+    </strong>Notations:<br>
+    alternatives in parameters are separated by |    <br>
+        T A or T.A means &quot;reference to attribute A of topic T&quot;<br>
+        T F or T.F means &quot;reference to function F of topic T&quot;<br>
+        reference R = T | A | F | T A | T F<br>
+        Values: are numbers or symbols introduced by separator <strong>is</strong> | <strong>equal</strong><br>
+        function arguments:<br>
+        Xi are values: numbers, symbols, ..<br>
+        They can be empty; they must be given in order for F<br>
+        J is often an adjective of judgement (bad, safe, nice, shameful, ..)<br>
+        * means not implemented in version 1.0        <br>
+    </p></td>
+    <td width="272" valign="top" bgcolor="#FFFFEE"><p><strong>BOT REACTION<br>
+    </strong>Notations:<br>
+    R: Bot replies to User<br>
+    U: Bot updates values in topics<br>
+    X: Bot operates on system</p></td>
+  </tr>
+  <tr>
+    <td bgcolor="#EFEFEF">&nbsp;</td>
+    <td bgcolor="#EFEFEF">&nbsp;</td>
+    <td bgcolor="#EFEFEF">&nbsp;</td>
+    <td bgcolor="#EFEFEF"><strong>KNOWLEDGE</strong></td>
+    <td bgcolor="#EFEFEF">&nbsp;</td>
+  </tr>
+  <tr>
+    <td>a</td>
+    <td>ask</td>
+    <td> T A</td>
+    <td>User asks Bot the value of T.A</td>
+    <td>R value of T.A </td>
+  </tr>
+  <tr>
+    <td>v</td>
+    <td>verify</td>
+    <td>T A V</td>
+    <td>User asks Bot if value of T.A equals V </td>
+    <td>R Yes/No</td>
+  </tr>
+  <tr>
+    <td>t</td>
+    <td>tell</td>
+    <td>T A V</td>
+    <td>User states to Bot that value of attribute A of Topic T equals V </td>
+    <td>U updates T.A with V</td>
+  </tr>
+  <tr>
+    <td>r</td>
+    <td>reply</td>
+    <td>V | R</td>
+    <td>User replies to a question of Bot by providing a value or a reference</td>
+    <td>R thanks</td>
+  </tr>
+  <tr>
+    <td>k</td>
+    <td>know</td>
+    <td>R</td>
+    <td>User asks Bot if R refers to an entity known by Bot </td>
+    <td>R Yes/No</td>
+  </tr>
+  <tr>
+    <td>w</td>
+    <td>why</td>
+    <td>_ | T A V</td>
+    <td>User asks Bot the reason of the last Bot's reaction | *why T.A equals V</td>
+    <td>R reason description</td>
+  </tr>
+  <tr>
+    <td>p</td>
+    <td>possible</td>
+    <td>F</td>
+    <td>User asks Bot if  F can be executed (availability, rights etc.)</td>
+    <td>R Yes/No</td>
+  </tr>
+  <tr>
+    <td>h</td>
+    <td>how</td>
+    <td>O</td>
+    <td>User asks Bot how User can achieve operation O, in terms of Fi</td>
+    <td>R procedure description</td>
+  </tr>
+  <tr>
+    <td>e</td>
+    <td>effect</td>
+    <td>F</td>
+    <td>User asks Bot the effect of executiong function F</td>
+    <td>R effect description</td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td><strong>ACTIONS</strong></td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>x</td>
+    <td>e<strong>x</strong>ecute</td>
+    <td>T F | T F X1 X2 ..</td>
+    <td>User requests Bot to execute function T.F(Xi) Xi can be empty</td>
+    <td>X T.F(Xi) and R done</td>
+  </tr>
+  <tr>
+    <td>m</td>
+    <td>more</td>
+    <td>_</td>
+    <td>User requests Bot to repeat last x command</td>
+    <td>X last T.F(Xi)</td>
+  </tr>
+  <tr>
+    <td>u</td>
+    <td>undo</td>
+    <td>_</td>
+    <td>User requests Bot to undo last x command</td>
+    <td>X reverse(last( T.F(Xi)))</td>
+  </tr>
+  <tr>
+    <td bgcolor="#EFEFEF">&nbsp;</td>
+    <td bgcolor="#EFEFEF">&nbsp;</td>
+    <td bgcolor="#EFEFEF">&nbsp;</td>
+    <td bgcolor="#EFEFEF"><strong>OPINIONS</strong></td>
+    <td bgcolor="#EFEFEF">&nbsp;</td>
+  </tr>
+  <tr>
+    <td>j</td>
+    <td>judge</td>
+    <td>R  J</td>
+    <td>User states to Bot that User thinks that R is J</td>
+    <td>U updates User's topic with R J</td>
+  </tr>
+  <tr>
+    <td>f</td>
+    <td>feel</td>
+    <td>J</td>
+    <td>User states to Bot that User feels J</td>
+    <td>U updates User's topic.feelings with J</td>
+  </tr>
+  <tr>
+    <td>l</td>
+    <td>like</td>
+    <td> R</td>
+    <td>User states to Bot that User likes entity referred by R</td>
+    <td>U updates User's topic.likes with R</td>
+  </tr>
+  <tr>
+    <td>d</td>
+    <td>dislike</td>
+    <td>R</td>
+    <td>User states to Bot that User dislikes entity referred by R</td>
+    <td>U updates User's topic.dislikes with R</td>
+  </tr>
+  <tr>
+    <td>b</td>
+    <td>bravo</td>
+    <td>_ | R</td>
+    <td>User congratualates Bot (about R)</td>
+    <td>U Bot's topic moods and R thanks</td>
+  </tr>
+  <tr>
+    <td>c</td>
+    <td>critisize</td>
+    <td>_ | R</td>
+    <td>User critisizes Bot (about R)</td>
+    <td>U Bot's topic moods and R sorry</td>
+  </tr>
+  <tr>
+    <td>s</td>
+    <td>suggest</td>
+    <td>T F | T F x1 X2 ..</td>
+    <td>User suggests/advises Bot to execute T.F(Xi)</td>
+    <td>R thanks and X T.F(Xi) or not</td>
+  </tr>
+  <tr>
+    <td>o</td>
+    <td>object</td>
+    <td>T F | T F x1 X2 ..</td>
+    <td>User suggests/advises Bot to execute T.F(Xi)</td>
+    <td>R thanks and X T.F(Xi) or not</td>
+  </tr>
+  <tr>
+    <td>i</td>
+    <td>intent</td>
+    <td>T F</td>
+    <td>User states to Bot that User intents to execute T.F in near future</td>
+    <td>U updates User's topic.intents with T.F</td>
+  </tr>
+  <tr>
+    <td bgcolor="#EFEFEF">&nbsp;</td>
+    <td bgcolor="#EFEFEF">&nbsp;</td>
+    <td bgcolor="#EFEFEF">&nbsp;</td>
+    <td bgcolor="#EFEFEF"><strong>DIALOG SESSION</strong></td>
+    <td bgcolor="#EFEFEF">&nbsp;</td>
+  </tr>
+  <tr>
+    <td>y</td>
+    <td>yes</td>
+    <td>_</td>
+    <td>User replies yes to a previous question from Bot</td>
+    <td>U updates and handles answer from User</td>
+  </tr>
+  <tr>
+    <td>n</td>
+    <td>no</td>
+    <td>_</td>
+    <td>User replies yes to a previous question from Bot</td>
+    <td>U updates and handles answer from User</td>
+  </tr>
+  <tr>
+    <td>g</td>
+    <td>greet</td>
+    <td>B</td>
+    <td>User begins a new session with Bot B</td>
+    <td>R hello (and swicth bots if needed)</td>
+  </tr>
+  <tr>
+    <td>q</td>
+    <td>quit</td>
+    <td>_</td>
+    <td>User quits the application</td>
+    <td>R bye and shuts application</td>
+  </tr>
+  <tr>
+    <td>z</td>
+    <td>extra</td>
+    <td>expression</td>
+    <td>*used for future extensions of litetak language</td>
+    <td>-</td>
+  </tr>
+</table>
+<h2>Command conventions</h2>
+<h3>Naming commands</h3>
+<p>ABRIDGEMENT: Each command can be abridged by a single character [a-z] corresponding to the first letter of the command (except x for e<strong>x</strong>ecute)<br>
+  when abridged the code of the command must begin the sentence.<br>
+  Example: &quot;bla bla bla ask Daisie name&quot; can be typed &quot;a daisie name&quot;</p>
+<p>ALTERNATIVES: Conversely each command name can have alternative expressions: simple symbols or phrases.<br>
+  See 
+    <a href="doc-code-ref.html">complete litetalk reference page</a> for the list of comand alternatives<br>
+  Examples: <br>
+  1. command &quot;ask&quot; can also be phrased : &quot;what is&quot;, &quot;what are&quot;, &quot;tell me&quot;, &quot;say&quot;..<br>
+   &quot;ask 
+  daisie name&quot; can be typed &quot;What is Daisie name?&quot;<br>
+  2. command &quot;execute&quot; can be phrased: &quot;do&quot;,&quot;perform&quot;..<br>
+  &quot;execute stop counter&quot;
+can be typed &quot;do stop counter&quot;</p>
+<p>COMMAND &quot;execute&quot;<br>
+The code for command execute is x not e<br>
+command execute can be ommited<br>
+Example &quot; x stop counter&quot; can be typed &quot;stop counter&quot; even &quot;stop&quot; if the current topic is Counter</p>
+<h3>Naming topics</h3>
+<p>ABRIDGEMENT: One can abridge topic names, as showed between () in the hint line under the chatbox<br>
+Example : while speaking to Fifi, &quot;ask daisie name&quot; can be typed &quot;a d name&quot;</p>
+<p>OMISSION: One can also omit the name of the current topic (the one in red in the hint line)<br>
+  Example: while speaking to Fifi, &quot;ask counter value&quot; can be typed &quot;ask value&quot; if Counter is the current topic
+</p>
+<p>PRONOUNS: One can refer to the current bot topic with pronoun &quot;you&quot; or &quot;your&quot; or abridged &quot;y&quot; and to the User topic (you) with pronoun &quot;me&quot; or &quot;my&quot;<br>
+  Examples:<br>
+&quot;ask fifi name&quot; can be typed &quot;ask y name&quot; or &quot;a y name&quot;<br>
+&quot;tell user age is 30&quot; can be typed &quot;tell my age is 30&quot; or &quot;t me age is 30&quot;
+</p>
+<h3>Naming attributes, functions, judgements, values</h3>
+<p>They cannot be abridged<br>
+  They can have alternatives.
+See 
+<a href="doc-code-ref.html">complete litetalk reference page</a> for the list of  alternatives</p>
+<h2>Examples of litetalk commands</h2>
+<h3>Greeting the agent [greet g] and closing a session [bye b]</h3>
+<p>A Web page can contain a single litetalk agent or several litetalk agents. 
+When there are several agents (like in the case of Fifi and Daisie) you may want to talk to a particular agent then talk to another etc. Each time you want to switch conversation, you have to indicate which agent you want to interact by using the so-called <span class="purple">greet</span> command:</p>
+<blockquote>
+  <p>COMMAND: greet<br>
+    SHORTCUT: g<br>
+    ALTERNATIVES: hello    &#8212; hi &#8212; ..<br>
+    PARAMETERS: name of the addressed agent<br>
+    EXAMPLES: Hello Fifi &#8212; Hi daisie  &#8212; greet Fifi   &#8212; g fifi &#8212; ..</p>
+</blockquote>
+<p>You can close a conversational session with the <span class="purple">bye</span> command</p>
+<blockquote>
+  <p>COMMAND: bye<br>
+    SHORTCUT: b<br>
+    ALTERNATIVES: bye bye   &#8212; see you &#8212; ..<br>
+    PARAMETERS: none<br>
+    EXAMPLES: Bye Bye! &#8212; .. </p>
+</blockquote>
+<h3>Asking information to the agent [ask a]</h3>
+<blockquote>
+  <p>COMMAND: ask<br>
+    SHORTCUT: a<br>
+    ALTERNATIVES: what is   &#8212; give me   &#8212; I would like to know &#8212; ..<br>
+    PARAMETERS: name of the topic and name of the key<br>
+    EXAMPLES: ask fifi age &#8212; a pal &#8212; ..</p>
+</blockquote>
+<p>A litetalk agent is provided by its designer with a set of so-called <span class="purple">topics</span> that encompass, in a single named entity, a particular subject of conversation. Each agent has its own topic so it can talk about itself. Topics are composed of a set of so-called <span class="purple">definitions</span> that contain information about the topic: an attribute, a property, an element, other related topics etc. </p>
+<ol>
+  <li>Topics can be referred to by a <span class="purple">reference</span>: their name, their type etc.</li>
+  <li>Definitions of a topic can be referred to by a <span class="purple">key</span>: the name of the attribute, the name of the property, the name of the relation etc.</li>
+</ol>
+<blockquote>
+  <p>EXAMPLE:<br>
+    <span class="purple">Fifi</span> is the name of an agent and it is also the reference of its topic;<br>
+    <span class="purple">age</span> is the key of a definition containing the actual <span class="purple">value</span> of the age of FiFi (say it is 4)<br>
+    <span class="purple">ask</span> is a command that will prompt the agent to retrieve this information from its topic and to return the actual value in 
+  its answer<br>
+  <br>
+  You can type:</p>
+  <p>ask fifi age&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;COMMAND TOPIC KEY<br>
+    ask dog age&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; COMMAND TOPIC KEY &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// topic fifi can also be referred to by its type (<span class="purple">dog</span>)<br>
+    ask age of fifi
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;COMMAND KEY OF TOPIC<br>
+    ask the age of fifi&nbsp;&nbsp;&nbsp; COMMAND KEY TOPIC&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // most gramatical words are discarded (<span class="purple">the</span>)<br>
+    ask your age&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; COMMAND THE-CURRENT-TOPIC KEY<br>
+    ask age&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; COMMAND  THE-CURRENT-TOPIC KEY<br>
+    ask&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  &nbsp; COMMAND THE-CURRENT-TOPIC THE-LAST-TYPED-KEY</p>
+</blockquote>
+<p>When some parameters are given
+implicitly (<span class="purple">your</span>) or not given they are inferred by the agent, generally on the basis of the context defined by  previous sentences.<br>
+For example, you can greet an agent, then forget  its topic name in further sentences:</p>
+<blockquote>
+  <p>SENTENCE &#8212;&#8250; ANSWER:<br>
+    g fifi &#8212;&#8250; Fifi speaking&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// now on, THE-CURRENT-TOPIC = fifi<br>
+  a age &#8212;&#8250; 4<br>
+  a pal &#8212;&#8250; They are: Daisie; Toto;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// pal = pals<br>
+  ...
+  </p>
+</blockquote>
+<p>An agent can know several topics. For example, Fifi knows all about agent Daisie (they are pals) and also all about a tool &quot;Counter&quot;. Hence we can ask with some success:</p>
+<blockquote>
+  <p>g fifi &#8212;&#8250; Fifi speaking<br>
+    a pal  &#8212;&#8250;They are: Daisie; Toto;&nbsp;<br>
+    a gender of daisie
+    &#8212;&#8250; female<br>
+    a tool
+    &#8212;&#8250; Counter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	// here THE-CURRENT-TOPIC  is still fifi<br>
+    a counter value&#8212;&#8250;It si 12&nbsp; </p>
+</blockquote>
+<h3>Telling an information to the agent [tell t]</h3>
+<blockquote>
+  <p>COMMAND: tell<br>
+    SHORTCUT: t<br>
+    ALTERNATIVES: I think that &#8212; ..<br>
+    PARAMETERS: TOPIC KEY <strong>IS </strong>VALUE // where <strong>IS</strong> is a separator introducing a value<br>
+    EXAMPLES: tell my name is Paul</p>
+</blockquote>
+<p>Litetalk agents can modify the definitions of a topic they know,  with three basic operations:</p>
+<ol>
+  <li>Setting an unknown value for an existing definition<br>
+    There is a special topic called <span class="purple">THEUSER</span> which represent the information the agent knows about the current user<br>
+    Suppose that the agent does not know yet about the name of the user (value of key <span class="purple">name</span> of topic THEUSER = <span class="purple">none</span>)<br>
+    EXAMPLE: 
+  tell my name is Paul&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// definition with key <span class="purple">name</span> of topic THEUSER is set to value <span class="purple">Paul</span> <br>
+  <br>
+  </li>
+  
+  <li>Updating the value of an existing definition<br>
+    Suppose taht  topic THEUSER has a definition with key <span class="purple">friend</span> = Mary, Peter<br>
+    EXAMPLE: 
+    tell my new friend is Liza&nbsp;&nbsp;&nbsp;&nbsp;// definition <span class="purple">friend</span> of topic THEUSER is updated by <em>appending</em> <span class="purple">Liza</span> to the existing list<br>
+    <br>
+  </li>
+  <li>Adding a new definition, when it does not exist in the topic<br>
+    EXAMPLE:<br>
+    Supose topic daisie has no definition with key <span class="purple">color</span> <br> 
+  tell daisie colors is yellow and white&nbsp;&nbsp;// a new definition with key color is added to daisie topic with list: yello, white</li>
+</ol>
+<h3>Executing and undoing actions [execute x] [undo u]</h3>
+<blockquote>
+  <p>COMMAND: execute<br>
+    SHORTCUT: x<br>
+    ALTERNATIVES: do   &#8212; perform &#8212; ..<br>
+    PARAMETERS: name of the action and arguments of the action (name of a topic or a value etc.)<br>
+    EXAMPLES: execute increase counter &#8212; x reset counter &#8212; ..</p>
+</blockquote>
+<p>Litetalk agents can perform two kinds of actions when asked by using the <span class="purple">execute</span> command. Some definitions of topics they know, called <span class="purple">actions</span>, can be about operations upon the structure of the Web page. they can be triggered by the agent.</p>
+<p>Litetalk agent can sometimes undo the last executed action:</p>
+<blockquote>
+  <p>COMMAND: undo<br>
+    SHORTCUT: u<br>
+    ALTERNATIVES: none<br>
+    PARAMETERS: none<br>
+    EXAMPLES: undo    &#8212; u</p>
+</blockquote>
+<p>See <a href="doc-code-ref.html">complete litetalk reference page</a> for other commands</p>
+<p>Last updated February, 02, 2012.<em><br>
+</em></p>
+</body>
+
+<!-- Mirrored from perso.limsi.fr/jps/online/litetalk/litetalkdoc/doc-talk-quick.html by HTTrack Website Copier/3.x [XR&CO'2013], Wed, 12 Nov 2014 10:24:09 GMT -->
+</html>

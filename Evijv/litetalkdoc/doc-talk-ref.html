@@ -1,0 +1,710 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+
+<!-- Mirrored from perso.limsi.fr/jps/online/litetalk/litetalkdoc/doc-talk-ref.html by HTTrack Website Copier/3.x [XR&CO'2013], Wed, 12 Nov 2014 10:24:16 GMT -->
+<head>
+<title>LITETALK REFERENCE PAGE</title>
+<link href="jps.css" rel="stylesheet" type="text/css">
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="../../litetalk_0.2/litetalkdoc%20-%20Copie/jps.html" rel="stylesheet" type="text/css">
+<style type="text/css">
+.red {
+	color: #B50000;
+}
+</style>
+</head>
+
+<body>
+<h1><strong>Litetalk language reference page</strong></h1>
+<p>GOTO <a href="../../litetalkwebsite/litetalk.site.main.html">litetalk home page</a></p>
+<h2>Table of litetalk commands</h2>
+<table width="1003" border="0" cellspacing="4" cellpadding="1">
+  <tr>
+    <td width="43" valign="top" bgcolor="#FFFFEE"><strong>CODE</strong></td>
+    <td width="81" valign="top" bgcolor="#FFFFEE"><strong>COMMAND</strong></td>
+    <td width="143" valign="top" bgcolor="#FFFFEE"><p><strong>PARAMETERS</strong><br>
+      There is no order<br>
+      Notations:<br>
+      B: Bot name<br>
+      T: Topic name<br>
+      A: Attribute name<br>
+      V: attribute Value<br>
+      F: function name <br>
+      O: Operation name<br>
+      J: Judgement symbol<br>
+      R: reference <br>
+      _: empty <br>
+    </p></td>
+    <td width="430" valign="top" bgcolor="#FFFFEE"><p><strong>DESCRIPTION<br>
+      </strong>Notations:<br>
+      alternatives in parameters are separated by | <br>
+      T A or T.A means &quot;reference to attribute A of topic T&quot;<br>
+      T F or T.F means &quot;reference to function F of topic T&quot;<br>
+      reference R = T | A | F | T A | T F<br>
+      Values: are numbers or symbols introduced by separator <strong>is</strong> | <strong>equal</strong>      <br>
+      function arguments:<br>
+      Xi are values: numbers, symbols, ..<br>
+      They can be empty; they must be given in order for F<br>
+      J is often an adjective of judgement (bad, safe, nice, shameful, ..)<br>
+      * means not implemented in version 1.0 <br>
+    </p></td>
+    <td width="272" valign="top" bgcolor="#FFFFEE"><p><strong>BOT REACTION<br>
+      </strong>Notations:<br>
+      R: Bot replies to User<br>
+      U: Bot updates values in topics<br>
+      X: Bot operates on system</p></td>
+  </tr>
+  <tr>
+    <td bgcolor="#EFEFEF">&nbsp;</td>
+    <td bgcolor="#EFEFEF">&nbsp;</td>
+    <td bgcolor="#EFEFEF">&nbsp;</td>
+    <td bgcolor="#EFEFEF"><strong>KNOWLEDGEw</strong></td>
+    <td bgcolor="#EFEFEF">&nbsp;</td>
+  </tr>
+  <tr>
+    <td>a</td>
+    <td>ask</td>
+    <td> T A</td>
+    <td>User asks Bot the value of T.A</td>
+    <td>R value of T.A </td>
+  </tr>
+  <tr>
+    <td>v</td>
+    <td>verify</td>
+    <td>T A V</td>
+    <td>User asks Bot if value of T.A equals V </td>
+    <td>R Yes/No</td>
+  </tr>
+  <tr>
+    <td>t</td>
+    <td>tell</td>
+    <td>T A V</td>
+    <td>User states to Bot that value of attribute A of Topic T equals V </td>
+    <td>U updates T.A with V</td>
+  </tr>
+  <tr>
+    <td>r</td>
+    <td>reply</td>
+    <td>V | R</td>
+    <td>User replies to a question of Bot by providing a value or a reference</td>
+    <td>R thanks</td>
+  </tr>
+  <tr>
+    <td>k</td>
+    <td>know</td>
+    <td>R</td>
+    <td>User asks Bot if R refers to an entity known by Bot </td>
+    <td>R Yes/No</td>
+  </tr>
+  <tr>
+    <td>w</td>
+    <td>why</td>
+    <td>_ | T A V</td>
+    <td>User asks Bot the reason of the last Bot's reaction | *why T.A equals V</td>
+    <td>R reason description</td>
+  </tr>
+  <tr>
+    <td>p</td>
+    <td>possible</td>
+    <td>F</td>
+    <td>User asks Bot if  F can be executed (availability, rights etc.)</td>
+    <td>R Yes/No</td>
+  </tr>
+  <tr>
+    <td>h</td>
+    <td>how</td>
+    <td>O</td>
+    <td>User asks Bot how User can achieve operation O, in terms of Fi</td>
+    <td>R procedure description</td>
+  </tr>
+  <tr>
+    <td>e</td>
+    <td>effect</td>
+    <td>F</td>
+    <td>User asks Bot the effect of executiong function F</td>
+    <td>R effect description</td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td><strong>ACTIONS</strong></td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>x</td>
+    <td>e<strong>x</strong>ecute</td>
+    <td>T F | T F X1 X2 ..</td>
+    <td>User requests Bot to execute function T.F(Xi) Xi can be empty</td>
+    <td>X T.F(Xi) and R done</td>
+  </tr>
+  <tr>
+    <td>m</td>
+    <td>more</td>
+    <td>_</td>
+    <td>User requests Bot to repeat last x command</td>
+    <td>X last T.F(Xi)</td>
+  </tr>
+  <tr>
+    <td>u</td>
+    <td>undo</td>
+    <td>_</td>
+    <td>User requests Bot to undo last x command</td>
+    <td>X reverse(last( T.F(Xi)))</td>
+  </tr>
+  <tr>
+    <td bgcolor="#EFEFEF">&nbsp;</td>
+    <td bgcolor="#EFEFEF">&nbsp;</td>
+    <td bgcolor="#EFEFEF">&nbsp;</td>
+    <td bgcolor="#EFEFEF"><strong>OPINIONS</strong></td>
+    <td bgcolor="#EFEFEF">&nbsp;</td>
+  </tr>
+  <tr>
+    <td>j</td>
+    <td>judge</td>
+    <td>R  J</td>
+    <td>User states to Bot that User thinks that R is J</td>
+    <td>U updates User's topic with R J</td>
+  </tr>
+  <tr>
+    <td>f</td>
+    <td>feel</td>
+    <td>J</td>
+    <td>User states to Bot that User feels J</td>
+    <td>U updates User's topic.feelings with J</td>
+  </tr>
+  <tr>
+    <td>l</td>
+    <td>like</td>
+    <td> R</td>
+    <td>User states to Bot that User likes entity referred by R</td>
+    <td>U updates User's topic.likes with R</td>
+  </tr>
+  <tr>
+    <td>d</td>
+    <td>dislike</td>
+    <td>R</td>
+    <td>User states to Bot that User dislikes entity referred by R</td>
+    <td>U updates User's topic.dislikes with R</td>
+  </tr>
+  <tr>
+    <td>b</td>
+    <td>bravo</td>
+    <td>_ | R</td>
+    <td>User congratualates Bot (about R)</td>
+    <td>U Bot's topic moods and R thanks</td>
+  </tr>
+  <tr>
+    <td>c</td>
+    <td>critisize</td>
+    <td>_ | R</td>
+    <td>User critisizes Bot (about R)</td>
+    <td>U Bot's topic moods and R sorry</td>
+  </tr>
+  <tr>
+    <td>s</td>
+    <td>suggest</td>
+    <td>T F | T F x1 X2 ..</td>
+    <td>User suggests/advises Bot to execute T.F(Xi)</td>
+    <td>R thanks and X T.F(Xi) or not</td>
+  </tr>
+  <tr>
+    <td>o</td>
+    <td>object</td>
+    <td>T F | T F x1 X2 ..</td>
+    <td>User suggests/advises Bot to execute T.F(Xi)</td>
+    <td>R thanks and X T.F(Xi) or not</td>
+  </tr>
+  <tr>
+    <td>i</td>
+    <td>intent</td>
+    <td>T F</td>
+    <td>User states to Bot that User intents to execute T.F in near future</td>
+    <td>U updates User's topic.intents with T.F</td>
+  </tr>
+  <tr>
+    <td bgcolor="#EFEFEF">&nbsp;</td>
+    <td bgcolor="#EFEFEF">&nbsp;</td>
+    <td bgcolor="#EFEFEF">&nbsp;</td>
+    <td bgcolor="#EFEFEF"><strong>DIALOG SESSION</strong></td>
+    <td bgcolor="#EFEFEF">&nbsp;</td>
+  </tr>
+  <tr>
+    <td>y</td>
+    <td>yes</td>
+    <td>_</td>
+    <td>User replies yes to a previous question from Bot</td>
+    <td>U updates and handles answer from User</td>
+  </tr>
+  <tr>
+    <td>n</td>
+    <td>no</td>
+    <td>_</td>
+    <td>User replies yes to a previous question from Bot</td>
+    <td>U updates and handles answer from User</td>
+  </tr>
+  <tr>
+    <td>g</td>
+    <td>greet</td>
+    <td>B</td>
+    <td>User begins a new session with Bot B</td>
+    <td>R hello (and swicth bots if needed)</td>
+  </tr>
+  <tr>
+    <td>q</td>
+    <td>quit</td>
+    <td>_</td>
+    <td>User quits the application</td>
+    <td>R bye and shuts application</td>
+  </tr>
+  <tr>
+    <td>z</td>
+    <td>extra</td>
+    <td>expression</td>
+    <td>*used for future extensions of litetak language</td>
+    <td>-</td>
+  </tr>
+</table>
+<p>&nbsp;</p>
+<h2>Litetalk sentence syntax</h2>
+<h3>General syntax</h3>
+<p>SENTENCE = COMMAND PARAM1 PARAM2 .. STRESSERS</p>
+<p>COMMAND must be in first position<br>
+  STRESSER must be at end
+  <br>
+  PARAMS can be given in any order (except for values: &quot;.... <strong><span class="red">is</span></strong> V&quot;)</p>
+<h3>COMMAND</h3>
+<p>COMMAND = CODE | NAME | ALTERNATIVE<br>
+  CODE = 
+a .. z (col 1 of table above)<br>
+NAME = 
+ask .. extra (col. 2 aof table above)</p>
+<p>List of ALTERNATIVES for COMMAND (V 1.0)</p>
+<table width="874" border="0" cellspacing="5" cellpadding="1">
+  <tr>
+    <td><strong>CODE</strong></td>
+    <td><strong>NAME</strong></td>
+    <td><strong>ALTERNATIVES</strong></td>
+  </tr>
+  <tr>
+    <td width="44">a</td>
+    <td width="118">ask</td>
+    <td width="686">&quot;what is&quot;,&quot;what are&quot;,&quot;tell me&quot;,&quot;say&quot;</td>
+  </tr>
+  <tr>
+    <td>b</td>
+    <td>bravo</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>c</td>
+    <td>criticize</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>d</td>
+    <td>dislike</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>e</td>
+    <td>effect</td>
+    <td>&quot;consequence&quot;,&quot;result&quot;,&quot;outcome&quot;,&quot;what if&quot;,&quot;what happen if&quot;,&quot;what would happen if&quot;</td>
+  </tr>
+  <tr>
+    <td>f</td>
+    <td>feel</td>
+    <td>&quot;i am&quot;</td>
+  </tr>
+  <tr>
+    <td>g</td>
+    <td>greet</td>
+    <td>&quot;hi&quot;,&quot;hello&quot;,&quot;welcome&quot;,&quot;hey&quot;,&quot;hey&quot;,&quot;ping&quot;,&quot;are you here&quot;,&quot;where are you&quot;</td>
+  </tr>
+  <tr>
+    <td>h</td>
+    <td>how</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>i</td>
+    <td>intent</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>j</td>
+    <td>&quot;judge</td>
+    <td>&quot;you are&quot;</td>
+  </tr>
+  <tr>
+    <td>k</td>
+    <td>know</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>l</td>
+    <td>like</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>m</td>
+    <td>more</td>
+    <td>&quot;repeat&quot;,&quot;redo&quot;,&quot;do again&quot;,&quot;again&quot;</td>
+  </tr>
+  <tr>
+    <td>n</td>
+    <td>no</td>
+    <td>&quot;nope&quot;,&quot;i disagree&quot;</td>
+  </tr>
+  <tr>
+    <td>o</td>
+    <td>object</td>
+    <td>&quot;forbid&quot;</td>
+  </tr>
+  <tr>
+    <td>p</td>
+    <td>possible</td>
+    <td>&quot;can i&quot;,&quot;can you&quot;,&quot;can&quot;,&quot;possibility&quot;,&quot;available&quot;,&quot;availability&quot;,&quot;authorized&quot;,&quot;authorised&quot;,&quot;authorization&quot;,&quot;authorisation&quot;</td>
+  </tr>
+  <tr>
+    <td>q</td>
+    <td>quit</td>
+    <td>&quot;bye bye&quot;,&quot;bye&quot;</td>
+  </tr>
+  <tr>
+    <td>r</td>
+    <td>reply</td>
+    <td>&quot;the answer is&quot;,&quot;it is&quot;,&quot;the value is&quot;,&quot;this is&quot;</td>
+  </tr>
+  <tr>
+    <td>s</td>
+    <td>suggest</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>t</td>
+    <td>tell</td>
+    <td>&quot;inform&quot;,&quot;i think&quot;,&quot;i believe&quot;</td>
+  </tr>
+  <tr>
+    <td>u</td>
+    <td>undo</td>
+    <td>&quot;revert&quot;,&quot;rev&quot;</td>
+  </tr>
+  <tr>
+    <td>v</td>
+    <td>verify</td>
+    <td>&quot;check&quot;,&quot;is it true&quot;</td>
+  </tr>
+  <tr>
+    <td>w</td>
+    <td>why</td>
+    <td>&quot;explain&quot;,&quot;cause&quot;,&quot;reason&quot;</td>
+  </tr>
+  <tr>
+    <td>x</td>
+    <td>execute</td>
+    <td>&quot;do&quot;,&quot;perform&quot;</td>
+  </tr>
+  <tr>
+    <td>y</td>
+    <td>yes</td>
+    <td>&quot;ok&quot;,&quot;i agree&quot;,&quot;agreed&quot;</td>
+  </tr>
+  <tr>
+    <td>z</td>
+    <td>extr</td>
+    <td>&nbsp;</td>
+  </tr>
+</table>
+<h3>PARAMS</h3>
+<table width="864" border="0" cellspacing="5" cellpadding="1">
+  <tr>
+    <td width="58"><strong>CODE</strong></td>
+    <td width="110"><strong>param</strong></td>
+    <td width="146"><strong>syntax</strong></td>
+    <td width="166"><strong>Examples</strong></td>
+    <td width="344"><strong>Short form</strong></td>
+  </tr>
+  <tr>
+    <td>B</td>
+    <td>Bot name</td>
+    <td> symbol</td>
+    <td>Fifi, fifi, daisie,</td>
+    <td>f, d (see hint line) you (cuurent bot) y</td>
+  </tr>
+  <tr>
+    <td height="29">T</td>
+    <td>Topic  name</td>
+    <td>symbol</td>
+    <td>Fifi, Counter, User</td>
+    <td>c, (see hint line), me (user)</td>
+  </tr>
+  <tr>
+    <td height="16">A</td>
+    <td>Attribute name</td>
+    <td>symbol</td>
+    <td>age, name, job, </td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>F</td>
+    <td>Function name</td>
+    <td>symbol</td>
+    <td>stop, faster</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>O</td>
+    <td>Operation name</td>
+    <td>symbol</td>
+    <td>register</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>J</td>
+    <td>Judgement symbol</td>
+    <td>symbol</td>
+    <td>pretty, nice, sad,angry</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>R</td>
+    <td>reference</td>
+    <td><p>T &lt;A | F | O &gt;<br>
+    &lt;A | F | O &gt; T<br>
+    T<br>
+    A | F | O    <br>
+    </p></td>
+    <td>Fifi name<br>
+      Counter stop<br>
+      counter<br>
+      name      <br></td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>V</td>
+    <td>attribute Value</td>
+    <td>number, symbol</td>
+    <td>12, Paul, true</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>Xi</td>
+    <td>Function args</td>
+    <td>number, symbol</td>
+    <td>12, Paul, true</td>
+    <td>&nbsp;</td>
+  </tr>
+</table>
+<h3>PRONOUNS:</h3>
+<p>- Current Bot = &quot;chatbot&quot;,&quot;bot&quot;,&quot;y&quot;,&quot;you&quot;,&quot;your&quot;</p>
+<p>- Current Topic = &quot;it&quot;,&quot;its&quot;,&quot;his&quot;,&quot;her&quot;,&quot;him&quot;</p>
+<h3>STRESSERS</h3>
+<p>No implemented in V1.0</p>
+<p>It is possible to modalize the performatives with some extra stressers <br>
+  stressers must be at the end of input (possibly followed by whitespaces)<br>
+  one can give only one stresser by input<br>
+  &quot;please&quot; can be placed anywhere</p>
+<table width="478" border="0" cellspacing="5" cellpadding="2">
+  <tr>
+    <td><strong>Form</strong></td>
+    <td><strong>Description</strong></td>
+  </tr>
+  <tr>
+    <td width="46">!</td>
+    <td width="351">makes the performative stronger</td>
+  </tr>
+  <tr>
+    <td>?</td>
+    <td>puts and interrogative form to the request</td>
+  </tr>
+  <tr>
+    <td>*</td>
+    <td>stands for 'please' meaning politeness or moral demand, ...</td>
+  </tr>
+  <tr>
+    <td>@</td>
+    <td> stand for 'apologize' or 'sorry' politely</td>
+  </tr>
+  <tr>
+    <td>&amp;</td>
+    <td>puts an accent of irony to the request just like -:)</td>
+  </tr>
+</table>
+<p>These forms can be doubled for more force :</p>
+<table width="480" border="0" cellspacing="5" cellpadding="2">
+  <tr>
+    <td><strong>Form</strong></td>
+    <td><strong>Description</strong></td>
+  </tr>
+  <tr>
+    <td width="46">!!</td>
+    <td width="411">strong order, strong bravo, strong disagree</td>
+  </tr>
+  <tr>
+    <td>??</td>
+    <td>surprise</td>
+  </tr>
+  <tr>
+    <td>**</td>
+    <td>beg</td>
+  </tr>
+  <tr>
+    <td>@@</td>
+    <td>strong apology, excuse, regretsy</td>
+  </tr>
+  <tr>
+    <td>&amp;&amp;</td>
+    <td>counterstatement: j P &amp;&amp; == j \[Not]P</td>
+  </tr>
+</table>
+<h3>INTERNAL ATTRIBUTES</h3>
+<p>They can be used as any other attribute, but are used by the system <br>
+They begin with  _</p>
+<table width="486" border="0" cellspacing="5" cellpadding="2">
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><p><strong>Description<br>
+      <br>
+    </strong></p></td>
+  </tr>
+  <tr>
+    <td width="85">_class </td>
+    <td width="378">&quot;bot&quot;, &quot;topic&quot;</td>
+  </tr>
+  <tr>
+    <td>_reference </td>
+    <td>synonyms for namming the topic</td>
+  </tr>
+  <tr>
+    <td>_htmlprefix</td>
+    <td>prefix namle for HTML embodiement</td>
+  </tr>
+  <tr>
+    <td>_read</td>
+    <td>topics that can be accessed in read mode - not in V1.0</td>
+  </tr>
+  <tr>
+    <td>_write</td>
+    <td>topics that can be accessed in write mode - not in V1.0</td>
+  </tr>
+  <tr>
+    <td>_exec</td>
+    <td>topics that can be accessed in exec mode - not in V1.0</td>
+  </tr>
+  <tr>
+    <td>..</td>
+    <td>&nbsp;</td>
+  </tr>
+</table>
+<h3>SEPARATORS</h3>
+<p>In V1.0 only &quot;eq&quot; is used to introduce a value<br>
+Example: tell my age <strong class="red">is</strong> 30 </p>
+<table width="486" border="0" cellspacing="5" cellpadding="2">
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><p><strong>Alternatives<br>
+      <br>
+    </strong></p></td>
+  </tr>
+  <tr>
+    <td width="85">eq</td>
+    <td width="378">&quot;is&quot;,&quot;are&quot;,&quot;was&quot;,&quot;were&quot;,&quot;equal&quot;</td>
+  </tr>
+  <tr>
+    <td>with </td>
+    <td>&quot;to&quot; -- not used in V1.0</td>
+  </tr>
+</table>
+<p>&nbsp;</p>
+<h2>Feelings and Judgements </h2>
+<h3>Symbols and attributes for feelings:</h3>
+<p>SYNTAX: feeling-symbol, Attribute-name</p>
+<p> [&quot;happy&quot;,&quot;happiness&quot;,&quot;+&quot;],<br>
+[&quot;sad&quot;,&quot;happiness&quot;,&quot;-&quot;],<br>
+[&quot;confident&quot;,&quot;confidence&quot;,&quot;+&quot;], 		// includes for dominance<br>
+[&quot;hesitant&quot;,&quot;confidence&quot;,&quot;-&quot;],<br>
+[&quot;angry&quot;,&quot;irritability&quot;,&quot;+&quot;],<br>
+[&quot;amiable&quot;,&quot;irritability&quot;,&quot;-&quot;],<br>
+[&quot;satisfied&quot;,&quot;satisfaction&quot;,&quot;+&quot;], 		// by things<br>
+[&quot;disappointed&quot;,&quot;satisfaction&quot;,&quot;-&quot;],<br>
+[&quot;proud&quot;,&quot;respect&quot;,&quot;+&quot;], 			    // of me<br>
+[&quot;guilty&quot;,&quot;respect&quot;,&quot;-&quot;],<br>
+// body states<br>
+[&quot;strong&quot;,&quot;force&quot;,&quot;+&quot;],<br>
+[&quot;weak&quot;,&quot;force&quot;,&quot;-&quot;],<br>
+[&quot;calm&quot;,&quot;excitement&quot;,&quot;+&quot;],<br>
+[&quot;excited&quot;,&quot;excitement&quot;,&quot;-&quot;]</p>
+<h3>Symbols and attributes for Judgements:</h3>
+<p>SYNTAX: judgement-symbol(pole positive), judgement-symbol(pole negative), Attribute-name</p>
+<p> [&quot;good&quot;,&quot;bad&quot;,&quot;evaluation&quot;,&quot;+&quot;],<br>
+[&quot;bad&quot;,&quot;good&quot;,&quot;evaluation&quot;,&quot;-&quot;], <br>
+[&quot;average&quot;,&quot;average&quot;,&quot;evaluation&quot;,&quot;=&quot;],  // special pole -- not used<br>
+// qualities<br>
+[&quot;perfect&quot;,&quot;imperfect&quot;,&quot;quality&quot;,&quot;+&quot;],<br>
+[&quot;imperfect&quot;,&quot;perfect&quot;,&quot;quality&quot;,&quot;-&quot;],<br>
+[&quot;useful&quot;,&quot;useless&quot;,&quot;usability&quot;,&quot;+&quot;],<br>
+[&quot;useless&quot;,&quot;useful&quot;,&quot;usability&quot;,&quot;-&quot;], <br>
+[&quot;competent&quot;,&quot;incompetent&quot;,&quot;competence&quot;,&quot;+&quot;],<br>
+[&quot;incompetent&quot;,&quot;competent&quot;,&quot;competence&quot;,&quot;-&quot;], <br>
+[&quot;important&quot;,&quot;insignificant&quot;,&quot;importance&quot;,&quot;+&quot;],<br>
+[&quot;insignificant&quot;,&quot;important&quot;,&quot;importance&quot;,&quot;-&quot;],<br>
+// physical<br>
+[&quot;strong&quot;,&quot;feeble&quot;,&quot;intensity&quot;,&quot;+&quot;],<br>
+[&quot;feeble&quot;,&quot;strong&quot;,&quot;intensity&quot;,&quot;-&quot;], <br>
+[&quot;long&quot;,&quot;brief&quot;,&quot;duration&quot;,&quot;+&quot;],<br>
+[&quot;brief&quot;,&quot;long&quot;,&quot;duration&quot;,&quot;-&quot;], <br>
+[&quot;fast&quot;,&quot;slow&quot;,&quot;speed&quot;,&quot;+&quot;], <br>
+[&quot;slow&quot;,&quot;fast&quot;,&quot;speed&quot;,&quot;-&quot;],<br>
+[&quot;large&quot;,&quot;small&quot;,&quot;size&quot;,&quot;+&quot;],<br>
+[&quot;small&quot;,&quot;large&quot;,&quot;size&quot;,&quot;-&quot;],<br>
+//likes &amp; dislikes<br>
+[&quot;likeable&quot;,&quot;detestable&quot;,&quot;favorite&quot;,&quot;+&quot;],<br>
+[&quot;detestable&quot;,&quot;likeable&quot;,&quot;favorite&quot;,&quot;-&quot;],<br>
+// social<br>
+[&quot;expensive&quot;,&quot;cheap&quot;,&quot;worth&quot;,&quot;+&quot;],<br>
+[&quot;cheap&quot;,&quot;expensive&quot;,&quot;worth&quot;,&quot;-&quot;],<br>
+[&quot;nice&quot;,&quot;ugly&quot;,&quot;beauty&quot;,&quot;+&quot;],<br>
+[&quot;ugly&quot;,&quot;nice&quot;,&quot;beauty&quot;,&quot;-&quot;], <br>
+[&quot;interesting&quot;,&quot;boring&quot;,&quot;interest&quot;,&quot;+&quot;],<br>
+[&quot;boring&quot;,&quot;interesting&quot;,&quot;interest&quot;,&quot;-&quot;], <br>
+[&quot;decent&quot;,&quot;depraved&quot;,&quot;decency&quot;,&quot;+&quot;],<br>
+[&quot;depraved&quot;,&quot;decent&quot;,&quot;decency&quot;,&quot;-&quot;],</p>
+<p>&nbsp;</p>
+<h2>Other alternatives</h2>
+<h3>Main attributes</h3>
+<p>SYNTAX: attribute-name, aletrnatives</p>
+<p> [&quot;name&quot;,		[&quot;name&quot;,&quot;surname&quot;,&quot;nickname&quot;,&quot;appellation&quot;]], <br>
+[&quot;action&quot;,		[&quot;action&quot;,&quot;operation&quot;,&quot;function&quot;]],<br>
+[&quot;type&quot;,		[&quot;type&quot;,&quot;kind&quot;]],<br>
+[&quot;value&quot;,		[&quot;value&quot;,&quot;val&quot;]],<br>
+[&quot;location&quot;,	[&quot;address&quot;,&quot;adress&quot;,&quot;loc&quot;]],</p>
+<h3>Feelings judgements and mind states attributes</h3>
+<p>SYNTAX: attribute-name, aletrnatives</p>
+<p> // mind and body states<br>
+[&quot;satisfied&quot;, 	[&quot;content&quot;,&quot;pleased&quot;]],<br>
+[&quot;confident&quot;, 	[&quot;definite&quot;,&quot;sure&quot;,&quot;certain&quot;]],<br>
+[&quot;hesitant&quot;, 	[&quot;fearful&quot;]],<br>
+[&quot;angry&quot;, 		[&quot;annoyed&quot;,&quot;irritated&quot;]],<br>
+[&quot;amiable&quot;, 	[&quot;peaceful&quot;,&quot;agreeable&quot;,&quot;cool&quot;]],<br>
+[&quot;disappointed&quot;,[&quot;dissatisfied&quot;,&quot;frustrated&quot;]],<br>
+// judgements<br>
+[&quot;judgement&quot;, 	[&quot;judgment&quot;,&quot;opinion&quot;]],			// attribute: list of judgements<br>
+[&quot;favorite&quot;, 	[&quot;favourite&quot;]],                     // judgement concept for likeable/detestable<br>
+// preferences<br>
+[&quot;preference&quot;, 	[&quot;pref&quot;,&quot;favorite&quot;,&quot;favourite&quot;,&quot;liking&quot;]], 			// attribute: list of preferences<br>
+[&quot;distaste&quot;, 	[&quot;dispref&quot;,&quot;dispreference&quot;,&quot;aversion&quot;,&quot;distaste&quot;]], // attribute: list of dispreferences<br>
+// suggestions<br>
+[&quot;suggestion&quot;, 	[&quot;advice&quot;,&quot;recommendation&quot;,&quot;guidance&quot;]], 		// attribute: list of suggested actions<br>
+[&quot;objection&quot;, 	[&quot;interdiction&quot;,&quot;veto&quot;,&quot;opposition&quot;]],   		 // attribute: list of disprefernces<br>
+// intentions<br>
+[&quot;intention&quot;, 	[&quot;intent&quot;,&quot;determination&quot;,&quot;promise&quot;]], 	 // attribute: list of intented actions<br>
+// <br>
+[&quot;average&quot;, 	[&quot;medium&quot;,&quot;normal&quot;]] </p>
+<p>&nbsp;</p>
+<p> Last updated: February, 03, 2012. </p>
+</body>
+
+<!-- Mirrored from perso.limsi.fr/jps/online/litetalk/litetalkdoc/doc-talk-ref.html by HTTrack Website Copier/3.x [XR&CO'2013], Wed, 12 Nov 2014 10:24:16 GMT -->
+</html>
