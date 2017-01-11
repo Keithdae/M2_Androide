@@ -72,6 +72,9 @@ public class LogicBehaviour extends TickerBehaviour {
 			LogicAgent.enemyObserved = true;
 			enemy = targets.get(0).getSecond();
 			enemyPos = targets.get(0).getFirst();
+			if(ag.enemyInSight(enemy)){
+				LogicAgent.enemyInSight = true;
+			}
 		}
 		else
 		{
@@ -83,9 +86,6 @@ public class LogicBehaviour extends TickerBehaviour {
 		}
 		if(sit.agentAltitude.y > sit.avgAltitude){
 			LogicAgent.heightOverAverage = true;
-		}
-		if(ag.enemyInSight(enemy)){
-			LogicAgent.enemyInSight = true;
 		}
 		
 		//mise a jour de la l'altitude maximum rencontrée et highGround
@@ -101,7 +101,7 @@ public class LogicBehaviour extends TickerBehaviour {
 		
 		
 		// Action
-		if(!LogicAgent.enemyInSight)
+		if(!LogicAgent.enemyObserved)
 		{
 			if (dest==null || approximativeEqualsCoordinates(currentpos, dest))
 			{
@@ -113,12 +113,13 @@ public class LogicBehaviour extends TickerBehaviour {
 			//System.out.println("Target in sight : " + enemy);
 			
 			LegalAction dir = lookAtPoint(enemyPos);
+			ag.moveTo(enemyPos);
 			if(dir != LegalAction.SHOOT)
 			{
 				if (dest != null || !approximativeEqualsCoordinates(currentpos, enemyPos))
 				{
 					//ag.cardinalMove(dir);
-					ag.randomMove();
+					//ag.randomMove();
 				}	
 			}
 			

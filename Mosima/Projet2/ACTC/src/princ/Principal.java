@@ -28,8 +28,8 @@ public class Principal {
 
 		//0) Create the environment
 
-		env = Environment.launchRandom(128);
-		//env = Environment.launch("circleMap2");
+		//env = Environment.launchRandom(128);
+		env = Environment.launch("circleMap2");
 		
 		emptyPlatform(containerList);
 

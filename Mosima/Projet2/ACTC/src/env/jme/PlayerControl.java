@@ -52,7 +52,7 @@ public class PlayerControl extends CharacterControl{
 			if (!equalsCoordinates(this.spatial.getWorldTranslation().x, destination.x) /*|| !equalsCoordinates(player.getWorldTranslation().z, dest.z)*/ || !equalsCoordinates(this.spatial.getWorldTranslation().z, destination.z)) {
 				Vector3f dir = this.destination.subtract(this.spatial.getWorldTranslation());
 				
-				dir.setY(dir.getY()+10);
+				dir.setY(dir.getY());
 				
 				setViewDirection(dir.clone().setY(0));
 				dir.normalizeLocal();
