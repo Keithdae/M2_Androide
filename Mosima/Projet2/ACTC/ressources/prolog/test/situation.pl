@@ -57,5 +57,6 @@ perfectSituation(X) :- enemyInSight(X), setdecision(attack), !.
 goodSituation(X) :- \+ heightOverAverage(X), setdecision(climb), !.
 goodSituation(X) :- highGround(X), lowHealth(X), setdecision(camping), !.
 goodSituation(X) :- highGround(X), \+ lowHealth(X), setdecision(explore), !.
-goodSituation(X) :- \+ highGround(X), knownHighPoint(X), setdecision(gotohigh), !.
-goodSituation(X) :- \+ highGround(X), \+ knownHighPoint(X), setdecision(explore), !.
+goodSituation(X) :- \+ highGround(X), setdecision(explore), !.
+%goodSituation(X) :- \+ highGround(X), knownHighPoint(X), setdecision(gotohigh), !.
+%goodSituation(X) :- \+ highGround(X), \+ knownHighPoint(X), setdecision(explore), !.

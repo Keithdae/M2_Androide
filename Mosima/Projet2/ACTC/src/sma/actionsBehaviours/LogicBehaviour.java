@@ -105,7 +105,7 @@ public class LogicBehaviour extends TickerBehaviour {
 		
 		LogicAgent.highGround = sit.agentAltitude.y > 0.8f * ag.highestAlt;
 		
-		/*
+		/* LEGACY CODE
 		// Action
 		if(!LogicAgent.enemyObserved)
 		{
@@ -137,30 +137,42 @@ public class LogicBehaviour extends TickerBehaviour {
 				System.out.println("Shoot Exception triggered.");
 			}	
 		}
-		
-		// Prolog
-		/*System.out.println("**Test Prolog**");
-		query = "goodSituation(agent)";
-		boolean gSol = Query.hasSolution(query);
-		System.out.println(query+" ?: "+gSol);*/
+		END OF LEGACY CODE*/ 
 		
 		query = "perfectSituation(agent)";
 		boolean gSol = Query.hasSolution(query);
-		System.out.println(query+" ?: "+gSol);
-		System.out.println("Decision taken : " + dec);
+		/*System.out.println(query+" ?: "+gSol);
+		System.out.println("Decision taken : " + dec);*/
 		if(!gSol)
 		{
 			query = "goodSituation(agent)";
 			gSol = Query.hasSolution(query);
-			System.out.println(query+" ?: "+gSol);
-			System.out.println("Decision taken : " + dec);
+			/*System.out.println(query+" ?: "+gSol);
+			System.out.println("Decision taken : " + dec);*/
 		}
 		
 		switch(dec)
 		{
-		case ATTACK:
+		case ATTACK: // L'ennemi est en vue, on tente de tirer dessus et on le suit
+			try{
+				ag.shoot(enemy);
+			}
+			catch(Exception e)
+			{
+				System.out.println("Shoot Exception triggered.");
+			}
+			
+			// Si on ne se deplace pas vers l'ennemi, on le fait
+			if (dest == null ||!approximativeEqualsCoordinates(dest, enemyPos))
+			{
+				ag.moveTo(enemyPos);
+			}
+			
 			break;
-		case CAMPING:
+		case CAMPING: // On reste sur place et on tourne aleatoirement en attendant l'adversaire
+			Vector3f test = currentpos.clone();
+			test.add( new Vector3f( ((float)Math.random() * 2) - 1,0,((float)Math.random() * 2) - 1 ) );
+			ag.lookAt(lookAtPoint(test));
 			break;
 		case CLIMB:
 			break;
@@ -168,7 +180,8 @@ public class LogicBehaviour extends TickerBehaviour {
 			break;
 		case GOTOHIGH:
 			break;
-		case LOOKAT:
+		case LOOKAT: // L'agent a ete detecte mais n'est pas dans le champ de vision, on essaye de le voir
+			ag.lookAt(lookAtPoint(enemyPos));
 			break;
 		case NOP:
 			break;
