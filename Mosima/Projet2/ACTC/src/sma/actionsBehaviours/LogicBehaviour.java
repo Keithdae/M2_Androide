@@ -56,6 +56,8 @@ public class LogicBehaviour extends TickerBehaviour {
 	private LogicAgent ag;
 	private String query = "";
 	
+	private boolean start = true;
+	
 	public LogicBehaviour(final AbstractAgent myagent) {
 		// TODO Auto-generated constructor stub
 		super(myagent, 100);
@@ -66,7 +68,17 @@ public class LogicBehaviour extends TickerBehaviour {
 	}
 
 	@Override
-	protected void onTick() {	
+	protected void onTick() {
+		if(start)
+		{
+			try {
+				Thread.sleep(15000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			start = false;
+		}
+		
 		Vector3f currentpos  = ag.getCurrentPosition();
 		Vector3f dest = ag.getDestination();
 		enemyPos = null;
