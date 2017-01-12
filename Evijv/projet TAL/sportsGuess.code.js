@@ -38,13 +38,13 @@ SPECIFIC TAGS:	WHY, EFFECT, REVERSE, UNDO
 // ====================================================================
 
 
-// ======================  TOPIC CYRIL  ======================
+// ======================  TOPIC BENEDICTE  ======================
 var benedicteTopic = [
 	// INFO
 	[["KEY", "_class"],						["VAL", "bot"], ["BOT","benedicteBot"]],
 	[["KEY", "_reference"],					["VAL", ["f","benedicte","dog"]]],
 	[["KEY", "_htmlprefix"],				["VAL", "benedicte"]], //prefix of HTML elements  
-	[["KEY", "_read"],						["VAL", ["userTopic","daisieTopic","counterTopic"]]],
+	[["KEY", "_read"],						["VAL", ["userTopic","danTopic","counterTopic"]]],
 	[["KEY", "_write"],						["VAL", ["userTopic","counterTopic"]]],
 	[["KEY", "_exec"],						["VAL", ["userTopic","counterTopic"]]], // try
 	[["KEY", "type"],						["VAL", ["animal","dog"]]],
@@ -70,7 +70,7 @@ var benedicteTopic = [
 	[["KEY", "relative"],		["VAL", ["pal"]], // acquaintances with BEINGS(bots): mother,father,son,daughter,brother,sister,pal,boss,pet,...
 								["ONASK", BOT_printRelativeList],
 								], 
-	[["KEY", "pal"],			["VAL", "daisieTopic"],["CAT","REL"]],
+	[["KEY", "pal"],			["VAL", "danTopic"],["CAT","REL"]],
 	[["KEY", "tool"],			["VAL", "counterTopic"],["CAT","REL"]],
 	// FEELINGS
 	[["KEY", "happiness"],		["VAL", 0.8], ["CAT","VAR"], ["TYPE","INT"]], // 7 standard feelings iniitated
@@ -97,17 +97,152 @@ var benedicteTopic = [
  
 
 
-// ======================  TOPIC ELSI  ======================
-var daisieTopic = [
+// ======================  TOPIC DAN  ======================
+var danTopic = [
 	// INFO
-	[["KEY", "_class"],						["VAL", "bot"], ["BOT","daisieBot"]],
-	[["KEY", "_reference"],					["VAL", ["d","daisie","flower"]]],
-	[["KEY", "_htmlprefix"],				["VAL", "daisie"]], //prefix of HTML elements  
-	[["KEY", "_read"],						["VAL", ["daisieTopic","userTopic"]]],
+	[["KEY", "_class"],						["VAL", "bot"], ["BOT","danBot"]],
+	[["KEY", "_reference"],					["VAL", ["d","dan","flower"]]],
+	[["KEY", "_htmlprefix"],				["VAL", "dan"]], //prefix of HTML elements  
+	[["KEY", "_read"],						["VAL", ["danTopic","userTopic"]]],
 	[["KEY", "_write"],						["VAL", []]],
 	[["KEY", "_exec"],						["VAL", ["userTopic","counterTopic"]]],
 	[["KEY", "type"],						["VAL", ["vegetal","flower"]]],
-	[["KEY", "name"],						["VAL", "Daisie"],
+	[["KEY", "name"],						["VAL", "Dan"],
+											["WHY","My gardener gave it to me"]
+											],
+	[["KEY", "age"],						["VAL", 1],["TYPE","INT"],
+											["ONASK","I am one year old"], ["WHY","I was born one years ago"]
+											],
+	[["KEY", "gender"],						["VAL", "female"],
+											["ONASK", function(s) { return ((s == "male") ? "I am proud to be a male!" : "Just a female") }]
+											],
+	[["KEY", ["job"]],			          	["VAL", "I am a basic component of a bouquet"]],
+	[["KEY", ["home","location"]],		    ["VAL", "I live in Paris"]],
+	[["KEY", "usage"],						["VAL", "_UN_, I can do mothing"]],
+	[["KEY", "date"],						["VAL", "To ask for a date with me type: suggest meeting"],
+											["WHY","Because asking is about information not action"]
+											],
+	// REL
+	[["KEY", "relative"],					["VAL", ["pal"]],
+											["ONASK", BOT_printRelativeList],
+											], 
+	[["KEY", "pal"],					["VAL", "benedicteTopic"],["CAT","REL"]],
+	// FEELINGS
+	[["KEY", "happiness"],		["VAL", 0], ["CAT","VAR"], ["TYPE","INT"]], // 7 standard feelings
+	[["KEY", "confidence"],		["VAL", 0], ["CAT","VAR"], ["TYPE","INT"]],
+	[["KEY", "irritability"],	["VAL", 0], ["CAT","VAR"], ["TYPE","INT"]],
+	[["KEY", "satisfaction"],	["VAL", 0], ["CAT","VAR"], ["TYPE","INT"]],
+	[["KEY", "respect"],		["VAL", 0], ["CAT","VAR"], ["TYPE","INT"]],
+	[["KEY", "force"],			["VAL", 0], ["CAT","VAR"], ["TYPE","INT"]],
+	[["KEY", "excitement"],		["VAL", 0], ["CAT","VAR"], ["TYPE","INT"]],
+	// FUNC
+	[["KEY", "action"],						["VAL", ["meeting"]]],
+	[["KEY", "meeting"],					["VAL", ""], ["CAT","ACT"],
+											["EFFECT","fix a meeting with me"]
+											]
+];
+
+// ======================  TOPIC EDITA  ======================
+var editaTopic = [
+	// INFO
+	[["KEY", "_class"],						["VAL", "bot"], ["BOT","editaBot"]],
+	[["KEY", "_reference"],					["VAL", ["d","edita","flower"]]],
+	[["KEY", "_htmlprefix"],				["VAL", "edita"]], //prefix of HTML elements  
+	[["KEY", "_read"],						["VAL", ["editaTopic","userTopic"]]],
+	[["KEY", "_write"],						["VAL", []]],
+	[["KEY", "_exec"],						["VAL", ["userTopic","counterTopic"]]],
+	[["KEY", "type"],						["VAL", ["vegetal","flower"]]],
+	[["KEY", "name"],						["VAL", "Edita"],
+											["WHY","My gardener gave it to me"]
+											],
+	[["KEY", "age"],						["VAL", 1],["TYPE","INT"],
+											["ONASK","I am one year old"], ["WHY","I was born one years ago"]
+											],
+	[["KEY", "gender"],						["VAL", "female"],
+											["ONASK", function(s) { return ((s == "male") ? "I am proud to be a male!" : "Just a female") }]
+											],
+	[["KEY", ["job"]],			          	["VAL", "I am a basic component of a bouquet"]],
+	[["KEY", ["home","location"]],		    ["VAL", "I live in Paris"]],
+	[["KEY", "usage"],						["VAL", "_UN_, I can do mothing"]],
+	[["KEY", "date"],						["VAL", "To ask for a date with me type: suggest meeting"],
+											["WHY","Because asking is about information not action"]
+											],
+	// REL
+	[["KEY", "relative"],					["VAL", ["pal"]],
+											["ONASK", BOT_printRelativeList],
+											], 
+	[["KEY", "pal"],					["VAL", "benedicteTopic"],["CAT","REL"]],
+	// FEELINGS
+	[["KEY", "happiness"],		["VAL", 0], ["CAT","VAR"], ["TYPE","INT"]], // 7 standard feelings
+	[["KEY", "confidence"],		["VAL", 0], ["CAT","VAR"], ["TYPE","INT"]],
+	[["KEY", "irritability"],	["VAL", 0], ["CAT","VAR"], ["TYPE","INT"]],
+	[["KEY", "satisfaction"],	["VAL", 0], ["CAT","VAR"], ["TYPE","INT"]],
+	[["KEY", "respect"],		["VAL", 0], ["CAT","VAR"], ["TYPE","INT"]],
+	[["KEY", "force"],			["VAL", 0], ["CAT","VAR"], ["TYPE","INT"]],
+	[["KEY", "excitement"],		["VAL", 0], ["CAT","VAR"], ["TYPE","INT"]],
+	// FUNC
+	[["KEY", "action"],						["VAL", ["meeting"]]],
+	[["KEY", "meeting"],					["VAL", ""], ["CAT","ACT"],
+											["EFFECT","fix a meeting with me"]
+											]
+];
+
+// ======================  TOPIC HARRY  ======================
+var harryTopic = [
+	// INFO
+	[["KEY", "_class"],						["VAL", "bot"], ["BOT","harryBot"]],
+	[["KEY", "_reference"],					["VAL", ["d","harry","flower"]]],
+	[["KEY", "_htmlprefix"],				["VAL", "harry"]], //prefix of HTML elements  
+	[["KEY", "_read"],						["VAL", ["harryTopic","userTopic"]]],
+	[["KEY", "_write"],						["VAL", []]],
+	[["KEY", "_exec"],						["VAL", ["userTopic","counterTopic"]]],
+	[["KEY", "type"],						["VAL", ["vegetal","flower"]]],
+	[["KEY", "name"],						["VAL", "Harry"],
+											["WHY","My gardener gave it to me"]
+											],
+	[["KEY", "age"],						["VAL", 1],["TYPE","INT"],
+											["ONASK","I am one year old"], ["WHY","I was born one years ago"]
+											],
+	[["KEY", "gender"],						["VAL", "female"],
+											["ONASK", function(s) { return ((s == "male") ? "I am proud to be a male!" : "Just a female") }]
+											],
+	[["KEY", ["job"]],			          	["VAL", "I am a basic component of a bouquet"]],
+	[["KEY", ["home","location"]],		    ["VAL", "I live in Paris"]],
+	[["KEY", "usage"],						["VAL", "_UN_, I can do mothing"]],
+	[["KEY", "date"],						["VAL", "To ask for a date with me type: suggest meeting"],
+											["WHY","Because asking is about information not action"]
+											],
+	// REL
+	[["KEY", "relative"],					["VAL", ["pal"]],
+											["ONASK", BOT_printRelativeList],
+											], 
+	[["KEY", "pal"],					["VAL", "benedicteTopic"],["CAT","REL"]],
+	// FEELINGS
+	[["KEY", "happiness"],		["VAL", 0], ["CAT","VAR"], ["TYPE","INT"]], // 7 standard feelings
+	[["KEY", "confidence"],		["VAL", 0], ["CAT","VAR"], ["TYPE","INT"]],
+	[["KEY", "irritability"],	["VAL", 0], ["CAT","VAR"], ["TYPE","INT"]],
+	[["KEY", "satisfaction"],	["VAL", 0], ["CAT","VAR"], ["TYPE","INT"]],
+	[["KEY", "respect"],		["VAL", 0], ["CAT","VAR"], ["TYPE","INT"]],
+	[["KEY", "force"],			["VAL", 0], ["CAT","VAR"], ["TYPE","INT"]],
+	[["KEY", "excitement"],		["VAL", 0], ["CAT","VAR"], ["TYPE","INT"]],
+	// FUNC
+	[["KEY", "action"],						["VAL", ["meeting"]]],
+	[["KEY", "meeting"],					["VAL", ""], ["CAT","ACT"],
+											["EFFECT","fix a meeting with me"]
+											]
+];
+
+// ======================  TOPIC MOUSTACHE  ======================
+var moustacheTopic = [
+	// INFO
+	[["KEY", "_class"],						["VAL", "bot"], ["BOT","moustacheBot"]],
+	[["KEY", "_reference"],					["VAL", ["d","moustache","flower"]]],
+	[["KEY", "_htmlprefix"],				["VAL", "moustache"]], //prefix of HTML elements  
+	[["KEY", "_read"],						["VAL", ["moustacheTopic","userTopic"]]],
+	[["KEY", "_write"],						["VAL", []]],
+	[["KEY", "_exec"],						["VAL", ["userTopic","counterTopic"]]],
+	[["KEY", "type"],						["VAL", ["vegetal","flower"]]],
+	[["KEY", "name"],						["VAL", "Moustache"],
 											["WHY","My gardener gave it to me"]
 											],
 	[["KEY", "age"],						["VAL", 1],["TYPE","INT"],
@@ -246,7 +381,10 @@ var counterTopic = [
 
 // =========  Initialization of bots and declaration of topics  ==========
 var benedicteBot    = new BOT_makeBot("benedicteBot","benedicteTopic");
-var daisieBot  = new BOT_makeBot("daisieBot","daisieTopic");
+var danBot  = new BOT_makeBot("danBot","danTopic");
+var editaBot = new BOT_makeBot("editaBot","editaTopic");
+var harryBot = new BOT_makeBot("harryBot","harryTopic");
+var moustacheBot = new BOT_makeBot("moustacheBot","moustacheTopic");
 BOT_declareTopics(["userTopic","counterTopic"]);
 
 BOT_theBotId		= "benedicteBot";		// sets current bot id 
