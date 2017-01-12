@@ -58,6 +58,9 @@ public class LogicBehaviour extends TickerBehaviour {
 	
 	private boolean start = true;
 	
+	private int nMove = 0;
+	private Vector3f lastPos = null;
+	
 	public LogicBehaviour(final AbstractAgent myagent) {
 		// TODO Auto-generated constructor stub
 		super(myagent, 100);
@@ -136,6 +139,11 @@ public class LogicBehaviour extends TickerBehaviour {
 			System.out.println("Decision taken : " + dec);*/
 		}
 		
+		if(!gSol && isStuck())
+		{
+			ag.randomMove();
+		}
+		
 		switch(dec)
 		{
 		case ATTACK: // L'ennemi est en vue, on tente de tirer dessus et on le suit
@@ -168,6 +176,7 @@ public class LogicBehaviour extends TickerBehaviour {
 				ag.randomMove();
 			break;
 		case LOOKAT: // L'agent a ete detecte mais n'est pas dans le champ de vision, on essaye de le voir
+			System.out.println("J'avais tort");
 			ag.lookAt(lookAtPoint(enemyPos));
 			break;
 		case NOP:
@@ -177,6 +186,8 @@ public class LogicBehaviour extends TickerBehaviour {
 			System.err.println("INCORRECT VALUE FOR DECISION : " + dec);;
 			break;
 		}
+		
+		lastPos = currentpos.clone();
 	}
 	
 	private boolean approximativeEqualsCoordinates(Vector3f a, Vector3f b) {
@@ -185,6 +196,34 @@ public class LogicBehaviour extends TickerBehaviour {
 	
 	private boolean approximativeEquals(float a, float b) {
 		return b-2.5 <= a && a <= b+2.5;
+	}
+	
+	
+	private boolean isStuck(){
+		boolean res = false;
+		if(nMove > 30)
+		{
+			res = true;
+			nMove = 0;
+		}
+		else
+		{
+			if(approximativeEqualsCoordinatesStricter(ag.getCurrentPosition(), lastPos))
+			{
+				nMove++;
+			}
+			else
+			{
+				nMove = 0;
+			}
+		}
+		return res;
+	}
+	private boolean approximativeEqualsCoordinatesStricter(Vector3f a, Vector3f b) {
+		return approximativeEqualsStricter(a.x, b.x) && approximativeEqualsStricter(a.z, b.z);
+	}
+	private boolean approximativeEqualsStricter(float a, float b) {
+		return b-0.2 <= a && a <= b+0.2;
 	}
 	
 	/* Calcule le point cardinal le plus proche de l'angle forme entre la position de l'agent et le point fourni en parametre
