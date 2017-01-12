@@ -1,9 +1,13 @@
 package sma.agents;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.jme3.math.Vector3f;
+
 import env.jme.Environment;
 import sma.AbstractAgent;
 import sma.actionsBehaviours.LogicBehaviour;
-import sma.actionsBehaviours.RandomWalkBehaviour;
 
 public class LogicAgent extends AbstractAgent {
 	
@@ -21,9 +25,11 @@ public class LogicAgent extends AbstractAgent {
 	// Variables pour Prolog
 	public static boolean highGround = false;
 	public static boolean lowHealth = false;
-	public static boolean heightOverAverage = false;
+	public static boolean onHighestPoint = false;
 	public static boolean enemyInSight = false;
 	public static boolean enemyObserved = false;
+	
+	public List<Vector3f> highPoints = new ArrayList<Vector3f>();
 	
 	public float highestAlt = -250.0f;
 	
@@ -54,6 +60,22 @@ public class LogicAgent extends AbstractAgent {
 		
 		System.out.println("the player "+this.getLocalName()+ " is started. Tag (0==enemy): " + friendorFoe);
 		
+	}
+	
+	public boolean isInHighPoints(Vector3f point){
+		boolean res = false;
+		for(Vector3f hp : this.highPoints){
+			res = approximativeEqualsCoordinates(point, hp);
+		}
+		return res;
+	}
+	
+	private boolean approximativeEqualsCoordinates(Vector3f a, Vector3f b) {
+		return approximativeEquals(a.x, b.x) && approximativeEquals(a.z, b.z);
+	}
+	
+	private boolean approximativeEquals(float a, float b) {
+		return b-2.5 <= a && a <= b+2.5;
 	}
 
 }

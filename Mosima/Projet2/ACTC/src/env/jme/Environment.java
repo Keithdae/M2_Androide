@@ -643,20 +643,22 @@ public class Environment extends SimpleApplication {
 				Random r = new Random();
 				if (r.nextFloat()<0.7) {
 					players.get(agent).getControl(PlayerControl.class).setViewDirection(dir);
-					Spatial bullet = getBullet();
+					/*Spatial bullet = getBullet();
 					bullet.setLocalTranslation(origin);
 					bullet.addControl(new BulletControl(dir));
-					bulletNode.attachChild(bullet);
+					bulletNode.attachChild(bullet);*/
 					System.out.println("bang");
 
 					int enemyLife = ((int)players.get(enemy).getUserData("life"))-DAMAGE;
 					if (enemyLife<=0) {
 						System.out.println(enemy+" killed.");
-						explode(target);
-						//			                	playersNode.detachChildNamed(enemy);
-						shootables.detachChildNamed(enemy);
-						rootNode.detachChild(marks.get(agent));
-						players.remove(enemy);
+						//explode(target);
+						//playersNode.detachChildNamed(enemy);
+						//shootables.detachChildNamed(enemy);
+						//rootNode.detachChild(marks.get(agent));
+						//players.remove(enemy);
+						this.requestClose(true);
+						//System.exit(0);
 					}
 					else {
 						players.get(enemy).setUserData("life", enemyLife);

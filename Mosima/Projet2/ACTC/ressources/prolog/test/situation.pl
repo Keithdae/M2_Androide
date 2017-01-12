@@ -42,19 +42,20 @@ highGround(agent) :- jpl_get('sma.agents.LogicAgent', 'highGround', R), jpl_is_t
 smallFoW(agent) :- jpl_get('sma.agents.LogicAgent', 'smallFoW', R), jpl_is_true(R).
 largeFoW(agent) :- jpl_get('sma.agents.LogicAgent', 'largeFoW', R), jpl_is_true(R).
 lowHealth(agent) :- jpl_get('sma.agents.LogicAgent', 'lowHealth', R), jpl_is_true(R).
-heightOverAverage(agent) :- jpl_get('sma.agents.LogicAgent', 'heightOverAverage', R), jpl_is_true(R).
+onHighestPoint(agent) :- jpl_get('sma.agents.LogicAgent', 'onHighestPoint', R), jpl_is_true(R).
 
 
 
-%perfectSituation(X)
-%On peut tirer sur l'ennemi
+% perfectSituation(X)
+% On peut tirer sur l'ennemi
 
 perfectSituation(X) :- enemyInSight(X), setdecision(attack), !.
 
 
 % goodSituation(X)
-% 
-goodSituation(X) :- \+ heightOverAverage(X), setdecision(climb), !.
+% On verifie dans quel type de situation on est et on prend une decision pour s'approcher d'une situation interessante
+
+goodSituation(X) :- \+ onHighestPoint(X), setdecision(climb), !.
 goodSituation(X) :- highGround(X), lowHealth(X), setdecision(camping), !.
 goodSituation(X) :- highGround(X), \+ lowHealth(X), setdecision(explore), !.
 goodSituation(X) :- \+ highGround(X), setdecision(explore), !.

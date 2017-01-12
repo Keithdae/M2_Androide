@@ -41,7 +41,7 @@ public class LogicBehaviour extends TickerBehaviour {
 	
 	// NOP correspond a une absence d'action (valeur par defaut)
 	public static enum Decision {
-		ATTACK, EXPLORE, CLIMB, CAMPING, GOTOHIGH, LOOKAT, NOP;
+		ATTACK, EXPLORE, CLIMB, CAMPING, LOOKAT, NOP;
 	}
 	
 	public static void setDecision(String s){
@@ -60,6 +60,7 @@ public class LogicBehaviour extends TickerBehaviour {
 		// TODO Auto-generated constructor stub
 		super(myagent, 100);
 		ag = (LogicAgent) myagent;
+		dec = Decision.NOP;
 		query = "consult('./ressources/prolog/test/situation.pl')";
 		System.out.println(query+" ?: "+Query.hasSolution(query));
 	}
@@ -69,7 +70,6 @@ public class LogicBehaviour extends TickerBehaviour {
 		Vector3f currentpos  = ag.getCurrentPosition();
 		Vector3f dest = ag.getDestination();
 		enemyPos = null;
-		dec = Decision.NOP;
 		
 		// Observation
 		Situation sit = ag.observeAgents();
@@ -101,49 +101,22 @@ public class LogicBehaviour extends TickerBehaviour {
 		
 		LogicAgent.lowHealth = ag.getHealth() < (ag.getMaxLife()/2);
 		
-		LogicAgent.heightOverAverage = currentpos.y > sit.avgAltitude;
+		LogicAgent.onHighestPoint = this.approximativeEqualsCoordinates(currentpos, sit.maxAltitude);
 		
 		LogicAgent.highGround = sit.agentAltitude.y > 0.8f * ag.highestAlt;
 		
-		/* LEGACY CODE
-		// Action
-		if(!LogicAgent.enemyObserved)
-		{
-			if (dest==null || approximativeEqualsCoordinates(currentpos, dest))
-			{
-				ag.randomMove();
-			}
+		if(LogicAgent.onHighestPoint && LogicAgent.highGround && !ag.isInHighPoints(sit.maxAltitude)){
+			ag.highPoints.add(sit.maxAltitude);
 		}
-		else
-		{
-			//System.out.println("Target in sight : " + enemy);
+		
+		boolean stopExplo = (LogicBehaviour.dec.equals(Decision.EXPLORE) && sit.maxAltitude.y > 0.8f * ag.highestAlt && !ag.isInHighPoints(sit.maxAltitude));
 			
-			LegalAction dir = lookAtPoint(enemyPos);
-			ag.moveTo(enemyPos);
-			if(dir != LegalAction.SHOOT)
-			{
-				if (dest != null || !approximativeEqualsCoordinates(currentpos, enemyPos))
-				{
-					//ag.cardinalMove(dir);
-					//ag.randomMove();
-				}	
-			}
-			
-			try{
-				//ag.shoot(enemy);
-			}
-			catch(Exception e)
-			{
-				System.out.println("Shoot Exception triggered.");
-			}	
-		}
-		END OF LEGACY CODE*/ 
 		
 		query = "perfectSituation(agent)";
 		boolean gSol = Query.hasSolution(query);
 		/*System.out.println(query+" ?: "+gSol);
 		System.out.println("Decision taken : " + dec);*/
-		if(!gSol)
+		if(!gSol && (ag.getDestination()==null || stopExplo))
 		{
 			query = "goodSituation(agent)";
 			gSol = Query.hasSolution(query);
@@ -175,10 +148,10 @@ public class LogicBehaviour extends TickerBehaviour {
 			ag.lookAt(lookAtPoint(test));
 			break;
 		case CLIMB:
+			ag.moveTo(sit.maxAltitude);
 			break;
 		case EXPLORE:
-			break;
-		case GOTOHIGH:
+			ag.randomMove();
 			break;
 		case LOOKAT: // L'agent a ete detecte mais n'est pas dans le champ de vision, on essaye de le voir
 			ag.lookAt(lookAtPoint(enemyPos));
