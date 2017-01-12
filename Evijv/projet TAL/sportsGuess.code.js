@@ -42,7 +42,7 @@ SPECIFIC TAGS:	WHY, EFFECT, REVERSE, UNDO
 var benedicteTopic = [
 	// INFO
 	[["KEY", "_class"],						["VAL", "bot"], ["BOT","benedicteBot"]],
-	[["KEY", "_reference"],					["VAL", ["f","benedicte","dog"]]],
+	[["KEY", "_reference"],					["VAL", ["b","benedicte","bene"]]],
 	[["KEY", "_htmlprefix"],				["VAL", "benedicte"]], //prefix of HTML elements  
 	[["KEY", "_read"],						["VAL", ["userTopic","danTopic","counterTopic"]]],
 	[["KEY", "_write"],						["VAL", ["userTopic","counterTopic"]]],
@@ -52,7 +52,7 @@ var benedicteTopic = [
 											["WHY","My father gave it to me. Actually, I am very happy about it"]
 											],
 	[["KEY", "age"],						["VAL", 24], ["TYPE","INT"],
-											["ONASK", "I am twenty-four year old"], 
+											["ONASK", "I am twenty-four years old"], 
 											["WHY","I was born twenty-four years ago"]
 											],
 	[["KEY", "toto"], 						["ONASK", function() {alert("coucou");}]],
@@ -101,7 +101,7 @@ var benedicteTopic = [
 var danTopic = [
 	// INFO
 	[["KEY", "_class"],						["VAL", "bot"], ["BOT","danBot"]],
-	[["KEY", "_reference"],					["VAL", ["d","dan","flower"]]],
+	[["KEY", "_reference"],					["VAL", ["d","dan","baldy"]]],
 	[["KEY", "_htmlprefix"],				["VAL", "dan"]], //prefix of HTML elements  
 	[["KEY", "_read"],						["VAL", ["danTopic","userTopic"]]],
 	[["KEY", "_write"],						["VAL", []]],
@@ -146,7 +146,7 @@ var danTopic = [
 var editaTopic = [
 	// INFO
 	[["KEY", "_class"],						["VAL", "bot"], ["BOT","editaBot"]],
-	[["KEY", "_reference"],					["VAL", ["d","edita","flower"]]],
+	[["KEY", "_reference"],					["VAL", ["e","edita","weirdo"]]],
 	[["KEY", "_htmlprefix"],				["VAL", "edita"]], //prefix of HTML elements  
 	[["KEY", "_read"],						["VAL", ["editaTopic","userTopic"]]],
 	[["KEY", "_write"],						["VAL", []]],
@@ -191,7 +191,7 @@ var editaTopic = [
 var harryTopic = [
 	// INFO
 	[["KEY", "_class"],						["VAL", "bot"], ["BOT","harryBot"]],
-	[["KEY", "_reference"],					["VAL", ["d","harry","flower"]]],
+	[["KEY", "_reference"],					["VAL", ["h","harry","glasses"]]],
 	[["KEY", "_htmlprefix"],				["VAL", "harry"]], //prefix of HTML elements  
 	[["KEY", "_read"],						["VAL", ["harryTopic","userTopic"]]],
 	[["KEY", "_write"],						["VAL", []]],
@@ -236,7 +236,7 @@ var harryTopic = [
 var moustacheTopic = [
 	// INFO
 	[["KEY", "_class"],						["VAL", "bot"], ["BOT","moustacheBot"]],
-	[["KEY", "_reference"],					["VAL", ["d","moustache","flower"]]],
+	[["KEY", "_reference"],					["VAL", ["m","moustache","old"]]],
 	[["KEY", "_htmlprefix"],				["VAL", "moustache"]], //prefix of HTML elements  
 	[["KEY", "_read"],						["VAL", ["moustacheTopic","userTopic"]]],
 	[["KEY", "_write"],						["VAL", []]],
