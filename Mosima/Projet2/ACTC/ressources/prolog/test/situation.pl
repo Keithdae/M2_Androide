@@ -35,7 +35,7 @@ setdecision(X) :- jpl_call('sma.actionsBehaviours.LogicBehaviour', 'setDecision'
 	
 enemyObserved(agent) :- jpl_get('sma.agents.LogicAgent', 'enemyObserved', R), jpl_is_true(R).
 enemyInSight(agent) :- jpl_get('sma.agents.LogicAgent', 'enemyInSight', R), jpl_is_true(R), !.
-enemyInSight(agent) :- enemyObserved(agent), setdecision(lookat).
+enemyInSight(agent) :- enemyObserved(agent).
 
 highGround(agent) :- jpl_get('sma.agents.LogicAgent', 'highGround', R), jpl_is_true(R).
 lowHealth(agent) :- jpl_get('sma.agents.LogicAgent', 'lowHealth', R), jpl_is_true(R).

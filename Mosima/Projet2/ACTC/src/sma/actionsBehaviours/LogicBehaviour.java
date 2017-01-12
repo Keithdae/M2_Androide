@@ -41,7 +41,7 @@ public class LogicBehaviour extends TickerBehaviour {
 	
 	// NOP correspond a une absence d'action (valeur par defaut)
 	public static enum Decision {
-		ATTACK, EXPLORE, CLIMB, CAMPING, LOOKAT, NOP;
+		ATTACK, EXPLORE, CLIMB, CAMPING, NOP;
 	}
 	
 	public static void setDecision(String s){
@@ -147,6 +147,9 @@ public class LogicBehaviour extends TickerBehaviour {
 		switch(dec)
 		{
 		case ATTACK: // L'ennemi est en vue, on tente de tirer dessus et on le suit
+			// Si on ne se deplace pas vers l'ennemi, on le fait
+			ag.moveTo(enemyPos);
+			
 			try{
 				ag.shoot(enemy);
 			}
@@ -154,13 +157,6 @@ public class LogicBehaviour extends TickerBehaviour {
 			{
 				System.out.println("Shoot Exception triggered.");
 			}
-			
-			// Si on ne se deplace pas vers l'ennemi, on le fait
-			if (dest == null ||!approximativeEqualsCoordinates(dest, enemyPos))
-			{
-				ag.moveTo(enemyPos);
-			}
-			
 			break;
 		case CAMPING: // On reste sur place et on tourne aleatoirement en attendant l'adversaire
 			Vector3f test = currentpos.clone();
@@ -174,10 +170,6 @@ public class LogicBehaviour extends TickerBehaviour {
 		case EXPLORE:
 			if(dest == null)
 				ag.randomMove();
-			break;
-		case LOOKAT: // L'agent a ete detecte mais n'est pas dans le champ de vision, on essaye de le voir
-			System.out.println("J'avais tort");
-			ag.lookAt(lookAtPoint(enemyPos));
 			break;
 		case NOP:
 			System.out.println("Attention, aucune decision prise !!!");
@@ -201,7 +193,7 @@ public class LogicBehaviour extends TickerBehaviour {
 	
 	private boolean isStuck(){
 		boolean res = false;
-		if(nMove > 30)
+		if(nMove > 10)
 		{
 			res = true;
 			nMove = 0;
@@ -223,7 +215,7 @@ public class LogicBehaviour extends TickerBehaviour {
 		return approximativeEqualsStricter(a.x, b.x) && approximativeEqualsStricter(a.z, b.z);
 	}
 	private boolean approximativeEqualsStricter(float a, float b) {
-		return b-0.2 <= a && a <= b+0.2;
+		return b-0.25 <= a && a <= b+0.25;
 	}
 	
 	/* Calcule le point cardinal le plus proche de l'angle forme entre la position de l'agent et le point fourni en parametre

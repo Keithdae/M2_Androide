@@ -18,11 +18,14 @@ public class FollowBehaviour extends TickerBehaviour {
 	
 	private NotBasicAgent ag = (NotBasicAgent)this.myAgent;
 	
-	// The agent will be stronger the closer both probabilities are to 1
-	private final float followProba = 0.2f;
-	private final float shootProba = 0.3f;
+	
+	private final float followProba = 1.0f;
+	private final float shootProba = 1.0f;
 	
 	private boolean start = true;
+	
+	private int nMove = 0;
+	private Vector3f lastPos = null;
 	
 	public FollowBehaviour(final AbstractAgent myagent) {
 		// TODO Auto-generated constructor stub
@@ -96,6 +99,13 @@ public class FollowBehaviour extends TickerBehaviour {
 				}
 			}			
 		}
+		
+		if(isStuck())
+		{
+			ag.randomMove();
+		}
+		
+		lastPos = currentpos.clone();
 	}
 	
 	private boolean approximativeEqualsCoordinates(Vector3f a, Vector3f b) {
@@ -104,5 +114,36 @@ public class FollowBehaviour extends TickerBehaviour {
 	
 	private boolean approximativeEquals(float a, float b) {
 		return b-2.5 <= a && a <= b+2.5;
+	}
+	
+	
+	private boolean isStuck(){
+		boolean res = false;
+		if(nMove > 10)
+		{
+			res = true;
+			nMove = 0;
+		}
+		else
+		{
+			if(lastPos != null)
+			{
+				if(approximativeEqualsCoordinatesStricter(ag.getCurrentPosition(), lastPos))
+				{
+					nMove++;
+				}
+				else
+				{
+					nMove = 0;
+				}
+			}
+		}
+		return res;
+	}
+	private boolean approximativeEqualsCoordinatesStricter(Vector3f a, Vector3f b) {
+		return approximativeEqualsStricter(a.x, b.x) && approximativeEqualsStricter(a.z, b.z);
+	}
+	private boolean approximativeEqualsStricter(float a, float b) {
+		return b-0.25 <= a && a <= b+0.25;
 	}
 }
