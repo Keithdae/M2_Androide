@@ -128,7 +128,7 @@ public class LogicBehaviour extends TickerBehaviour {
 		boolean gSol = Query.hasSolution(query);
 		/*System.out.println(query+" ?: "+gSol);
 		System.out.println("Decision taken : " + dec);*/
-		if(!gSol && (ag.getDestination()==null || stopExplo))
+		if(!gSol && (dest==null || stopExplo))
 		{
 			query = "goodSituation(agent)";
 			gSol = Query.hasSolution(query);
@@ -140,7 +140,7 @@ public class LogicBehaviour extends TickerBehaviour {
 		{
 		case ATTACK: // L'ennemi est en vue, on tente de tirer dessus et on le suit
 			try{
-				//ag.shoot(enemy);
+				ag.shoot(enemy);
 			}
 			catch(Exception e)
 			{
@@ -160,15 +160,18 @@ public class LogicBehaviour extends TickerBehaviour {
 			ag.lookAt(lookAtPoint(test));
 			break;
 		case CLIMB:
-			ag.moveTo(sit.maxAltitude);
+			if(dest == null)
+				ag.moveTo(sit.maxAltitude);
 			break;
 		case EXPLORE:
-			ag.randomMove();
+			if(dest == null)
+				ag.randomMove();
 			break;
 		case LOOKAT: // L'agent a ete detecte mais n'est pas dans le champ de vision, on essaye de le voir
 			ag.lookAt(lookAtPoint(enemyPos));
 			break;
 		case NOP:
+			System.out.println("Attention, aucune decision prise !!!");
 			break;
 		default:
 			System.err.println("INCORRECT VALUE FOR DECISION : " + dec);;
