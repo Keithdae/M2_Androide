@@ -7,9 +7,11 @@
 
 <link href="sg.css" rel="stylesheet" type="text/css">                <!-- *** JPSMODIFY **** -->
 <script type="text/javascript" src="./litetalk.code.js"> </script>   <!-- first:  litetalk code        -->
-<script type="text/javascript" src="sportsGuess.code.js">  </script>         <!-- second: Application: fifi    -->
+<script type="text/javascript" src="sportsGuess.code.js">  </script>         <!-- second: Application: SportsGuess    -->
 
 </head>
+
+
 
 <body>
 <h1> Guess a sport, an object, or a celebrity related to a sport </h1>
@@ -24,41 +26,27 @@ I you click on an agents face, it becomes the current locutor. Agents have diffe
 you can discuss their hobbies to cheer them up.
 </p>
 <p>
-<em>Go to Litetalk <a href="../../litetalkwebsite/litetalk.main.html">home page</a></em>
+<em>Go to Litetalk <a href="../../litetalkwebsite/litetalk.main.html">home page</a> <br>
 </p>
 
-<div style="position:relative; left:30px; top:20px; height:230px; width:1250px; border:0px solid red;">
+<div style="position:relative; left:100px; top:20px; height:230px; width:500px; border:0px solid red;">
 
-	<div style="position:absolute; left:30px; top:0px; height:200px; width:300px; border:0px solid blue;">
+	<div id= style="position:absolute; left:0px; top:0px; height:200px; width:300px; border:0px solid blue;">
 	<textarea id="benedicteballoon" cols="30" rows="2" spellcheck="false" style="overflow:hidden; border:hidden; visibility:hidden; 
     font-family:Segoe Print;">.</textarea> <br />
 			<div style="position:absolute; top:60px;">
-    		<img id="benedicte_img" src="images/benedicte_concombre.png" width="150" height="150" alt="benedicte" onClick="BOT_standardSwitchToChar('benedicteBot');" />  
+    		<img id="benedictepict" src="images/benedicte_concombre.png" width="150" height="150" alt="benedicte" onClick="BOT_standardSwitchToChar('benedicteBot');" />  
 			</div>
     </div>
-	<div style="position:absolute; left:210px; top:0px; height:200px; width:300px; border:0px solid green;">
-	<textarea id="danballoon" cols="30" rows="2" spellcheck="false" style="overflow:hidden; border:hidden; visibility:hidden; font-family:Segoe Print; ">.</textarea> <br />
+	<div style="position:absolute; left:180px; top:0px; height:200px; width:300px; border:0px solid green;">
+	<textarea id="daisieballoon" cols="30" rows="2" spellcheck="false" style="overflow:hidden; border:hidden; visibility:hidden; font-family:Segoe Print; ">.</textarea> <br />
 			<div style="position:absolute; top:60px;" >
-    		<img id="dan_img" src="images/dan_kai.png" width="150" height="150" alt="dan" onClick="BOT_standardSwitchToChar('danBot');"/>
+    		<img id="daisiepict" src="images/dan_kai.png" width="150" height="150" alt="daisie" onClick="BOT_standardSwitchToChar('daisieBot');"/>
 			</div>
 	</div>
-	<div style="position:absolute; left:390px; top:0px; height:200px; width:300px; border:0px solid green;">
-	<textarea id="editaballoon" cols="30" rows="2" spellcheck="false" style="overflow:hidden; border:hidden; visibility:hidden; font-family:Segoe Print; ">.</textarea> <br />
-			<div style="position:absolute; top:60px;" >
-    		<img id="edita_img" src="images/edita_malou.png" width="150" height="150" alt="edita" onClick="BOT_standardSwitchToChar('editaBot');"/>
-			</div>
-	</div>
-	<div style="position:absolute; left:570px; top:0px; height:200px; width:300px; border:0px solid green;">
-	<textarea id="harryballoon" cols="30" rows="2" spellcheck="false" style="overflow:hidden; border:hidden; visibility:hidden; font-family:Segoe Print; ">.</textarea> <br />
-			<div style="position:absolute; top:60px;" >
-    		<img id="harry_img" src="images/harry_frotteur.png" width="150" height="150" alt="harry" onClick="BOT_standardSwitchToChar('harryBot');"/>
-			</div>
-	</div>
-	<div style="position:absolute; left:750px; top:0px; height:200px; width:300px; border:0px solid green;">
-	<textarea id="moustacheballoon" cols="30" rows="2" spellcheck="false" style="overflow:hidden; border:hidden; visibility:hidden; font-family:Segoe Print; ">.</textarea> <br />
-			<div style="position:absolute; top:60px;" >
-    		<img id="moustache_img" src="images/monsieur_moustache.png" width="150" height="150" alt="moustache" onClick="BOT_standardSwitchToChar('moustacheBot');"/>
-			</div>
+    
+    <div id="divcounter"style="position:absolute; left:400px; top:100px; height:100px; width:200px; border:0px solid green;">
+	<p id="countertextfield"  style="font-family: Arial; font-size:72px; font-weight:bold; margin:0px;" >0</p> </div>
 	</div>
 
 </div>
@@ -84,10 +72,24 @@ you can discuss their hobbies to cheer them up.
 	BOT_theInterface 	= "STANDARD";
 	BOT_traceFlag		= false; 
 	BOT_statusFlag		= true; 
-	BOT_standardFrameBot('benedicteBot','visible','4px solid yellow');	// shows frame around benedicte's picture 
-	SG_counterLoop(); 											// launches counter process (but doesn't count)
+	BOT_standardFrameBot('benedicteBot','visible','4px solid yellow');	// shows benedicte pict and balloon
+	SG_counterLoop(); 											// launches counter process (but does't count)
 </script> 
 
 
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

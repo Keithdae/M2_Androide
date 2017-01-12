@@ -1,0 +1,95 @@
+<!DOCTYPE html >
+<html lang="en">
+
+<head>
+<meta charset="utf-8">
+<title>Sports guess</title>
+
+<link href="sg.css" rel="stylesheet" type="text/css">                <!-- *** JPSMODIFY **** -->
+<script type="text/javascript" src="./litetalk.code.js"> </script>   <!-- first:  litetalk code        -->
+<script type="text/javascript" src="sportsGuess.code.js">  </script>         <!-- second: Application: fifi    -->
+
+</head>
+
+<body>
+<h1> Guess a sport, an object, or a celebrity related to a sport </h1>
+
+<div id="test">
+</div>
+
+<p>
+You can interact in litetalk language with the different agents to get hints for your guess.<br>
+Type a litetalk sentence in the chat box, followed by a carriage return or click the send button.<br>
+I you click on an agents face, it becomes the current locutor. Agents have different hobbies, if they are unhappy, <br>
+you can discuss their hobbies to cheer them up.
+</p>
+<p>
+<em>Go to Litetalk <a href="../../litetalkwebsite/litetalk.main.html">home page</a></em>
+</p>
+
+<div style="position:relative; left:30px; top:20px; height:230px; width:1250px; border:0px solid red;">
+
+	<div style="position:absolute; left:30px; top:0px; height:200px; width:300px; border:0px solid blue;">
+	<textarea id="benedicteballoon" cols="30" rows="2" spellcheck="false" style="overflow:hidden; border:hidden; visibility:hidden; 
+    font-family:Segoe Print;">.</textarea> <br />
+			<div style="position:absolute; top:60px;">
+    		<img id="benedicte_img" src="images/benedicte_concombre.png" width="150" height="150" alt="benedicte" onClick="BOT_standardSwitchToChar('benedicteBot');" />  
+			</div>
+    </div>
+	<div style="position:absolute; left:210px; top:0px; height:200px; width:300px; border:0px solid green;">
+	<textarea id="danballoon" cols="30" rows="2" spellcheck="false" style="overflow:hidden; border:hidden; visibility:hidden; font-family:Segoe Print; ">.</textarea> <br />
+			<div style="position:absolute; top:60px;" >
+    		<img id="dan_img" src="images/dan_kai.png" width="150" height="150" alt="dan" onClick="BOT_standardSwitchToChar('danBot');"/>
+			</div>
+	</div>
+	<div style="position:absolute; left:390px; top:0px; height:200px; width:300px; border:0px solid green;">
+	<textarea id="editaballoon" cols="30" rows="2" spellcheck="false" style="overflow:hidden; border:hidden; visibility:hidden; font-family:Segoe Print; ">.</textarea> <br />
+			<div style="position:absolute; top:60px;" >
+    		<img id="edita_img" src="images/edita_malou.png" width="150" height="150" alt="edita" onClick="BOT_standardSwitchToChar('editaBot');"/>
+			</div>
+	</div>
+	<div style="position:absolute; left:570px; top:0px; height:200px; width:300px; border:0px solid green;">
+	<textarea id="harryballoon" cols="30" rows="2" spellcheck="false" style="overflow:hidden; border:hidden; visibility:hidden; font-family:Segoe Print; ">.</textarea> <br />
+			<div style="position:absolute; top:60px;" >
+    		<img id="harry_img" src="images/harry_frotteur.png" width="150" height="150" alt="harry" onClick="BOT_standardSwitchToChar('harryBot');"/>
+			</div>
+	</div>
+	<div style="position:absolute; left:750px; top:0px; height:200px; width:300px; border:0px solid green;">
+	<textarea id="moustacheballoon" cols="30" rows="2" spellcheck="false" style="overflow:hidden; border:hidden; visibility:hidden; font-family:Segoe Print; ">.</textarea> <br />
+			<div style="position:absolute; top:60px;" >
+    		<img id="moustache_img" src="images/monsieur_moustache.png" width="150" height="150" alt="moustache" onClick="BOT_standardSwitchToChar('moustacheBot');"/>
+			</div>
+	</div>
+	
+	<div id="divcounter"style="position:absolute; left:940px; top:100px; height:100px; width:200px; border:0px solid green;">
+	<p id="countertextfield"  style="font-family: Arial; font-size:72px; font-weight:bold; margin:0px;" >0</p> </div>
+	</div>
+
+</div>
+
+
+<div style="position:relative; left:100px; top:50px; height:520px; width:500px; border:0px solid red;">
+    <input id="litetalkchatbox" type="text" size="55" value="ask name"  onKeyPress="BOT_chatboxOnKeypress(this,event);"> &nbsp;
+  	<input type="submit" name="sendButton" id="sendButton" value="SEND" onClick="BOT_chatboxOnSend('litetalkchatbox');"> &nbsp;
+	<input type="button" value="+"  onClick="BOT_switchTraceBox(this)"><BR>
+    
+    <div id="litetalkstatustext" align="left" style= "font-family:Verdana, Geneva, sans-serif;  font-size:10px;
+    	width:450px; height:80px; border:0px solid pink;">.</div>  <BR>
+
+	<p> <textarea id="litetalktracebox" cols="55" rows="20" spellcheck="false" style="visibility:hidden;">.</textarea> </p> 
+
+</div>
+
+
+
+<script type="text/javascript">
+	BOT_theInterface 	= "STANDARD";
+	BOT_traceFlag		= false; 
+	BOT_statusFlag		= true; 
+	BOT_standardFrameBot('benedicteBot','visible','4px solid yellow');	// shows frame around benedicte's picture 
+	SG_counterLoop(); 											// launches counter process (but doesn't count)
+</script> 
+
+
+</body>
+</html>

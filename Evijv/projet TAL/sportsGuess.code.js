@@ -1,3 +1,9 @@
+// *************************************************************************************************************
+// *************************************************************************************************************
+//           Jean-Paul Sansonnet Specific code of application: FIFI   V0.2  january 31, 2012
+// *************************************************************************************************************
+// *************************************************************************************************************
+
 
 /* ------------------------------------------------
 
@@ -33,39 +39,38 @@ SPECIFIC TAGS:	WHY, EFFECT, REVERSE, UNDO
 
 
 // ======================  TOPIC CYRIL  ======================
-var cyrilTopic = [
+var benedicteTopic = [
 	// INFO
-	[["KEY", "_class"],						["VAL", "bot"], ["BOT","cyrilBot"]],
-	[["KEY", "_reference"],					["VAL", ["cy","cyril","boy","man","assistant"]]],
-	[["KEY", "_charprefix"],				["VAL", "cyril"]],
-	[["KEY", "_read"],						["VAL", ["userTopic","elsiTopic","counterTopic"]]],
+	[["KEY", "_class"],						["VAL", "bot"], ["BOT","benedicteBot"]],
+	[["KEY", "_reference"],					["VAL", ["f","benedicte","dog"]]],
+	[["KEY", "_htmlprefix"],				["VAL", "benedicte"]], //prefix of HTML elements  
+	[["KEY", "_read"],						["VAL", ["userTopic","daisieTopic","counterTopic"]]],
 	[["KEY", "_write"],						["VAL", ["userTopic","counterTopic"]]],
 	[["KEY", "_exec"],						["VAL", ["userTopic","counterTopic"]]], // try
-	[["KEY", "type"],						["VAL", ["human","man"]]],
-	[["KEY", "name"],						["VAL", "Cyril"],   				
-											["WHY","My father gave it to me. Actually, I am very happy about it"]
+	[["KEY", "type"],						["VAL", ["animal","dog"]]],
+	[["KEY", "name"],						["VAL", "Benedicte"],   				
+											["WHY","My master gave it to me. Actually, I am very happy about it"]
 											],
-	[["KEY", "age"],						["VAL", 0], ["TYPE","INT"],
-											["ONASK", "I am thirty year old"], 
-											["WHY","I was born thirty years ago"]
+	[["KEY", "age"],						["VAL", 3], ["TYPE","INT"],
+											["ONASK", "I am three year old"], 
+											["WHY","I was born three years ago"]
 											],
+	[["KEY", "toto"], 						["ONASK", function() {alert("coucou");}]],
+	[["KEY", "titi"], 						["ONASK", function() {elem = document.getElementById('test'); elem.innerHTML = "<img src='http://placehold.it/350x150'/>";}]],
 	[["KEY", "gender"],						["VAL", "male"],
-											["ONASK", function(s) { return ((s == "male") ? "I am proud to be a man!" : "Just a woman") }]
+											["ONASK", function(s) { return ((s == "male") ? "I am proud to be a male!" : "Just a female") }]
 											],
-	[["KEY", ["job"]],			          	["VAL", "I am a counter assistant"]],
-	[["KEY", ["job","phone"]],				["VAL", "01 69 85 80 85"], ["TYPE","INT"]],
-	[["KEY", ["job","company"]],			["VAL", "I work at LIMSI-CNRS"]],
+	[["KEY", ["job"]],			          	["VAL", "I am a pet"]],
 	[["KEY", ["home","location"]],		    ["VAL", "I live in Orsay"]],
-	[["KEY", ["home","phone","number"]],	["VAL", "It is a secret"]],
 	[["KEY", "usage"],						["VAL", "_UN_, I can control the counter for you"]],
 	[["KEY", "date"],						["VAL", function(){return new Date()}],
 											["WHY","Because I asked JavaScript to calculate it for me"]
 											],
 	// REL
-	[["KEY", "relative"],		["VAL", ["sister"]], // acquaintances with BEINGS(bots): mother,father,son,daughter,brother,sister,pal,boss,pet,...
+	[["KEY", "relative"],		["VAL", ["pal"]], // acquaintances with BEINGS(bots): mother,father,son,daughter,brother,sister,pal,boss,pet,...
 								["ONASK", BOT_printRelativeList],
 								], 
-	[["KEY", "sister"],			["VAL", "elsiTopic"],["CAT","REL"]],
+	[["KEY", "pal"],			["VAL", "daisieTopic"],["CAT","REL"]],
 	[["KEY", "tool"],			["VAL", "counterTopic"],["CAT","REL"]],
 	// FEELINGS
 	[["KEY", "happiness"],		["VAL", 0.8], ["CAT","VAR"], ["TYPE","INT"]], // 7 standard feelings iniitated
@@ -76,10 +81,10 @@ var cyrilTopic = [
 	[["KEY", "force"],			["VAL", 0], ["CAT","VAR"], ["TYPE","INT"]],
 	[["KEY", "excitement"],		["VAL", 0], ["CAT","VAR"], ["TYPE","INT"]],
 	// PREFS
-	[["KEY", "preference"],		["VAL", [["cyrilTopic","name"]]], ["CAT","VAR"], 	["ONASK",BOT_printPreferenceList]],  
-	[["KEY", "distaste"],		["VAL", [["elsiTopic","name"]]],  ["CAT","VAR"], 	["ONASK",BOT_printDistasteList]], 
-	[["KEY", "suggestion"],		["VAL", [["counterTopic","start"]]], ["CAT","VAR"], ["ONASK",BOT_printSuggestionList]], 
-	[["KEY", "intention"],		["VAL", [["counterTopic","start"]]], ["CAT","VAR"], ["ONASK",BOT_printIntentionList]],  
+	[["KEY", "preference"],		["VAL", []], ["CAT","VAR"], ["ONASK",BOT_printPreferenceList]],  
+	[["KEY", "distaste"],		["VAL", []],  ["CAT","VAR"],["ONASK",BOT_printDistasteList]], 
+	[["KEY", "suggestion"],		["VAL", []], ["CAT","VAR"], ["ONASK",BOT_printSuggestionList]], 
+	[["KEY", "intention"],		["VAL", []], ["CAT","VAR"], ["ONASK",BOT_printIntentionList]],  
 	// FUNC
 	[["KEY", "action"],			["VAL", ["compute"]]],
 	[["KEY", "compute"],		["VAL", "func_compute"], ["CAT","ACT"],
@@ -93,38 +98,35 @@ var cyrilTopic = [
 
 
 // ======================  TOPIC ELSI  ======================
-var elsiTopic = [
+var daisieTopic = [
 	// INFO
-	[["KEY", "_class"],						["VAL", "bot"], ["BOT","elsiBot"]],
-	[["KEY", "_reference"],					["VAL", ["e","elsi","girl","woman","assistant"]]],
-	[["KEY", "_charprefix"],				["VAL", "elsi"]],
-	[["KEY", "_read"],						["VAL", ["cyrilTopic","userTopic"]]],
-	[["KEY", "_write"],						["VAL", ["userTopic"]]],
-	[["KEY", "_exec"],						["VAL", []]],
-	[["KEY", "type"],						["VAL", ["human","woman"]]],
-	[["KEY", "name"],						["VAL", "Elsi"],
-											["WHY","My mother gave it to me"]
+	[["KEY", "_class"],						["VAL", "bot"], ["BOT","daisieBot"]],
+	[["KEY", "_reference"],					["VAL", ["d","daisie","flower"]]],
+	[["KEY", "_htmlprefix"],				["VAL", "daisie"]], //prefix of HTML elements  
+	[["KEY", "_read"],						["VAL", ["daisieTopic","userTopic"]]],
+	[["KEY", "_write"],						["VAL", []]],
+	[["KEY", "_exec"],						["VAL", ["userTopic","counterTopic"]]],
+	[["KEY", "type"],						["VAL", ["vegetal","flower"]]],
+	[["KEY", "name"],						["VAL", "Daisie"],
+											["WHY","My gardener gave it to me"]
 											],
-	[["KEY", "age"],						["VAL", 20],["TYPE","INT"],
-											["ONASK","I am twenty year old"], ["WHY","I was born twenty years ago"]
+	[["KEY", "age"],						["VAL", 1],["TYPE","INT"],
+											["ONASK","I am one year old"], ["WHY","I was born one years ago"]
 											],
 	[["KEY", "gender"],						["VAL", "female"],
-											["ONASK", function(s) { return ((s == "male") ? "I am proud to be a man!" : "Just a woman") }]
+											["ONASK", function(s) { return ((s == "male") ? "I am proud to be a male!" : "Just a female") }]
 											],
-	[["KEY", ["job"]],			          	["VAL", "I am a basic assistant"]],
-	[["KEY", ["job","phone"]],				["VAL", "01 02 03 04 05"],["TYPE","INT"]],
-	[["KEY", ["job","company"]],			["VAL", "I work at LIMSI-CNRS"]],
+	[["KEY", ["job"]],			          	["VAL", "I am a basic component of a bouquet"]],
 	[["KEY", ["home","location"]],		    ["VAL", "I live in Paris"]],
-	[["KEY", ["home","phone","number"]],	["VAL", "It is a secret"]],
 	[["KEY", "usage"],						["VAL", "_UN_, I can do mothing"]],
 	[["KEY", "date"],						["VAL", "To ask for a date with me type: suggest meeting"],
 											["WHY","Because asking is about information not action"]
 											],
 	// REL
-	[["KEY", "relative"],					["VAL", ["brother"]],
+	[["KEY", "relative"],					["VAL", ["pal"]],
 											["ONASK", BOT_printRelativeList],
 											], 
-	[["KEY", "brother"],					["VAL", "cyrilTopic"],["CAT","REL"]],
+	[["KEY", "pal"],					["VAL", "benedicteTopic"],["CAT","REL"]],
 	// FEELINGS
 	[["KEY", "happiness"],		["VAL", 0], ["CAT","VAR"], ["TYPE","INT"]], // 7 standard feelings
 	[["KEY", "confidence"],		["VAL", 0], ["CAT","VAR"], ["TYPE","INT"]],
@@ -190,7 +192,7 @@ var counterTopic = [
 	[["KEY", "usage"],		["VAL", "_UN_, a counter can be useful for counting things"]],
 	// REL
 	[["KEY", "relative"],	["VAL", "operator"]], // viewed as boss
-	[["KEY", "operator"],	["VAL", "cyrilTopic"],	["CAT","REL"]],
+	[["KEY", "operator"],	["VAL", "benedicteTopic"],	["CAT","REL"]],
 	// VAR 
 	[["KEY", "status"],		["VAL", "off"],  		["CAT","VAR"], ["TYPE","STR"]], 	// on|off is running ["TYPE","STR"] is default
 	[["KEY", "direction"],	["VAL", "up"],  		["CAT","VAR"], ["TYPE","STR"]],		// up|down is is increasing|decresing
@@ -243,12 +245,12 @@ var counterTopic = [
 
 
 // =========  Initialization of bots and declaration of topics  ==========
-var cyrilBot = new BOT_makeBot("cyrilBot","cyrilTopic");
-var elsiBot  = new BOT_makeBot("elsiBot","elsiTopic");
-BOT_declareTopics(["userTopic","counterTopic"]); 
+var benedicteBot    = new BOT_makeBot("benedicteBot","benedicteTopic");
+var daisieBot  = new BOT_makeBot("daisieBot","daisieTopic");
+BOT_declareTopics(["userTopic","counterTopic"]);
 
-BOT_theBotId		= "cyrilBot";		// sets current bot id 
-BOT_theTopicId		= "cyrilTopic";		// sets current topic id
+BOT_theBotId		= "benedicteBot";		// sets current bot id 
+BOT_theTopicId		= "benedicteTopic";		// sets current topic id
 BOT_theUserTopicId	= "userTopic";		// sets topic of current user id
 
  
@@ -262,35 +264,27 @@ BOT_theUserTopicId	= "userTopic";		// sets topic of current user id
 // *************************************************************************************************************
 // *************************************************************************************************************
 
-// launched at end of main.htm page
-var COUNTER_TIMEOUT = null;
-function COUNTER_loop() {
-	clearTimeout(COUNTER_TIMEOUT);
-	BOT_exec("counterTopic","count")
-	var speed = BOT_get("counterTopic","speed","VAL");
-	if(typeof(speed) == "number") COUNTER_TIMEOUT = setTimeout("COUNTER_loop()", speed);
-}
-
-
-function COUNTER_print(val) {
-	var e = document.getElementById("countertextfield");
-	if(e) { e.firstChild.nodeValue = val; }
-}
-
-
-function COUNTER_frameBot(botid,borderdata) {
-	var elem, elemid;
-	if(botid == "cyrilBot") elemid = "imagecyril";
-	else  if(botid == "elsiBot") elemid = "imageelsi";
-	elem = document.getElementById(elemid);
-	if(elem) { elem.style.border = borderdata}
-}
-
 
 
 // ====================================================================
 //                  INTERNAL FUNCTIONS OF MODEL
 // ====================================================================
+
+// launched at end of main.htm page
+var FIFI_TIMEOUT = null;
+function SG_counterLoop() {
+	clearTimeout(FIFI_TIMEOUT);
+	BOT_exec("counterTopic","count")
+	var speed = BOT_get("counterTopic","speed","VAL");
+	if(typeof(speed) == "number") FIFI_TIMEOUT = setTimeout("SG_counterLoop()", speed);
+}
+
+
+function FIFI_print(val) {
+	var e = document.getElementById("countertextfield");
+	if(e) { e.firstChild.nodeValue = val; }
+}
+
 
 function func_countStep() {
 	var status		= BOT_get("counterTopic","status","VAL");
@@ -304,7 +298,7 @@ function func_countStep() {
 			else newval = oldval - step; 
 			BOT_set("counterTopic","value","OLD",oldval);
 			BOT_set("counterTopic","value","VAL",newval);
-			COUNTER_print(newval);
+			FIFI_print(newval);
 		}
 	}
 }
@@ -364,9 +358,12 @@ function BOT_reqApplicationPostProcessing() {
 
 
 function BOT_onSwitchBot(oldbotid,newbotid) {
-	COUNTER_frameBot(oldbotid,"0px");
-	COUNTER_frameBot(newbotid,"4px solid yellow");
+	BOT_standardFrameBot(oldbotid, "hidden", "0px");
+	BOT_standardFrameBot(newbotid, "visible","4px solid yellow");
 }
+
+
+
 
 
 // *************************************************************************************************************
