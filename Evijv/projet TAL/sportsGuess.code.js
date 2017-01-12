@@ -47,20 +47,20 @@ var benedicteTopic = [
 	[["KEY", "_read"],						["VAL", ["userTopic","danTopic","counterTopic"]]],
 	[["KEY", "_write"],						["VAL", ["userTopic","counterTopic"]]],
 	[["KEY", "_exec"],						["VAL", ["userTopic","counterTopic"]]], // try
-	[["KEY", "type"],						["VAL", ["animal","dog"]]],
+	[["KEY", "type"],						["VAL", ["human","woman"]]],
 	[["KEY", "name"],						["VAL", "Benedicte"],   				
-											["WHY","My master gave it to me. Actually, I am very happy about it"]
+											["WHY","My father gave it to me. Actually, I am very happy about it"]
 											],
-	[["KEY", "age"],						["VAL", 3], ["TYPE","INT"],
-											["ONASK", "I am three year old"], 
-											["WHY","I was born three years ago"]
+	[["KEY", "age"],						["VAL", 24], ["TYPE","INT"],
+											["ONASK", "I am twenty-four year old"], 
+											["WHY","I was born twenty-four years ago"]
 											],
 	[["KEY", "toto"], 						["ONASK", function() {alert("coucou");}]],
 	[["KEY", "titi"], 						["ONASK", function() {elem = document.getElementById('test'); elem.innerHTML = "<img src='http://placehold.it/350x150'/>";}]],
-	[["KEY", "gender"],						["VAL", "male"],
-											["ONASK", function(s) { return ((s == "male") ? "I am proud to be a male!" : "Just a female") }]
+	[["KEY", "gender"],						["VAL", "female"],
+											["ONASK", function(s) { return ((s == "male") ? "I am proud to be a man!" : "Just a woman") }]
 											],
-	[["KEY", ["job"]],			          	["VAL", "I am a pet"]],
+	[["KEY", ["job"]],			          	["VAL", "I am a goddess"]],
 	[["KEY", ["home","location"]],		    ["VAL", "I live in Orsay"]],
 	[["KEY", "usage"],						["VAL", "_UN_, I can control the counter for you"]],
 	[["KEY", "date"],						["VAL", function(){return new Date()}],
@@ -114,7 +114,7 @@ var danTopic = [
 											["ONASK","I am one year old"], ["WHY","I was born one years ago"]
 											],
 	[["KEY", "gender"],						["VAL", "female"],
-											["ONASK", function(s) { return ((s == "male") ? "I am proud to be a male!" : "Just a female") }]
+											["ONASK", function(s) { return ((s == "male") ? "I am proud to be a man!" : "Just a woman") }]
 											],
 	[["KEY", ["job"]],			          	["VAL", "I am a basic component of a bouquet"]],
 	[["KEY", ["home","location"]],		    ["VAL", "I live in Paris"]],
@@ -159,7 +159,7 @@ var editaTopic = [
 											["ONASK","I am one year old"], ["WHY","I was born one years ago"]
 											],
 	[["KEY", "gender"],						["VAL", "female"],
-											["ONASK", function(s) { return ((s == "male") ? "I am proud to be a male!" : "Just a female") }]
+											["ONASK", function(s) { return ((s == "male") ? "I am proud to be a man!" : "Just a woman") }]
 											],
 	[["KEY", ["job"]],			          	["VAL", "I am a basic component of a bouquet"]],
 	[["KEY", ["home","location"]],		    ["VAL", "I live in Paris"]],
@@ -204,7 +204,7 @@ var harryTopic = [
 											["ONASK","I am one year old"], ["WHY","I was born one years ago"]
 											],
 	[["KEY", "gender"],						["VAL", "female"],
-											["ONASK", function(s) { return ((s == "male") ? "I am proud to be a male!" : "Just a female") }]
+											["ONASK", function(s) { return ((s == "male") ? "I am proud to be a man!" : "Just a woman") }]
 											],
 	[["KEY", ["job"]],			          	["VAL", "I am a basic component of a bouquet"]],
 	[["KEY", ["home","location"]],		    ["VAL", "I live in Paris"]],
@@ -249,7 +249,7 @@ var moustacheTopic = [
 											["ONASK","I am one year old"], ["WHY","I was born one years ago"]
 											],
 	[["KEY", "gender"],						["VAL", "female"],
-											["ONASK", function(s) { return ((s == "male") ? "I am proud to be a male!" : "Just a female") }]
+											["ONASK", function(s) { return ((s == "male") ? "I am proud to be a man!" : "Just a woman") }]
 											],
 	[["KEY", ["job"]],			          	["VAL", "I am a basic component of a bouquet"]],
 	[["KEY", ["home","location"]],		    ["VAL", "I live in Paris"]],
