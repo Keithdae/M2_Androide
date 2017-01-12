@@ -25,11 +25,10 @@ use_module(library(jpl)).
 	goodSituation/1,
 	perfectSituation/1,
 	highGround/1,
-	smallFoW/1,
-	largeFoW/1,
+	enemyObserved/1,
 	enemyInSight/1,
 	lowHealth/1,
-	heightOverAverage/1.
+	onHighestPoint/1.
 
 
 setdecision(X) :- jpl_call('sma.actionsBehaviours.LogicBehaviour', 'setDecision', [X], @(void)).	
@@ -39,8 +38,6 @@ enemyInSight(agent) :- jpl_get('sma.agents.LogicAgent', 'enemyInSight', R), jpl_
 enemyInSight(agent) :- enemyObserved(agent), setdecision(lookat).
 
 highGround(agent) :- jpl_get('sma.agents.LogicAgent', 'highGround', R), jpl_is_true(R).
-smallFoW(agent) :- jpl_get('sma.agents.LogicAgent', 'smallFoW', R), jpl_is_true(R).
-largeFoW(agent) :- jpl_get('sma.agents.LogicAgent', 'largeFoW', R), jpl_is_true(R).
 lowHealth(agent) :- jpl_get('sma.agents.LogicAgent', 'lowHealth', R), jpl_is_true(R).
 onHighestPoint(agent) :- jpl_get('sma.agents.LogicAgent', 'onHighestPoint', R), jpl_is_true(R).
 
@@ -59,5 +56,3 @@ goodSituation(X) :- \+ onHighestPoint(X), setdecision(climb), !.
 goodSituation(X) :- highGround(X), lowHealth(X), setdecision(camping), !.
 goodSituation(X) :- highGround(X), \+ lowHealth(X), setdecision(explore), !.
 goodSituation(X) :- \+ highGround(X), setdecision(explore), !.
-%goodSituation(X) :- \+ highGround(X), knownHighPoint(X), setdecision(gotohigh), !.
-%goodSituation(X) :- \+ highGround(X), \+ knownHighPoint(X), setdecision(explore), !.
