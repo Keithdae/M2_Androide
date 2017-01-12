@@ -41,7 +41,7 @@ public class LogicBehaviour extends TickerBehaviour {
 	
 	// NOP correspond a une absence d'action (valeur par defaut)
 	public static enum Decision {
-		ATTACK, EXPLORE, CLIMB, CAMPING, LOOKAT, NOP;
+		ATTACK, EXPLORE, CLIMB, CAMPING, NOP;
 	}
 	
 	public static void setDecision(String s){
@@ -57,6 +57,9 @@ public class LogicBehaviour extends TickerBehaviour {
 	private String query = "";
 	
 	private boolean start = true;
+	
+	private int nMove = 0;
+	private Vector3f lastPos = null;
 	
 	public LogicBehaviour(final AbstractAgent myagent) {
 		// TODO Auto-generated constructor stub
@@ -128,7 +131,7 @@ public class LogicBehaviour extends TickerBehaviour {
 		boolean gSol = Query.hasSolution(query);
 		/*System.out.println(query+" ?: "+gSol);
 		System.out.println("Decision taken : " + dec);*/
-		if(!gSol && (dest==null || stopExplo))
+		if(!gSol && (dest==null || stopExplo || dec == Decision.NOP))
 		{
 			query = "goodSituation(agent)";
 			gSol = Query.hasSolution(query);
@@ -136,9 +139,17 @@ public class LogicBehaviour extends TickerBehaviour {
 			System.out.println("Decision taken : " + dec);
 		}
 		
+		if(!gSol && isStuck())
+		{
+			ag.randomMove();
+		}
+		
 		switch(dec)
 		{
 		case ATTACK: // L'ennemi est en vue, on tente de tirer dessus et on le suit
+			// Si on ne se deplace pas vers l'ennemi, on le fait
+			ag.moveTo(enemyPos);
+			
 			try{
 				ag.shoot(enemy);
 			}
@@ -146,13 +157,6 @@ public class LogicBehaviour extends TickerBehaviour {
 			{
 				System.out.println("Shoot Exception triggered.");
 			}
-			
-			// Si on ne se deplace pas vers l'ennemi, on le fait
-			if (dest == null ||!approximativeEqualsCoordinates(dest, enemyPos))
-			{
-				ag.moveTo(enemyPos);
-			}
-			
 			break;
 		case CAMPING: // On reste sur place et on tourne aleatoirement en attendant l'adversaire
 			Vector3f test = currentpos.clone();
@@ -167,9 +171,6 @@ public class LogicBehaviour extends TickerBehaviour {
 			if(dest == null)
 				ag.randomMove();
 			break;
-		case LOOKAT: // L'agent a ete detecte mais n'est pas dans le champ de vision, on essaye de le voir
-			ag.lookAt(lookAtPoint(enemyPos));
-			break;
 		case NOP:
 			System.out.println("Attention, aucune decision prise !!!");
 			break;
@@ -177,6 +178,8 @@ public class LogicBehaviour extends TickerBehaviour {
 			System.err.println("INCORRECT VALUE FOR DECISION : " + dec);;
 			break;
 		}
+		
+		lastPos = currentpos.clone();
 	}
 	
 	private boolean approximativeEqualsCoordinates(Vector3f a, Vector3f b) {
@@ -185,6 +188,34 @@ public class LogicBehaviour extends TickerBehaviour {
 	
 	private boolean approximativeEquals(float a, float b) {
 		return b-2.5 <= a && a <= b+2.5;
+	}
+	
+	
+	private boolean isStuck(){
+		boolean res = false;
+		if(nMove > 10)
+		{
+			res = true;
+			nMove = 0;
+		}
+		else
+		{
+			if(approximativeEqualsCoordinatesStricter(ag.getCurrentPosition(), lastPos))
+			{
+				nMove++;
+			}
+			else
+			{
+				nMove = 0;
+			}
+		}
+		return res;
+	}
+	private boolean approximativeEqualsCoordinatesStricter(Vector3f a, Vector3f b) {
+		return approximativeEqualsStricter(a.x, b.x) && approximativeEqualsStricter(a.z, b.z);
+	}
+	private boolean approximativeEqualsStricter(float a, float b) {
+		return b-0.25 <= a && a <= b+0.25;
 	}
 	
 	/* Calcule le point cardinal le plus proche de l'angle forme entre la position de l'agent et le point fourni en parametre
