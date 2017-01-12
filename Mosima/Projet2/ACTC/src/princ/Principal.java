@@ -14,8 +14,8 @@ import jade.wrapper.AgentContainer;
 import jade.wrapper.AgentController;
 import jade.wrapper.ContainerController;
 import jade.wrapper.StaleProxyException;
-import sma.agents.BasicAgent;
 import sma.agents.LogicAgent;
+import sma.agents.NotBasicAgent;
 
 public class Principal {
 	
@@ -38,7 +38,6 @@ public class Principal {
 
 		//3) launch agents
 		startAgents(agentList);
-
 	}
 	
 	
@@ -175,8 +174,6 @@ public class Principal {
 		c = containerList.get("container0");
 		agentName="Player1";
 		try {
-
-
 			Object[] objtab=new Object[]{env, true};//used to give informations to the agent
 			AgentController	ag=c.createNewAgent(agentName,LogicAgent.class.getName(),objtab);
 			agentList.add(ag);
@@ -189,10 +186,8 @@ public class Principal {
 		
 		agentName="Player2";
 		try {
-
-
 			Object[] objtab=new Object[]{env, false};//used to give informations to the agent
-			AgentController	ag=c.createNewAgent(agentName,BasicAgent.class.getName(),objtab);
+			AgentController	ag=c.createNewAgent(agentName,NotBasicAgent.class.getName(),objtab);
 			agentList.add(ag);
 			System.out.println(agentName+" launched");
 		} catch (StaleProxyException e) {

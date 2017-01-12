@@ -679,7 +679,7 @@ public class Environment extends SimpleApplication {
 	 * @param enemy the name of the target agent.
 	 * @return true if the enemy is visible, false if not.
 	 */
-	public boolean isVisible(String agent, String enemy) {
+	public synchronized boolean isVisible(String agent, String enemy) {
 		Vector3f origin = getCurrentPosition(agent);
 		Vector3f target = getCurrentPosition(enemy);
 		Vector3f dir = target.subtract(origin).normalize();

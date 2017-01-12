@@ -101,7 +101,7 @@ public class LogicBehaviour extends TickerBehaviour {
 		
 		LogicAgent.lowHealth = ag.getHealth() < (ag.getMaxLife()/2);
 		
-		LogicAgent.heightOverAverage = currentpos.y > sit.avgAltitude;
+		LogicAgent.heightOverAverage = currentpos.y >= sit.avgAltitude;
 		
 		LogicAgent.highGround = sit.agentAltitude.y > 0.8f * ag.highestAlt;
 		
@@ -155,7 +155,7 @@ public class LogicBehaviour extends TickerBehaviour {
 		{
 		case ATTACK: // L'ennemi est en vue, on tente de tirer dessus et on le suit
 			try{
-				ag.shoot(enemy);
+				//ag.shoot(enemy);
 			}
 			catch(Exception e)
 			{

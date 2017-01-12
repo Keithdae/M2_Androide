@@ -7,7 +7,7 @@ import com.jme3.math.Vector3f;
 import dataStructures.tuple.Tuple2;
 import env.jme.Situation;
 import sma.AbstractAgent;
-import sma.actionsBehaviours.LegalActions.LegalAction;
+import sma.agents.NotBasicAgent;
 import jade.core.behaviours.TickerBehaviour;
 
 public class FollowBehaviour extends TickerBehaviour {
@@ -16,19 +16,37 @@ public class FollowBehaviour extends TickerBehaviour {
 	private String enemy = null;
 	private boolean inSight = false;
 	
+	private NotBasicAgent ag = (NotBasicAgent)this.myAgent;
+	
+	// The agent will be stronger the closer both probabilities are to 1
+	private final float followProba = 0.2f;
+	private final float shootProba = 0.3f;
+	
+	private boolean start = true;
+	
 	public FollowBehaviour(final AbstractAgent myagent) {
 		// TODO Auto-generated constructor stub
 		super(myagent, 100);
 	}
 
 	@Override
-	protected void onTick() {	
-		Vector3f currentpos  = ((AbstractAgent)this.myAgent).getCurrentPosition();
-		Vector3f dest = ((AbstractAgent)this.myAgent).getDestination();
+	protected void onTick() {
+		if(start)
+		{
+			try {
+				Thread.sleep(15000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			start = false;
+		}
+		
+		Vector3f currentpos  = ag.getCurrentPosition();
+		Vector3f dest = ag.getDestination();
 		Vector3f enemypos = null;
 		
 		
-		Situation sit = ((AbstractAgent)this.myAgent).observeAgents();
+		Situation sit = ag.observeAgents();
 		
 		// System.out.println(sit);
 		
@@ -39,14 +57,6 @@ public class FollowBehaviour extends TickerBehaviour {
 			inSight = true;
 			enemy = targets.get(0).getSecond();
 			enemypos = targets.get(0).getFirst();
-			System.out.println("Target in sight : " + enemy);
-			try{
-				//((AbstractAgent)this.myAgent).shoot(enemy);
-			}
-			catch(Exception e)
-			{
-				System.out.println("Shoot Exception triggered.");
-			}
 		}
 		else
 		{
@@ -57,16 +67,32 @@ public class FollowBehaviour extends TickerBehaviour {
 		{
 			if (dest==null || approximativeEqualsCoordinates(currentpos, dest))
 			{
-				((AbstractAgent)this.myAgent).moveTo(sit.maxAltitude);
+				ag.randomMove();
 			}
 		}
 		else
 		{
 			if(enemypos != null)
 			{
-				if (dest == null || approximativeEqualsCoordinates(enemypos, dest))
+				if (Math.random() < this.followProba)
 				{
 					((AbstractAgent)this.myAgent).moveTo(enemypos);
+				}
+				if (Math.random() < this.shootProba)
+				{
+					try{
+						ag.shoot(enemy);
+					}
+					catch(Exception e)
+					{
+						System.out.println("Shoot Exception triggered.");
+					}
+				}
+				
+				// If we didn't follow and reached our former destination
+				if(dest == null)
+				{
+					ag.randomMove();
 				}
 			}			
 		}
