@@ -132,8 +132,8 @@ public class LogicBehaviour extends TickerBehaviour {
 		{
 			query = "goodSituation(agent)";
 			gSol = Query.hasSolution(query);
-			/*System.out.println(query+" ?: "+gSol);
-			System.out.println("Decision taken : " + dec);*/
+			System.out.println(query+" ?: "+gSol);
+			System.out.println("Decision taken : " + dec);
 		}
 		
 		switch(dec)
