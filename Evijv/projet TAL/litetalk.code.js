@@ -180,7 +180,7 @@ var BOT_basicSynonymList	=  [
 	["location",	["address","adress","loc"]],
 	
 	// actions
-	["_a", 		["ask","what is","what are","tell me","say","what's","what","which", "is"]],
+	["_a", 		["ask","what is","what are","tell me","say","what's","what","which", "are you thinking of", "give me a"]],
 	["_b", 		["bravo","congratulations","well done"]],
 	["_c", 		["criticize"]],
 	["_d", 		["dislike"]],

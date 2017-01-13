@@ -36,7 +36,7 @@ SPECIFIC TAGS:	WHY, EFFECT, REVERSE, UNDO
  var guessTopic = [
  // INFO 
  [["KEY", "_class"],  ["VAL", "component"]],
- [["KEY", "_reference"], ["VAL", ["g","guess"]]],
+ [["KEY", "_reference"], ["VAL", ["g","guess", "topic"]]],
  [["KEY", "type"],  ["VAL", "It's a martial art"]],
  [["KEY", "name"],  ["VAL", "Guess"],
  		["ONASK", "Won't tell you so easily"]],
