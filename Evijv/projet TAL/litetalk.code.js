@@ -180,7 +180,7 @@ var BOT_basicSynonymList	=  [
 	["location",	["address","adress","loc"]],
 	
 	// actions
-	["_a", 		["ask","what is","what are","tell me","say","what's","what","which"]],
+	["_a", 		["ask","what is","what are","tell me","say","what's","what","which", "is"]],
 	["_b", 		["bravo","congratulations","well done"]],
 	["_c", 		["criticize"]],
 	["_d", 		["dislike"]],
@@ -201,7 +201,7 @@ var BOT_basicSynonymList	=  [
 	["_s", 		["suggest"]],
 	["_t", 		["tell","inform","i think","i believe"]], // TO DO
 	["_u", 		["undo","revert","rev"]],
-	["_v", 		["verify","check","is it true","is it","is"]],
+	["_v", 		["verify","check","is it true"]],
 	["_w", 		["why","explain","cause","reason"]],
 	["_x", 		["do","execute","perform"]],
 	["_y", 		["yes","ok","i agree","agreed"]], 

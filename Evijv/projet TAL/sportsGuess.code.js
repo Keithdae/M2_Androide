@@ -33,15 +33,14 @@ SPECIFIC TAGS:	WHY, EFFECT, REVERSE, UNDO
 
 
 // ======================  TOPIC KARATE ==========================
- var karateTopic = [
+ var guessTopic = [
  // INFO 
  [["KEY", "_class"],  ["VAL", "component"]],
- [["KEY", "_reference"], ["VAL", ["k","karate"]]],
- [["KEY", "type"],  ["VAL", "karate"]],
- [["KEY", "name"],  ["VAL", "Karate"]],
+ [["KEY", "_reference"], ["VAL", ["g","guess"]]],
+ [["KEY", "type"],  ["VAL", "It's a martial art"]],
+ [["KEY", "name"],  ["VAL", "Won't tell you so easily"]],
  [["KEY", "gender"],  ["VAL", ""],
-       ["ONASK","I have no gender"],
-       ["WHY","Because I am not a human nor an animal!"]
+       ["ONASK","It can be practiced by both"]
        ],
  [["KEY", "karate"],  ["VAL", "Yes you did it!"]],
  // REL
@@ -397,7 +396,7 @@ var danBot  = new BOT_makeBot("danBot","danTopic");
 var editaBot = new BOT_makeBot("editaBot","editaTopic");
 var harryBot = new BOT_makeBot("harryBot","harryTopic");
 var moustacheBot = new BOT_makeBot("moustacheBot","moustacheTopic");
-BOT_declareTopics(["userTopic","counterTopic","karateTopic"]);
+BOT_declareTopics(["userTopic","counterTopic","guessTopic"]);
 
 BOT_theBotId		= "benedicteBot";		// sets current bot id 
 BOT_theTopicId		= "benedicteTopic";		// sets current topic id
