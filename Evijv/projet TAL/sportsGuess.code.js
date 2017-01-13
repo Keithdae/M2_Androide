@@ -43,7 +43,9 @@ SPECIFIC TAGS:	WHY, EFFECT, REVERSE, UNDO
  [["KEY", "gender"],  ["VAL", ""],
        ["ONASK","It can be practiced by both"]
        ],
- [["KEY", "karate"],  ["VAL", "Yes you did it!"]],
+ [["KEY", "karate"],  ["VAL", "Yes you did it!"],
+		["ONASK", function() {elem = document.getElementById('test'); elem.innerHTML = "<img src='https://blog.kaspersky.com/files/2014/01/win.png'/>"; return "Yes you dit it !";}]
+		],
  [["KEY", "country"],  ["VAL", ""],
  		["ONASK", "It is a japanese sport."]],
  [["KEY", "hint"],  ["VAL", ""],
@@ -83,7 +85,7 @@ var benedicteTopic = [
 											["WHY","I was born twenty-four years ago"]
 											],
 	[["KEY", "toto"], 						["ONASK", function() {alert("coucou");}]],
-	[["KEY", "titi"], 						["ONASK", function() {elem = document.getElementById('test'); elem.innerHTML = "<img src='http://placehold.it/350x150'/>";}]],
+	[["KEY", "titi"], 						["ONASK", function() {elem = document.getElementById('test'); elem.innerHTML = "<img src='https://blog.kaspersky.com/files/2014/01/win.png'/>";}]],
 	[["KEY", "gender"],						["VAL", "female"],
 											["ONASK", function(s) { return ((s == "male") ? "I am proud to be a man!" : "Just a woman") }]
 											],
