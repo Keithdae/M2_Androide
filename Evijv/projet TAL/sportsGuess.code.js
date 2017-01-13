@@ -33,9 +33,21 @@ SPECIFIC TAGS:	WHY, EFFECT, REVERSE, UNDO
 
 
 // ======================  TOPIC KARATE ==========================
-var karateTopic = [
-
-]
+ var karateTopic = [
+ // INFO 
+ [["KEY", "_class"],  ["VAL", "component"]],
+ [["KEY", "_reference"], ["VAL", ["k","karate"]]],
+ [["KEY", "type"],  ["VAL", "karate"]],
+ [["KEY", "name"],  ["VAL", "Karate"]],
+ [["KEY", "gender"],  ["VAL", ""],
+       ["ONASK","I have no gender"],
+       ["WHY","Because I am not a human nor an animal!"]
+       ],
+ [["KEY", "usage"],  ["VAL", "_UN_, a counter can be useful for counting things"]],
+ // REL
+ [["KEY", "relative"], ["VAL", "operator"]], 
+ [["KEY", "operator"], ["VAL", "benedicteTopic"], ["CAT","REL"]],
+];
 
 
 // ======================  TOPIC BENEDICTE  ======================
@@ -385,7 +397,7 @@ var danBot  = new BOT_makeBot("danBot","danTopic");
 var editaBot = new BOT_makeBot("editaBot","editaTopic");
 var harryBot = new BOT_makeBot("harryBot","harryTopic");
 var moustacheBot = new BOT_makeBot("moustacheBot","moustacheTopic");
-BOT_declareTopics(["userTopic","counterTopic"]);
+BOT_declareTopics(["userTopic","counterTopic","karateTopic"]);
 
 BOT_theBotId		= "benedicteBot";		// sets current bot id 
 BOT_theTopicId		= "benedicteTopic";		// sets current topic id
