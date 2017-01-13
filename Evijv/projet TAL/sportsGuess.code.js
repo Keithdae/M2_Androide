@@ -43,7 +43,7 @@ SPECIFIC TAGS:	WHY, EFFECT, REVERSE, UNDO
        ["ONASK","I have no gender"],
        ["WHY","Because I am not a human nor an animal!"]
        ],
- [["KEY", "usage"],  ["VAL", "_UN_, a counter can be useful for counting things"]],
+ [["KEY", "karate"],  ["VAL", "Yes you did it!"]],
  // REL
  [["KEY", "relative"], ["VAL", "operator"]], 
  [["KEY", "operator"], ["VAL", "benedicteTopic"], ["CAT","REL"]],
