@@ -81,7 +81,7 @@ var benedicteTopic = [
 	[["KEY", "force"],			["VAL", 0], ["CAT","VAR"], ["TYPE","INT"]],
 	[["KEY", "excitement"],		["VAL", 0], ["CAT","VAR"], ["TYPE","INT"]],
 	// PREFS
-	[["KEY", "preference"],		["VAL", []], ["CAT","VAR"], ["ONASK",BOT_printPreferenceList]],  
+	[["KEY", "preference"],		["VAL", [["benedicteTopic", "pizza"]]], ["CAT","VAR"], ["ONASK",BOT_printPreferenceList]],  
 	[["KEY", "distaste"],		["VAL", []],  ["CAT","VAR"],["ONASK",BOT_printDistasteList]], 
 	[["KEY", "suggestion"],		["VAL", []], ["CAT","VAR"], ["ONASK",BOT_printSuggestionList]], 
 	[["KEY", "intention"],		["VAL", []], ["CAT","VAR"], ["ONASK",BOT_printIntentionList]],  
@@ -191,7 +191,7 @@ var editaTopic = [
 var harryTopic = [
 	// INFO
 	[["KEY", "_class"],						["VAL", "bot"], ["BOT","harryBot"]],
-	[["KEY", "_reference"],					["VAL", ["h","harry","glasses"]]],
+	[["KEY", "_reference"],					["VAL", ["h","harry"]]],
 	[["KEY", "_htmlprefix"],				["VAL", "harry"]], //prefix of HTML elements  
 	[["KEY", "_read"],						["VAL", ["harryTopic","userTopic"]]],
 	[["KEY", "_write"],						["VAL", []]],
