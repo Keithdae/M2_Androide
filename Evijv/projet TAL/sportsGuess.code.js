@@ -38,14 +38,30 @@ SPECIFIC TAGS:	WHY, EFFECT, REVERSE, UNDO
  [["KEY", "_class"],  ["VAL", "component"]],
  [["KEY", "_reference"], ["VAL", ["g","guess"]]],
  [["KEY", "type"],  ["VAL", "It's a martial art"]],
- [["KEY", "name"],  ["VAL", "Won't tell you so easily"]],
+ [["KEY", "name"],  ["VAL", "Guess"],
+ 		["ONASK", "Won't tell you so easily"]],
  [["KEY", "gender"],  ["VAL", ""],
        ["ONASK","It can be practiced by both"]
        ],
  [["KEY", "karate"],  ["VAL", "Yes you did it!"]],
+ [["KEY", "country"],  ["VAL", ""],
+ 		["ONASK", "It is a japanese sport."]],
+ [["KEY", "hint"],  ["VAL", ""],
+ 		["ONASK", "I am thinking about a sport."]],
+ [["KEY", "ball"],  ["VAL", ""],
+ 		["ONASK", "No, it is not that kind of sport."]],
+ [["KEY", "team"],  ["VAL", ""],
+ 		["ONASK", "No, this sport is practiced individually."]],
+ [["KEY", "martial art"],  ["VAL", ""],
+ 		["ONASK", "Now you're getting closer."]],
+ [["KEY", "judo"],  ["VAL", ""],
+ 		["ONASK", "So close..."]],
+ [["KEY", "Taekwondo"],  ["VAL", ""],
+ 		["ONASK", "Nope, but you're almost there."]],
+ [["KEY", "Aikido"],  ["VAL", ""],
+ 		["ONASK", "Good guess, but not what I'm thinking of."]],
  // REL
- [["KEY", "relative"], ["VAL", "operator"]], 
- [["KEY", "operator"], ["VAL", "benedicteTopic"], ["CAT","REL"]],
+ [["KEY", "relative"], ["VAL", "operator"]]
 ];
 
 
@@ -82,6 +98,7 @@ var benedicteTopic = [
 								["ONASK", BOT_printRelativeList],
 								], 
 	[["KEY", "pal"],			["VAL", "danTopic"],["CAT","REL"]],
+	[["KEY", "guess"],			["VAL", "guessTopic"],["CAT","REL"]],
 	[["KEY", "tool"],			["VAL", "counterTopic"],["CAT","REL"]],
 	// FEELINGS
 	[["KEY", "happiness"],		["VAL", 0.8], ["CAT","VAR"], ["TYPE","INT"]], // 7 standard feelings iniitated
@@ -138,6 +155,7 @@ var danTopic = [
 											["ONASK", BOT_printRelativeList],
 											], 
 	[["KEY", "pal"],					["VAL", "benedicteTopic"],["CAT","REL"]],
+	[["KEY", "guess"],			["VAL", "guessTopic"],["CAT","REL"]],
 	// FEELINGS
 	[["KEY", "happiness"],		["VAL", 0], ["CAT","VAR"], ["TYPE","INT"]], // 7 standard feelings
 	[["KEY", "confidence"],		["VAL", 0], ["CAT","VAR"], ["TYPE","INT"]],
@@ -183,6 +201,7 @@ var editaTopic = [
 											["ONASK", BOT_printRelativeList],
 											], 
 	[["KEY", "pal"],					["VAL", "benedicteTopic"],["CAT","REL"]],
+	[["KEY", "guess"],			["VAL", "guessTopic"],["CAT","REL"]],
 	// FEELINGS
 	[["KEY", "happiness"],		["VAL", 0], ["CAT","VAR"], ["TYPE","INT"]], // 7 standard feelings
 	[["KEY", "confidence"],		["VAL", 0], ["CAT","VAR"], ["TYPE","INT"]],
@@ -228,6 +247,7 @@ var harryTopic = [
 											["ONASK", BOT_printRelativeList],
 											], 
 	[["KEY", "pal"],					["VAL", "benedicteTopic"],["CAT","REL"]],
+	[["KEY", "guess"],			["VAL", "guessTopic"],["CAT","REL"]],
 	// FEELINGS
 	[["KEY", "happiness"],		["VAL", 0], ["CAT","VAR"], ["TYPE","INT"]], // 7 standard feelings
 	[["KEY", "confidence"],		["VAL", 0], ["CAT","VAR"], ["TYPE","INT"]],
@@ -273,6 +293,7 @@ var moustacheTopic = [
 											["ONASK", BOT_printRelativeList],
 											], 
 	[["KEY", "pal"],					["VAL", "benedicteTopic"],["CAT","REL"]],
+	[["KEY", "guess"],			["VAL", "guessTopic"],["CAT","REL"]],
 	// FEELINGS
 	[["KEY", "happiness"],		["VAL", 0], ["CAT","VAR"], ["TYPE","INT"]], // 7 standard feelings
 	[["KEY", "confidence"],		["VAL", 0], ["CAT","VAR"], ["TYPE","INT"]],

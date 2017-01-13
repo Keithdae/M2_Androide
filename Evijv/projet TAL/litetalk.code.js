@@ -203,7 +203,7 @@ var BOT_basicSynonymList	=  [
 	["_u", 		["undo","revert","rev"]],
 	["_v", 		["verify","check","is it true"]],
 	["_w", 		["why","explain","cause","reason"]],
-	["_x", 		["do","execute","perform"]],
+	["_x", 		["execute","perform"]],
 	["_y", 		["yes","ok","i agree","agreed"]], 
 	["_z", 		["extra"]], 
 	
